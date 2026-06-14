@@ -1,12 +1,12 @@
 # Train Today
 
-A lightweight, single-file training app for an 11-year-old multi-sport athlete. No frameworks, no build step — just open the HTML file in a browser.
+A lightweight, single-file training app for young multi-sport athletes. No frameworks, no build step — just open the HTML file in a browser.
 
 ## What it does
 
 - Shows a daily workout drawn from a rotating 10-week plan that cycles forever
 - Activities cover soccer, football, track, strength, cardio, and plyometrics
-- Each activity has step-by-step instructions written for a kid
+- Each activity has step-by-step instructions written for young athletes
 - Tap/click an activity to expand the how-to guide
 - Check off activities as you complete them; a progress bar tracks the day
 - Navigate forward/backward by day or tap any day in the week strip
@@ -14,7 +14,7 @@ A lightweight, single-file training app for an 11-year-old multi-sport athlete. 
 
 ## Usage
 
-Open `train-today.html` in any browser — no server needed.
+Open `index.html` in any browser — no server needed.
 
 Works on phone or desktop. Designed to be bookmarked on a phone home screen.
 
