@@ -1,0 +1,33 @@
+# Train Today
+
+A lightweight, single-file training app for an 11-year-old multi-sport athlete. No frameworks, no build step — just open the HTML file in a browser.
+
+## What it does
+
+- Shows a daily workout drawn from a rotating 10-week plan that cycles forever
+- Activities cover soccer, football, track, strength, cardio, and plyometrics
+- Each activity has step-by-step instructions written for a kid
+- Tap/click an activity to expand the how-to guide
+- Check off activities as you complete them; a progress bar tracks the day
+- Navigate forward/backward by day or tap any day in the week strip
+- "Jump to Today" button appears whenever you're browsing another date
+
+## Usage
+
+Open `train-today.html` in any browser — no server needed.
+
+Works on phone or desktop. Designed to be bookmarked on a phone home screen.
+
+## Customizing
+
+All workouts live in two places inside the `<script>` block:
+
+- **`ACTIVITIES`** — the exercise library (name, duration, tag, step-by-step instructions)
+- **`dayWorkouts`** inside `getWorkoutForDate`  — named workout combos that pull from the library
+- **`weekPatterns`** — a 10-week rotation array; each row is Mon–Sun, each value is a `dayWorkouts` key
+
+To add a new exercise: add an entry to `ACTIVITIES`, then reference it in an existing or new `dayWorkouts` entry.
+
+## Sports covered
+
+⚽ Soccer · 🏈 Football · 🏃 Track · 💪 Strength · 🏃 Cardio · 🤸 Plyometrics
