@@ -188,26 +188,26 @@
   .activity-duration {
     font-size: 15px;
     color: var(--text-secondary);
-    margin-top: 2px;
+    margin-top: 1px;
   }
   .tag {
-    display: inline-block;
+    display: block;
     font-size: 12px;
     font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 10px;
-    margin-top: 5px;
+    padding: 0;
+    background: none !important;
+    margin-top: 2px;
     text-transform: uppercase;
     letter-spacing: 0.3px;
   }
-  .tag-soccer { background: var(--green-light); color: var(--green-dark); }
-  .tag-cardio { background: var(--blue-light); color: #185FA5; }
-  .tag-strength { background: var(--amber-light); color: #F0A500; }
-  .tag-plyo { background: var(--purple-light); color: #A89BFF; }
-  .tag-stretch { background: var(--pink-light); color: #FF7BAC; }
-  .tag-football { background: #1e1208; color: #C87941; }
-  .tag-track { background: var(--blue-light); color: #185FA5; }
-  .tag-warmup { background: #222; color: #aaa; }
+  .tag-soccer { color: var(--green-dark); }
+  .tag-cardio { color: #185FA5; }
+  .tag-strength { color: #F0A500; }
+  .tag-plyo { color: #A89BFF; }
+  .tag-stretch { color: #FF7BAC; }
+  .tag-football { color: #C87941; }
+  .tag-track { color: #185FA5; }
+  .tag-warmup { color: #38bdf8; }
 
   .chevron {
     font-size: 18px;
@@ -336,6 +336,141 @@
     justify-content: center;
     font-size: 12px;
   }
+
+  /* START BUTTON */
+  .start-btn {
+    background: var(--green);
+    color: #0d0d0d;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    display: inline-block;
+  }
+  .start-btn:active { opacity: 0.8; }
+
+  /* TIMER OVERLAY */
+  #timerOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #22c55e;
+    z-index: 100;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #timerOverlay.active { display: flex; }
+
+  #timerTop {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 24px 20px;
+  }
+  #timerLabel {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+  #timerDisplay {
+    font-size: clamp(56px, 18vw, 100px);
+    font-weight: 700;
+    color: #000;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  #timerSteps {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px 12px;
+  }
+  #timerSteps ol {
+    list-style: none;
+    counter-reset: step;
+    margin: 0;
+    padding: 0;
+  }
+  #timerSteps li {
+    counter-increment: step;
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    line-height: 1.5;
+    align-items: flex-start;
+  }
+  #timerSteps li:last-child { border-bottom: none; }
+  #timerSteps li::before {
+    content: counter(step);
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+
+  #timerButtons {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px 24px 40px;
+    background: #22c55e;
+  }
+  .timer-btn {
+    background: rgba(0,0,0,0.15);
+    color: #000;
+    border: 2px solid rgba(0,0,0,0.25);
+    border-radius: 32px;
+    padding: 14px 32px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    min-width: 120px;
+  }
+  .timer-btn:active { background: rgba(0,0,0,0.3); }
+  .timer-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .timer-btn.finish {
+    background: #000;
+    color: #22c55e;
+    border-color: #000;
+  }
+  #timerRestartBtn {
+    background: rgba(0,0,0,0.15);
+    color: #000;
+    border: 2px solid rgba(0,0,0,0.25);
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  #timerRestartBtn:active { background: rgba(0,0,0,0.3); }
 </style>
 </head>
 <body>
@@ -344,6 +479,19 @@
 
 <div class="today-btn-wrap">
   <button class="today-btn" id="todayBtn" onclick="goToToday()">↑ Jump to Today</button>
+</div>
+
+<div id="timerOverlay">
+  <div id="timerTop">
+    <div id="timerLabel"></div>
+    <div id="timerDisplay">00:00</div>
+  </div>
+  <div id="timerSteps"><ol id="timerStepsList"></ol></div>
+  <div id="timerButtons">
+    <button id="timerRestartBtn" onclick="timerRestart()" title="Restart">↺</button>
+    <button class="timer-btn" id="timerPauseBtn" onclick="timerTogglePause()">Pause</button>
+    <button class="timer-btn finish" onclick="timerFinish()">Finish</button>
+  </div>
 </div>
 
 <script>
@@ -883,8 +1031,30 @@ function dateKey(d) {
 
 let displayDate = new Date(today);
 
-const checked = {}; // dateKey -> Set of activity ids
 const expanded = {}; // dateKey+actId -> bool
+
+// ─── LOCALSTORAGE PERSISTENCE ──────────────────────────────────────────────
+
+const LS_KEY = 'trainToday_completed';
+
+function loadChecked() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return {};
+    const obj = JSON.parse(raw);
+    const result = {};
+    for (const [k, arr] of Object.entries(obj)) result[k] = new Set(arr);
+    return result;
+  } catch { return {}; }
+}
+
+function saveChecked() {
+  const obj = {};
+  for (const [k, s] of Object.entries(checked)) obj[k] = [...s];
+  localStorage.setItem(LS_KEY, JSON.stringify(obj));
+}
+
+const checked = loadChecked();
 
 function getChecked(dk) {
   if (!checked[dk]) checked[dk] = new Set();
@@ -967,8 +1137,9 @@ function render() {
           </div>
           <div class="activity-text">
             <div class="activity-name ${done ? 'done' : ''}">${act.name}</div>
-            <div class="activity-duration">${act.duration}</div>
             <span class="tag ${tagClass}">${act.tag}</span>
+            <div class="activity-duration">${act.duration}</div>
+            <button class="start-btn" onclick="startTimer(event,'${dk}','${act.id}',${parseDurationMin(act.duration)},'${act.name.replace(/'/g,"\\'")}')">▶ Start</button>
           </div>
           <div class="chevron ${isExp ? 'open' : ''}">›</div>
         </div>`;
@@ -1046,6 +1217,104 @@ function toggleCheck(e, dk, actId) {
   e.stopPropagation();
   const ch = getChecked(dk);
   if (ch.has(actId)) ch.delete(actId); else ch.add(actId);
+  saveChecked();
+  render();
+}
+
+// ─── TIMER ─────────────────────────────────────────────────────────────────
+
+let timerState = null; // { dk, actId, totalSecs, remaining, paused, interval }
+
+function parseDurationMin(dur) {
+  const m = parseInt(dur);
+  return isNaN(m) ? 5 : m;
+}
+
+function playCompleteSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Three sharp buzzer bursts
+    for (let i = 0; i < 3; i++) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'square';
+      osc.frequency.value = 180;
+      const t = ctx.currentTime + i * 0.45;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.6, t + 0.01);
+      gain.gain.setValueAtTime(0.6, t + 0.28);
+      gain.gain.linearRampToValueAtTime(0, t + 0.32);
+      osc.start(t);
+      osc.stop(t + 0.35);
+    }
+  } catch(e) {}
+}
+
+function timerTick() {
+  if (!timerState || timerState.paused) return;
+  timerState.remaining--;
+  updateTimerDisplay();
+  if (timerState.remaining <= 0) {
+    clearInterval(timerState.interval);
+    timerState.interval = null;
+    document.getElementById('timerPauseBtn').disabled = true;
+    playCompleteSound();
+  }
+}
+
+function updateTimerDisplay() {
+  const s = timerState.remaining;
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  document.getElementById('timerDisplay').textContent =
+    String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+
+function startTimer(e, dk, actId, durationMin, name) {
+  e.stopPropagation();
+  if (timerState) clearInterval(timerState.interval);
+  const secs = durationMin * 60;
+  timerState = { dk, actId, totalSecs: secs, remaining: secs, paused: false, interval: null };
+  document.getElementById('timerLabel').textContent = name;
+  const pauseBtn = document.getElementById('timerPauseBtn');
+  pauseBtn.textContent = 'Pause';
+  pauseBtn.disabled = false;
+  const steps = (ACTIVITIES[actId] || {}).steps || [];
+  document.getElementById('timerStepsList').innerHTML = steps.map(s => `<li>${s}</li>`).join('');
+  updateTimerDisplay();
+  timerState.interval = setInterval(timerTick, 1000);
+  document.getElementById('timerOverlay').classList.add('active');
+}
+
+function timerTogglePause() {
+  if (!timerState || timerState.remaining <= 0) return;
+  timerState.paused = !timerState.paused;
+  document.getElementById('timerPauseBtn').textContent = timerState.paused ? 'Resume' : 'Pause';
+}
+
+function timerRestart() {
+  if (!timerState) return;
+  clearInterval(timerState.interval);
+  timerState.remaining = timerState.totalSecs;
+  timerState.paused = false;
+  const pauseBtn = document.getElementById('timerPauseBtn');
+  pauseBtn.disabled = false;
+  pauseBtn.textContent = 'Pause';
+  updateTimerDisplay();
+  timerState.interval = setInterval(timerTick, 1000);
+}
+
+function timerFinish() {
+  if (!timerState) return;
+  clearInterval(timerState.interval);
+  const { dk, actId } = timerState;
+  timerState = null;
+  document.getElementById('timerOverlay').classList.remove('active');
+  const ch = getChecked(dk);
+  ch.add(actId);
+  saveChecked();
   render();
 }
 
