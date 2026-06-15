@@ -390,7 +390,7 @@
   #timerSteps {
     flex: 1;
     overflow-y: auto;
-    padding: 0 20px 12px;
+    padding: 0 20px 140px;
   }
   #timerSteps ol {
     list-style: none;
@@ -427,17 +427,21 @@
   }
 
   #timerButtons {
-    flex-shrink: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 16px;
     padding: 16px 24px 40px;
-    background: #22c55e;
+    background: none;
   }
   .timer-btn {
-    background: rgba(0,0,0,0.15);
+    background: #1aad52;
     color: #000;
-    border: 2px solid rgba(0,0,0,0.25);
+    border: none;
     border-radius: 32px;
     padding: 14px 32px;
     font-size: 18px;
@@ -445,7 +449,7 @@
     cursor: pointer;
     min-width: 120px;
   }
-  .timer-btn:active { background: rgba(0,0,0,0.3); }
+  .timer-btn:active { background: #178f44; }
   .timer-btn:disabled {
     opacity: 0.35;
     cursor: default;
@@ -453,12 +457,11 @@
   .timer-btn.finish {
     background: #000;
     color: #22c55e;
-    border-color: #000;
   }
   #timerRestartBtn {
-    background: rgba(0,0,0,0.15);
+    background: #1aad52;
     color: #000;
-    border: 2px solid rgba(0,0,0,0.25);
+    border: none;
     border-radius: 50%;
     width: 56px;
     height: 56px;
@@ -470,7 +473,7 @@
     flex-shrink: 0;
     align-self: center;
   }
-  #timerRestartBtn:active { background: rgba(0,0,0,0.3); }
+  #timerRestartBtn:active { background: #178f44; }
 </style>
 </head>
 <body>
