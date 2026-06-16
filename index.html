@@ -50,6 +50,19 @@
     padding: 12px;
   }
 
+  /* Masks content scrolling behind the floating sticky header */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    background: var(--bg);
+    z-index: 9;
+    pointer-events: none;
+  }
+
   /* HEADER */
   .header {
     background: var(--green);
