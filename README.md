@@ -1,6 +1,6 @@
 # Train Today
 
-A lightweight, single-file training app for young multi-sport athletes. No frameworks, no build step — just open the HTML file in a browser.
+A lightweight, single-file training app for young multi-sport athletes. No frameworks, no build step. Just open the HTML file in a browser.
 
 ![Train Today app screenshot](train-today-app-screenshot.png)
 
@@ -16,7 +16,7 @@ A lightweight, single-file training app for young multi-sport athletes. No frame
 
 ## Usage
 
-Open `index.html` in any browser — no server needed.
+Open `index.html` in any browser. No server needed.
 
 Works on phone or desktop. Designed to be bookmarked on a phone home screen.
 
@@ -24,9 +24,9 @@ Works on phone or desktop. Designed to be bookmarked on a phone home screen.
 
 All workouts live in two places inside the `<script>` block:
 
-- **`ACTIVITIES`** — the exercise library (name, duration, tag, step-by-step instructions)
-- **`dayWorkouts`** inside `getWorkoutForDate`  — named workout combos that pull from the library
-- **`weekPatterns`** — a 10-week rotation array; each row is Mon–Sun, each value is a `dayWorkouts` key
+- **`ACTIVITIES`**: the exercise library (name, duration, tag, step-by-step instructions)
+- **`dayWorkouts`** inside `getWorkoutForDate`: named workout combos that pull from the library
+- **`weekPatterns`**: a 10-week rotation array; each row is Mon-Sun, each value is a `dayWorkouts` key
 
 To add a new exercise: add an entry to `ACTIVITIES`, then reference it in an existing or new `dayWorkouts` entry.
 
