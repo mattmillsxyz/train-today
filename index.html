@@ -50,7 +50,7 @@
   #app {
     max-width: 600px;
     margin: 0 auto;
-    padding: 12px;
+    padding: 0 12px 12px;
   }
 
   /* HEADER */
@@ -59,21 +59,9 @@
     color: #0d0d0d;
     padding: 20px 16px 16px;
     position: sticky;
-    top: 12px;
+    top: 0;
     z-index: 10;
     border-radius: 20px 20px 0 0;
-  }
-  /* Sits behind header background, covers the gap above and fills the rounded corner cutouts */
-  .header::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    top: -32px;
-    left: -100vw;
-    right: -100vw;
-    height: calc(32px + 20px);
-    background: var(--bg);
-    pointer-events: none;
   }
   .header-top {
     display: flex;
