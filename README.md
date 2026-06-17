@@ -2,6 +2,8 @@
 
 A lightweight, single-file training app for young multi-sport athletes. No frameworks, no build step — just open the HTML file in a browser.
 
+![Train Today app screenshot](train-today-app-screenshot.png)
+
 ## What it does
 
 - Shows a daily workout drawn from a rotating 10-week plan that cycles forever
