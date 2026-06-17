@@ -54,13 +54,17 @@
   }
 
   /* HEADER */
+  .header-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+    padding-top: 12px;
+  }
   .header {
     background: var(--green);
     color: #0d0d0d;
     padding: 20px 16px 16px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
     border-radius: 20px 20px 0 0;
   }
   .header-top {
@@ -1111,7 +1115,7 @@ function render() {
     return s + (isNaN(m) ? 0 : m);
   }, 0) : 0;
 
-  html += `<div class="header">
+  html += `<div class="header-wrap"><div class="header">
     <div class="header-top">
       <div class="header-nav">
         <button class="nav-btn" onclick="shiftDay(-1)">‹</button>
@@ -1130,7 +1134,7 @@ function render() {
     html += `<div class="header-meta">${workout.activities.length} activities · ~${totalMin} min</div>
     <div class="sport-pills">${workout.sports.map(s => `<span class="sport-pill">${s}</span>`).join('')}</div>`;
   }
-  html += `</div>`;
+  html += `</div></div>`;
 
   // Week strip
   html += buildWeekStrip();
