@@ -63,14 +63,15 @@
     z-index: 10;
     border-radius: 20px 20px 0 0;
   }
-  /* Extends upward from sticky header to mask content scrolling behind the gap and rounded corners */
+  /* Sits behind header background, covers the gap above and fills the rounded corner cutouts */
   .header::before {
     content: '';
     position: absolute;
+    z-index: -1;
     top: -32px;
     left: -100vw;
     right: -100vw;
-    height: 32px;
+    height: calc(32px + 20px);
     background: var(--bg);
     pointer-events: none;
   }
