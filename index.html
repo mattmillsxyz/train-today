@@ -17,6 +17,13 @@
 <meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script>
+  (function() {
+    var s = localStorage.getItem('trainToday_theme');
+    var dark = s ? s === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  })();
+</script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -25,20 +32,56 @@
     --green-light: #0d2e1f;
     --green-dark: #16a869;
     --blue: #4DA8FF;
-    --blue-light: #0d1e33;
     --amber: #F0A500;
-    --amber-light: #2a1e05;
     --red: #FF5C5C;
-    --red-light: #2a0f0f;
     --purple: #A89BFF;
-    --purple-light: #1a1740;
     --pink: #FF7BAC;
-    --pink-light: #2a0d1a;
     --text: #f0f0f0;
     --text-secondary: #888;
     --border: #2a2a2a;
     --bg: #0d0d0d;
     --card: #161616;
+    --today-btn-bg: rgba(20, 20, 20, 0.85);
+    --today-btn-text: #ffffff;
+    --today-btn-border: rgba(255,255,255,0.15);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --green-light: #d4f5e9;
+      --text: #1a1a1a;
+      --text-secondary: #777;
+      --border: #e0e0e0;
+      --bg: #f0f0f0;
+      --card: #ffffff;
+      --today-btn-bg: rgba(255, 255, 255, 0.85);
+      --today-btn-text: #1a1a1a;
+      --today-btn-border: rgba(0,0,0,0.15);
+    }
+  }
+
+  html[data-theme="light"] {
+    --green-light: #d4f5e9;
+    --text: #1a1a1a;
+    --text-secondary: #777;
+    --border: #e0e0e0;
+    --bg: #f0f0f0;
+    --card: #ffffff;
+    --today-btn-bg: rgba(255, 255, 255, 0.85);
+    --today-btn-text: #1a1a1a;
+    --today-btn-border: rgba(0,0,0,0.15);
+  }
+
+  html[data-theme="dark"] {
+    --green-light: #0d2e1f;
+    --text: #f0f0f0;
+    --text-secondary: #888;
+    --border: #2a2a2a;
+    --bg: #0d0d0d;
+    --card: #161616;
+    --today-btn-bg: rgba(20, 20, 20, 0.85);
+    --today-btn-text: #ffffff;
+    --today-btn-border: rgba(255,255,255,0.15);
   }
 
   html {
@@ -312,10 +355,10 @@
     z-index: 20;
   }
   .today-btn {
-    background: rgba(20, 20, 20, 0.85);
+    background: var(--today-btn-bg);
     backdrop-filter: blur(8px);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--today-btn-text);
+    border: 1px solid var(--today-btn-border);
     border-radius: 24px;
     padding: 12px 28px;
     font-size: 16px;
@@ -325,6 +368,29 @@
     display: none;
   }
   .today-btn.visible { display: block; }
+
+  /* THEME TOGGLE */
+  .theme-toggle-wrap {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 20;
+  }
+  .theme-toggle {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    line-height: 1;
+  }
+  .theme-toggle:active { opacity: 0.7; }
 
   /* WEEK STRIP */
   .week-strip {
@@ -510,6 +576,10 @@
 
 <div class="today-btn-wrap">
   <button class="today-btn" id="todayBtn" onclick="goToToday()">↑ Jump to Today</button>
+</div>
+
+<div class="theme-toggle-wrap">
+  <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
 </div>
 
 <div id="timerOverlay">
@@ -1354,7 +1424,31 @@ function toggleActivity(dk, actId, expKey) {
   render();
 }
 
+// ─── THEME ─────────────────────────────────────────────────────────────────
+
+const THEME_KEY = 'trainToday_theme';
+
+function getEffectiveTheme() {
+  return document.documentElement.getAttribute('data-theme') ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const toggle = document.getElementById('themeToggle');
+  if (toggle) toggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (metaTheme) metaTheme.content = theme === 'dark' ? '#0d0d0d' : '#f0f0f0';
+}
+
+function toggleTheme() {
+  const next = getEffectiveTheme() === 'dark' ? 'light' : 'dark';
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+}
+
 // ─── BOOT ──────────────────────────────────────────────────────────────────
+applyTheme(getEffectiveTheme());
 render();
 </script>
 </body>
