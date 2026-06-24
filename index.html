@@ -41,9 +41,6 @@
     --border: #2a2a2a;
     --bg: #0d0d0d;
     --card: #161616;
-    --today-btn-bg: rgba(20, 20, 20, 0.85);
-    --today-btn-text: #ffffff;
-    --today-btn-border: rgba(255,255,255,0.15);
   }
 
   @media (prefers-color-scheme: light) {
@@ -54,9 +51,6 @@
       --border: #e0e0e0;
       --bg: #f0f0f0;
       --card: #ffffff;
-      --today-btn-bg: rgba(255, 255, 255, 0.85);
-      --today-btn-text: #1a1a1a;
-      --today-btn-border: rgba(0,0,0,0.15);
     }
   }
 
@@ -67,9 +61,6 @@
     --border: #e0e0e0;
     --bg: #f0f0f0;
     --card: #ffffff;
-    --today-btn-bg: rgba(255, 255, 255, 0.85);
-    --today-btn-text: #1a1a1a;
-    --today-btn-border: rgba(0,0,0,0.15);
   }
 
   html[data-theme="dark"] {
@@ -79,9 +70,6 @@
     --border: #2a2a2a;
     --bg: #0d0d0d;
     --card: #161616;
-    --today-btn-bg: rgba(20, 20, 20, 0.85);
-    --today-btn-text: #ffffff;
-    --today-btn-border: rgba(255,255,255,0.15);
   }
 
   html {
@@ -346,29 +334,6 @@
   .rest-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
   .rest-sub { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 
-  /* TODAY BUTTON */
-  .today-btn-wrap {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-  }
-  .today-btn {
-    background: var(--today-btn-bg);
-    backdrop-filter: blur(8px);
-    color: var(--today-btn-text);
-    border: 1px solid var(--today-btn-border);
-    border-radius: 24px;
-    padding: 12px 28px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-    display: none;
-  }
-  .today-btn.visible { display: block; }
-
   /* THEME TOGGLE */
   .theme-toggle-wrap {
     max-width: 600px;
@@ -573,10 +538,6 @@
 <body>
 
 <div id="app"></div>
-
-<div class="today-btn-wrap">
-  <button class="today-btn" id="todayBtn" onclick="goToToday()">↑ Jump to Today</button>
-</div>
 
 <div class="theme-toggle-wrap">
   <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode"></button>
@@ -1257,14 +1218,6 @@ function render() {
   }
 
   document.getElementById('app').innerHTML = html;
-
-  // Show/hide today button
-  const todayBtn = document.getElementById('todayBtn');
-  if (isToday(displayDate)) {
-    todayBtn.classList.remove('visible');
-  } else {
-    todayBtn.classList.add('visible');
-  }
 }
 
 function buildWeekStrip() {
@@ -1304,12 +1257,6 @@ function shiftDay(n) {
 function goToDate(dk) {
   const parts = dk.split('-');
   displayDate = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
-  render();
-  window.scrollTo(0, 0);
-}
-
-function goToToday() {
-  displayDate = new Date(today);
   render();
   window.scrollTo(0, 0);
 }
