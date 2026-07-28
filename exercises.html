@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0d0d0d">
+<meta name="robots" content="noindex">
+<title>All Exercises – Train Today</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script>
+  (function() {
+    var s = localStorage.getItem('trainToday_theme');
+    var dark = s ? s === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  })();
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #22D68A;
+    --green-light: #0d2e1f;
+    --green-dark: #16a869;
+    --text: #f0f0f0;
+    --text-secondary: #888;
+    --border: #2a2a2a;
+    --bg: #0d0d0d;
+    --card: #161616;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --green-light: #d4f5e9;
+      --text: #1a1a1a;
+      --text-secondary: #777;
+      --border: #e0e0e0;
+      --bg: #f0f0f0;
+      --card: #ffffff;
+    }
+  }
+
+  html[data-theme="light"] {
+    --green-light: #d4f5e9;
+    --text: #1a1a1a;
+    --text-secondary: #777;
+    --border: #e0e0e0;
+    --bg: #f0f0f0;
+    --card: #ffffff;
+  }
+
+  html[data-theme="dark"] {
+    --green-light: #0d2e1f;
+    --text: #f0f0f0;
+    --text-secondary: #888;
+    --border: #2a2a2a;
+    --bg: #0d0d0d;
+    --card: #161616;
+  }
+
+  html { background-color: var(--bg); }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #app {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 12px 12px;
+  }
+
+  /* HEADER */
+  .header-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+    padding-top: 12px;
+  }
+  .header {
+    background: var(--green);
+    color: #0d0d0d;
+    padding: 20px 16px 16px;
+    border-radius: 20px 20px 0 0;
+  }
+  .header-title {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    text-align: center;
+  }
+  .header-meta {
+    font-size: 15px;
+    opacity: 0.8;
+    margin-top: 2px;
+    text-align: center;
+  }
+
+  /* SECTIONS */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--green-dark);
+    padding: 20px 4px 8px;
+  }
+
+  /* ACTIVITIES */
+  .activities { padding: 0; }
+
+  .activity-item {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+  .activity-item:first-child {
+    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+  }
+  .activity-item:last-child {
+    border-bottom: none;
+    border-radius: 0 0 20px 20px;
+    overflow: hidden;
+  }
+  .activities:has(.activity-item:only-child) .activity-item {
+    border-radius: 20px;
+  }
+  .activity-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .activity-text { flex: 1; min-width: 0; }
+  .activity-name {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .activity-duration {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 1px;
+  }
+  .tag {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0;
+    background: none !important;
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .tag-soccer { color: var(--green-dark); }
+  .tag-cardio { color: #185FA5; }
+  .tag-strength { color: #F0A500; }
+  .tag-plyo { color: #A89BFF; }
+  .tag-stretch { color: #FF7BAC; }
+  .tag-football { color: #C87941; }
+  .tag-track { color: #185FA5; }
+  .tag-warmup { color: #38bdf8; }
+  .tag-balance { color: #14B8A6; }
+
+  .chevron {
+    font-size: 18px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .chevron.open { transform: rotate(90deg); }
+
+  .activity-detail {
+    display: none;
+    padding: 0 16px 16px 16px;
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+  .activity-detail.open { display: block; }
+  .detail-steps {
+    list-style: none;
+    counter-reset: step;
+  }
+  .detail-steps li {
+    counter-increment: step;
+    padding: 6px 0 6px 28px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .detail-steps li:last-child { border-bottom: none; }
+  .detail-steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 20px;
+    height: 20px;
+    background: var(--green-light);
+    color: var(--green-dark);
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* THEME TOGGLE */
+  .theme-toggle-wrap {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 12px 12px 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    opacity: 0.5;
+  }
+  .theme-toggle:hover { opacity: 0.8; }
+  .theme-toggle:active { opacity: 0.4; }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<div class="theme-toggle-wrap">
+  <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode"></button>
+</div>
+
+<script>
+// ─── ACTIVITY LIBRARY (mirrors index.html — keep in sync if edited) ────────
+
+const ACTIVITIES = {
+
+  // WARMUPS
+  dynamicWarmup: {
+    name: "Dynamic Warmup",
+    duration: "8 min",
+    tag: "warmup",
+    steps: [
+      "Jog in place for 1 minute to get your heart rate up.",
+      "High knees: lift each knee up to your belly button while jogging, for 30 seconds.",
+      "Butt kicks: kick your heels up toward your butt while jogging, for 30 seconds.",
+      "Leg swings: hold a wall or fence, swing each leg forward and back 10 times.",
+      "Arm circles: big circles forward 10 times, then backward 10 times.",
+      "Hip circles: hands on hips, make big circles with your hips, 10 each way.",
+      "Lateral shuffles: side-step quickly back and forth, for 30 seconds.",
+    ]
+  },
+
+  // SOCCER
+  jugglingBasic: {
+    name: "Juggling Practice",
+    duration: "10 min",
+    tag: "soccer",
+    steps: [
+      "Drop the ball, let it bounce once, then kick it up with the top of your foot (laces). Catch it. Repeat.",
+      "Once you feel comfortable, try to kick it twice before catching it.",
+      "Keep your foot flat when you kick. Imagine your foot is a shelf the ball sits on.",
+      "Count your best streak! Write it down and try to beat it tomorrow.",
+      "If you get good, try alternating feet: right, left, right, left.",
+    ]
+  },
+  coneDribbling: {
+    name: "Cone Dribbling",
+    duration: "12 min · 3 sets",
+    tag: "soccer",
+    steps: [
+      "Set up 5 cones (or water bottles, shoes, anything!) in a straight line, about 3 feet apart.",
+      "Dribble through them using only the inside of your foot. Go slow and controlled first.",
+      "Come back through using the outside of your foot.",
+      "Rest 30 seconds, then repeat. Try to go a little faster each set.",
+      "Bonus: time yourself and try to beat your record!",
+    ]
+  },
+  passAndMove: {
+    name: "Wall Passing",
+    duration: "10 min",
+    tag: "soccer",
+    steps: [
+      "Stand about 6 feet from a wall or rebounder.",
+      "Pass the ball firmly against the wall with the inside of your foot.",
+      "Control the return with your opposite foot. Soft touch!",
+      "Try 20 passes with your right foot, then 20 with your left foot.",
+      "Move back a few feet once you're comfortable and repeat.",
+    ]
+  },
+  shootingDrill: {
+    name: "Shooting Practice",
+    duration: "10 min",
+    tag: "soccer",
+    steps: [
+      "Set up a goal (use cones or pick a spot on a wall/fence).",
+      "Start 10 feet away. Shoot using your laces and make sure you follow through!",
+      "Take 10 shots from straight on, then 10 from the left side, then 10 from the right.",
+      "After each shot, jog to get the ball. Don't just walk!",
+      "Try aiming for corners (low left, low right) instead of straight at the middle.",
+    ]
+  },
+  firstTouchDrill: {
+    name: "First Touch Drill",
+    duration: "10 min",
+    tag: "soccer",
+    steps: [
+      "Toss the ball up in the air about head height. Let it drop.",
+      "Stop the ball dead with the sole (bottom) of your foot before it bounces twice.",
+      "Then try stopping it with the inside of your foot.",
+      "Do 15 reps each foot. The goal is a soft, controlled touch, not kicking it away.",
+      "Challenge: toss higher and try to chest-trap it, then foot trap before it bounces.",
+    ]
+  },
+  insideOutsideDribble: {
+    name: "Inside/Outside Dribble",
+    duration: "10 min",
+    tag: "soccer",
+    steps: [
+      "In an open space, dribble forward tapping the ball with the inside of your right foot, then the outside.",
+      "Inside tap, outside tap, inside tap, outside tap. Keep a rhythm.",
+      "Do this for 20 yards, then turn around and come back.",
+      "Repeat 4 times, then switch to your left foot.",
+      "This improves your ball control and makes you harder to defend.",
+    ]
+  },
+
+  // FOOTBALL
+  routeRunning: {
+    name: "Route Running",
+    duration: "10 min",
+    tag: "football",
+    steps: [
+      "Set up 2 cones: one where you start, one 10 yards ahead.",
+      "Run hard to the cone, then cut sharply to the right (out route). Raise your hands like you're catching.",
+      "Jog back. Repeat, this time cutting to the left.",
+      "Do 6 reps each direction. Focus on planting your outside foot hard before cutting.",
+      "Advanced: add a third cone and practice a corner route. Go straight, then cut out at 45°.",
+    ]
+  },
+  handCatching: {
+    name: "Catching Drills",
+    duration: "10 min",
+    tag: "football",
+    steps: [
+      "Toss a football up and catch with just your fingertips, not your palms.",
+      "Run 5 yards, turn around, catch a toss. Eyes on the ball the whole time, not the catcher.",
+      "Try catching while looking away, then turning at the last second.",
+      "10 catches straight on, then run routes and catch: 5 cuts left, 5 cuts right.",
+      "Remember: catch the ball, THEN tuck it in. Don't tuck early!",
+    ]
+  },
+  footballAgility: {
+    name: "Football Agility",
+    duration: "10 min",
+    tag: "football",
+    steps: [
+      "Set up 4 cones in a square about 5 yards apart.",
+      "Sprint forward to the first cone, shuffle sideways to the second, backpedal to the third, shuffle back to start.",
+      "This is called a 4-corner drill. It's used by real NFL players!",
+      "Do 4 rounds, resting 30 seconds between each.",
+      "Try to keep your hips low and stay on the balls of your feet. No flat-footed running!",
+    ]
+  },
+
+  // CARDIO
+  sprintIntervals: {
+    name: "Sprint Intervals",
+    duration: "12 min",
+    tag: "cardio",
+    steps: [
+      "Find a flat area: a backyard, street, or park works great.",
+      "Mark a start and end point about 30-40 yards apart.",
+      "Sprint as FAST as you can from one end to the other.",
+      "Walk back slowly. This is your rest.",
+      "Do 8 sprints total. Rest 45 seconds after every 2 sprints.",
+    ]
+  },
+  bikeRide: {
+    name: "Bike Ride",
+    duration: "20 min",
+    tag: "cardio",
+    steps: [
+      "Gear up: helmet on, no shortcuts!",
+      "Ride at a comfortable pace for the first 5 minutes to warm up your legs.",
+      "For the middle 10 minutes, try to go a little faster. You should be breathing harder.",
+      "Cool down the last 5 minutes at an easy pace.",
+      "Try to explore a slightly different route each time!",
+    ]
+  },
+  suicideSprints: {
+    name: "Suicide Sprints",
+    duration: "10 min",
+    tag: "cardio",
+    steps: [
+      "Set up 4 cones in a line: 5 yards, 10 yards, 15 yards, and 20 yards from your start.",
+      "Sprint to the first cone, touch it (or the ground), sprint back to start.",
+      "Sprint to the second cone, back to start. Then third, then fourth.",
+      "That's 1 full suicide. Rest 45 seconds and repeat.",
+      "Try to complete 3-4 suicides. These are tough, so give everything!",
+    ]
+  },
+  agilityLadder: {
+    name: "Agility Ladder Work",
+    duration: "10 min",
+    tag: "cardio",
+    steps: [
+      "No ladder? Use chalk or tape on the ground to make 10 boxes, each about 18 inches.",
+      "Run through stepping one foot in each box as fast as you can.",
+      "Try lateral shuffles: step side to side through each box.",
+      "Try the in-in-out-out pattern: both feet in, both feet out the sides, repeat.",
+      "Rest 20 seconds between each pass. Do 3 passes of each pattern.",
+    ]
+  },
+
+  // PLYOMETRICS
+  boxJumps: {
+    name: "Box Jumps",
+    duration: "8 min · 3×8",
+    tag: "plyo",
+    steps: [
+      "Find a sturdy box, step, or ledge about 12-18 inches high.",
+      "Stand about 1 foot in front. Bend your knees, swing your arms back.",
+      "Explode up: swing arms forward, jump, and land SOFTLY on top with bent knees.",
+      "Step back down (don't jump down). Reset and go again.",
+      "Do 8 jumps, rest 30 seconds, repeat 3 times. LAND SOFT, no loud thuds!",
+    ]
+  },
+  broadJumps: {
+    name: "Broad Jumps",
+    duration: "8 min · 3×6",
+    tag: "plyo",
+    steps: [
+      "Stand with feet shoulder-width apart. Bend your knees and swing arms back.",
+      "Jump as FAR forward as you can. Use your arms to help propel you.",
+      "Land softly with both feet, knees bent like a shock absorber.",
+      "Mark where you landed. Try to beat your distance each jump!",
+      "Do 6 jumps, rest 30 seconds, repeat 3 times.",
+    ]
+  },
+  lateralBounds: {
+    name: "Lateral Bounds",
+    duration: "8 min · 3×8",
+    tag: "plyo",
+    steps: [
+      "Stand on your right foot. Bend your knee slightly.",
+      "Jump sideways to the left, landing on your LEFT foot only. Balance for 1 second.",
+      "Then jump back to the right, landing on your RIGHT foot. That's 1 rep.",
+      "Keep your chest up and land soft. Pretend the floor is hot!",
+      "Do 8 total bounds, rest 30 seconds, repeat 3 times.",
+    ]
+  },
+  jumpSquats: {
+    name: "Jump Squats",
+    duration: "8 min · 3×10",
+    tag: "plyo",
+    steps: [
+      "Stand with feet shoulder-width apart, toes pointing slightly out.",
+      "Lower into a squat with thighs parallel to the ground and chest up.",
+      "Explode up and jump as high as you can!",
+      "Land softly back in the squat position. Don't let your knees cave in.",
+      "Do 10 jump squats, rest 30 seconds, repeat 3 sets.",
+    ]
+  },
+
+  // STRENGTH
+  pushups: {
+    name: "Push-Ups",
+    duration: "6 min · 3×10",
+    tag: "strength",
+    steps: [
+      "Start in a plank: hands slightly wider than shoulders, body in a straight line.",
+      "Lower your chest to just above the ground. Keep elbows at a 45° angle, not flared wide.",
+      "Push back up to start. That's 1 rep.",
+      "Keep your core tight the whole time. No sagging hips!",
+      "Do 10, rest 30 seconds, repeat 3 sets. Can't do 10? Do 5 on your knees. That's great too!",
+    ]
+  },
+  mountainClimbers: {
+    name: "Mountain Climbers",
+    duration: "6 min · 3×20 sec",
+    tag: "strength",
+    steps: [
+      "Start in a push-up position with arms straight and body flat like a board.",
+      "Drive your right knee toward your chest, then quickly switch: left knee in, right leg out.",
+      "Keep alternating fast, like you're running in place horizontally.",
+      "Keep hips down. Don't let your butt stick up in the air.",
+      "Go for 20 seconds, rest 20 seconds. Repeat 3 times. It should burn!",
+    ]
+  },
+  tricepDips: {
+    name: "Tricep Dips",
+    duration: "6 min · 3×10",
+    tag: "strength",
+    steps: [
+      "Find a sturdy chair, bench, or low step. Sit on the edge.",
+      "Put your hands next to your hips, fingers pointing forward.",
+      "Slide your butt off the edge, legs out in front with knees slightly bent.",
+      "Bend elbows and lower yourself down until elbows reach 90°.",
+      "Push back up to start. That's 1 rep. Do 10, rest 30 seconds, 3 sets.",
+    ]
+  },
+  plankHold: {
+    name: "Plank Hold",
+    duration: "5 min · 3×30 sec",
+    tag: "strength",
+    steps: [
+      "Get in push-up position. Drop to your forearms with elbows under shoulders.",
+      "Body should be straight from head to heels, like a wooden plank.",
+      "Squeeze your belly button toward your spine. Don't hold your breath!",
+      "Hold for 30 seconds. Rest 20 seconds. Repeat 3 times.",
+      "Too easy? Lift one foot off the ground to make it harder.",
+    ]
+  },
+  squats: {
+    name: "Bodyweight Squats",
+    duration: "6 min · 3×12",
+    tag: "strength",
+    steps: [
+      "Stand with feet shoulder-width apart, toes pointed out slightly.",
+      "Stretch your arms out in front for balance.",
+      "Sit back and down like you're sitting into a chair. Chest stays up!",
+      "Lower until thighs are parallel to the ground (or as low as comfortable).",
+      "Drive through your heels to stand back up. Do 12, rest 30 seconds, 3 sets.",
+    ]
+  },
+  burpees: {
+    name: "Burpees",
+    duration: "6 min · 3×6",
+    tag: "strength",
+    steps: [
+      "Stand up straight. Drop hands to the floor, jump feet back to a plank.",
+      "Do one push-up (or skip it if you're tired).",
+      "Jump feet back to your hands, then explode up: jump and clap overhead!",
+      "Land soft, immediately go into the next one.",
+      "Do 6, rest 40 seconds, repeat 3 sets. These are HARD but make you super athletic!",
+    ]
+  },
+  lunges: {
+    name: "Walking Lunges",
+    duration: "6 min · 3×10 each leg",
+    tag: "strength",
+    steps: [
+      "Stand tall, feet together. Step your right foot forward about 2 feet.",
+      "Lower your back knee toward the ground. Front thigh should be parallel to the floor.",
+      "Push up through your front heel and bring your back foot forward. That's 1 rep.",
+      "Keep your chest up and don't let your front knee go past your toes.",
+      "Do 10 lunges each leg, rest 30 seconds, repeat 3 sets.",
+    ]
+  },
+
+  // BALANCE & AGILITY
+  duckWalks: {
+    name: "Duck Walks",
+    duration: "5 min · 3×15 yd",
+    tag: "balance",
+    steps: [
+      "Squat down like you're sitting in a low chair, thighs about parallel to the ground.",
+      "Keep your chest up and hands out in front (or on your hips) for balance.",
+      "Waddle forward one small step at a time, staying low the whole way — like a duck!",
+      "Walk 15 yards forward, then waddle backward 15 yards to reset.",
+      "Rest 30 seconds, repeat 3 times. Burns your legs but builds serious hip and knee control.",
+    ]
+  },
+  calfRaises: {
+    name: "Calf Raises",
+    duration: "5 min · 3×15",
+    tag: "balance",
+    steps: [
+      "Stand tall, feet hip-width apart. Hold a wall or chair if you need help balancing.",
+      "Toes pointing straight ahead: rise onto your tiptoes as high as you can, then slowly lower. Do 15 reps.",
+      "Turn your toes OUT (heels together, like a V) and do 15 more.",
+      "Turn your toes IN (pigeon-toed) and do a final 15. Different angles hit different parts of your calf!",
+      "Rest 30 seconds between each set of 15. Go slow on the way down — that's where the real work happens.",
+    ]
+  },
+  singleLegBalance: {
+    name: "Single-Leg Balance",
+    duration: "5 min",
+    tag: "balance",
+    steps: [
+      "Stand on your right foot, arms out to your sides like airplane wings.",
+      "Hold as still as you can for 30 seconds. Pick a spot on the wall to stare at — it helps!",
+      "Switch to your left foot and hold for 30 seconds.",
+      "Level up: try closing your eyes for 10 seconds on each foot.",
+      "Level up more: bend your standing knee slightly and hold 30 seconds each leg.",
+      "Do 2 full rounds (both legs, all challenges).",
+    ]
+  },
+  cariocaSteps: {
+    name: "Carioca Steps",
+    duration: "6 min",
+    tag: "balance",
+    steps: [
+      "Stand sideways to the direction you're going to travel. Pick a 15-20 yard path.",
+      "Cross your right foot OVER your left, then step your left foot out to the side.",
+      "Next cross your right foot BEHIND your left, then step your left foot out again.",
+      "Keep alternating over-behind-over-behind as you travel sideways. Hips stay facing forward the whole time.",
+      "Go 15-20 yards, then switch directions and lead with your left foot going back.",
+      "Do 4 total passes (2 each direction), moving a little faster once you feel confident.",
+    ]
+  },
+
+  // TRACK
+  trackSprints: {
+    name: "Track Sprints",
+    duration: "12 min",
+    tag: "track",
+    steps: [
+      "Find a straight path: a driveway, sidewalk, or field works great.",
+      "Mark a 50-yard distance (about 45 steps).",
+      "Sprint at full effort from one end to the other.",
+      "Walk back slowly. This is your rest period.",
+      "Do 6 sprints. Rest 1 minute after every 2 sprints. Focus on FORM: drive your knees up, pump your arms!",
+    ]
+  },
+  strideDrills: {
+    name: "Running Form Drills",
+    duration: "10 min",
+    tag: "track",
+    steps: [
+      "A-skips: march forward with an exaggerated knee drive, skipping. 20 yards.",
+      "B-skips: same as A-skips, but kick your leg out at the top. 20 yards.",
+      "High knees: sprint in place driving knees as high as possible, for 20 seconds.",
+      "Butt kicks: sprint in place kicking heels to your butt, for 20 seconds.",
+      "Straight-leg bounds: jump forward off alternate feet with straight legs. 20 yards. Rest, repeat 2x.",
+    ]
+  },
+
+  // STRETCHING
+  coolDownStretch: {
+    name: "Cool Down Stretch",
+    duration: "8 min",
+    tag: "stretch",
+    steps: [
+      "Quad stretch: stand on one leg, pull your other heel to your butt. Hold 20 seconds each leg.",
+      "Hamstring stretch: sit on the ground, legs out, reach toward your toes. Hold 30 seconds.",
+      "Hip flexor stretch: kneel on one knee, lean your hips forward. Hold 20 seconds each side.",
+      "Seated butterfly: sit with feet together, press knees toward the ground. Hold 30 seconds.",
+      "Shoulder cross: pull one arm across your chest, hold with the other. 20 seconds each arm.",
+      "Child's pose: kneel and reach arms forward, rest forehead down. Hold 30 seconds. Breathe slow!",
+    ]
+  },
+  hipMobility: {
+    name: "Hip Mobility",
+    duration: "6 min",
+    tag: "stretch",
+    steps: [
+      "Hip circles: hands on hips, make big slow circles, 10 each direction.",
+      "Pigeon pose: from push-up position, bring right knee to right wrist, extend left leg back. Hold 30 seconds.",
+      "Switch legs. Hold 30 seconds.",
+      "Deep squat hold: feet slightly wider than hips, squat all the way down, hold for 30 seconds.",
+      "Lateral lunge stretch: step wide right, bend right knee, keep left leg straight. Hold 20 seconds each side.",
+    ]
+  },
+};
+
+const CATEGORIES = [
+  { tag: 'warmup', label: 'Warmup' },
+  { tag: 'soccer', label: 'Soccer' },
+  { tag: 'football', label: 'Football' },
+  { tag: 'cardio', label: 'Cardio' },
+  { tag: 'plyo', label: 'Plyometrics' },
+  { tag: 'strength', label: 'Strength' },
+  { tag: 'balance', label: 'Balance & Agility' },
+  { tag: 'track', label: 'Track' },
+  { tag: 'stretch', label: 'Stretching' },
+];
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+
+const expanded = {}; // activityId -> bool
+
+// ─── RENDER ────────────────────────────────────────────────────────────────
+
+function render() {
+  const total = Object.keys(ACTIVITIES).length;
+
+  let html = `<div class="header-wrap"><div class="header">
+    <div class="header-title">All Exercises</div>
+    <div class="header-meta">${total} exercises across ${CATEGORIES.length} categories</div>
+  </div></div>`;
+
+  for (const cat of CATEGORIES) {
+    const entries = Object.entries(ACTIVITIES).filter(([, a]) => a.tag === cat.tag);
+    if (!entries.length) continue;
+
+    html += `<div class="section-title">${cat.label}</div>`;
+    html += `<div class="activities">`;
+    for (const [id, act] of entries) {
+      const isExp = !!expanded[id];
+      const tagClass = 'tag-' + act.tag;
+
+      html += `<div class="activity-item">
+        <div class="activity-row" onclick="toggleActivity('${id}')">
+          <div class="activity-text">
+            <div class="activity-name">${act.name}</div>
+            <span class="tag ${tagClass}">${act.tag}</span>
+            <div class="activity-duration">${act.duration}</div>
+          </div>
+          <div class="chevron ${isExp ? 'open' : ''}">›</div>
+        </div>`;
+
+      if (isExp && act.steps) {
+        html += `<div class="activity-detail open">
+          <ol class="detail-steps">${act.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+        </div>`;
+      }
+      html += `</div>`;
+    }
+    html += `</div>`;
+  }
+
+  document.getElementById('app').innerHTML = html;
+}
+
+function toggleActivity(id) {
+  expanded[id] = !expanded[id];
+  render();
+}
+
+// ─── THEME ─────────────────────────────────────────────────────────────────
+
+const THEME_KEY = 'trainToday_theme';
+
+const SUN_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+const MOON_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+
+function getEffectiveTheme() {
+  return document.documentElement.getAttribute('data-theme') ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const toggle = document.getElementById('themeToggle');
+  if (toggle) toggle.innerHTML = theme === 'dark' ? SUN_SVG : MOON_SVG;
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (metaTheme) metaTheme.content = theme === 'dark' ? '#0d0d0d' : '#f0f0f0';
+}
+
+function toggleTheme() {
+  const next = getEffectiveTheme() === 'dark' ? 'light' : 'dark';
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+}
+
+// ─── BOOT ──────────────────────────────────────────────────────────────────
+applyTheme(getEffectiveTheme());
+render();
+</script>
+</body>
+</html>
