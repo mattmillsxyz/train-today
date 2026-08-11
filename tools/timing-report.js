@@ -17,11 +17,13 @@ const doc = JSON.parse(
 // Places where the prose was ambiguous and a call had to be made. Keyed by
 // `${exerciseId}:${stepNumber}`, or `${exerciseId}` for whole-exercise calls.
 const JUDGEMENT_CALLS = {
-  'sprintIntervals:5': 'Prose says "8 sprints, rest 45s after every 2". Modelled as 4 rounds of 2 sprints — 8 total, rest between rounds.',
-  'trackSprints:5': 'Same shape as Sprint Intervals: 3 rounds of 2 sprints = 6 total, 60s rest between rounds.',
+  'sprintIntervals:5': 'Prose says "8 sprints, rest 45s after every 2". Loops the sprint-and-walk-back pair 8 times, resting after every second one.',
+  'trackSprints:5': 'Same shape as Sprint Intervals: the sprint-and-walk-back pair 6 times, 60s rest after every second one.',
   'calfRaises:2': 'The "rest 30 seconds between each set" instruction lives in step 5 but applies to steps 2-4. Attached a trailing 30s rest to each variation.',
-  'coneDribbling:4': 'Work phase is self-paced (dribble the line); 3 sets comes from the "12 min · 3 sets" duration label.',
+  'coneDribbling:4': 'The 3 sets come from the "12 min · 3 sets" duration label — the step text alone only says "repeat".',
+  'footballAgility:4': 'The loop spans steps 2-3, so the "used by real NFL players!" line in step 3 gets shown again each round. Harmless, but reordering it after the loop would read better.',
   'singleLegBalance:4': '"10 seconds on each foot" — 2 rounds with no rest between, so it flows straight from one foot to the other.',
+  'strideDrills:5': 'The only self-paced interval left: the bounds are described in this same step, so it stays an interval rather than a loop.',
   'cariocaSteps': 'Left as an open block despite the "4 passes" count — it is travel-based technique practice, not a timed set.',
 };
 
@@ -49,7 +51,16 @@ function describe(t) {
         : t.reps !== null ? `${t.reps} reps${t.each ? ` each ${t.each}` : ''}`
         : 'self-paced';
       const rest = t.rest > 0 ? `${fmtSecs(t.rest)} rest` : 'no rest';
-      return { kind: 'interval', label: `${t.rounds}× · ${work} · ${rest}` };
+      // A single round is just "work then rest" — the "1×" adds nothing.
+      const rounds = t.rounds > 1 ? `${t.rounds}× · ` : '';
+      return { kind: 'interval', label: `${rounds}${work} · ${rest}` };
+    }
+    case 'loop': {
+      const every = t.restEvery > 1 ? ` every ${t.restEvery}` : '';
+      return {
+        kind: 'loop',
+        label: `${fmtSecs(t.rest)} rest${every} → back to step ${t.repeatFrom} · ${t.rounds} rounds`,
+      };
     }
   }
 }
@@ -77,15 +88,31 @@ for (const ex of exercises) {
 
 // ── Render ──────────────────────────────────────────────────────────────────
 
-function renderStep(ex, step, i) {
+/** Step numbers (1-based) that sit inside a loop body, mapped to their loop. */
+function loopBodies(ex) {
+  const inBody = new Map();
+  ex.steps.forEach((s, i) => {
+    if (s.timing && s.timing.type === 'loop') {
+      for (let n = s.timing.repeatFrom; n <= i; n++) inBody.set(n, s.timing);
+    }
+  });
+  return inBody;
+}
+
+function renderStep(ex, step, i, inBody) {
   const n = i + 1;
   const d = describe(step.timing);
   const note = JUDGEMENT_CALLS[`${ex.id}:${n}`];
+  const loop = inBody.get(n);
+  const cls = ['step'];
+  if (!d) cls.push('step--untimed');
+  if (loop) cls.push('step--looped');
   return `
-        <li class="step${d ? '' : ' step--untimed'}">
+        <li class="${cls.join(' ')}">
           <span class="step__n">${n}</span>
           <div class="step__body">
             <p class="step__text">${esc(step.text)}</p>
+            ${loop ? `<span class="looped">↻ repeats ${loop.rounds}×</span>` : ''}
             ${note ? `<p class="step__note">${esc(note)}</p>` : ''}
           </div>
           ${d
@@ -96,6 +123,7 @@ function renderStep(ex, step, i) {
 
 function renderExercise(ex) {
   const timed = ex.steps.filter((s) => s.timing !== null).length;
+  const inBody = loopBodies(ex);
   return `
       <article class="ex" id="${esc(ex.id)}">
         <header class="ex__head">
@@ -108,7 +136,7 @@ function renderExercise(ex) {
           ${ex.prMetric ? `<p class="ex__pr">Tracks a record — ${esc(ex.prMetric.label)} <span>(${esc(ex.prMetric.unit)}, ${ex.prMetric.higherIsBetter ? 'higher' : 'lower'} is better)</span></p>` : ''}
           ${JUDGEMENT_CALLS[ex.id] ? `<p class="step__note">${esc(JUDGEMENT_CALLS[ex.id])}</p>` : ''}
         </header>
-        <ol class="steps">${ex.steps.map((s, i) => renderStep(ex, s, i)).join('')}
+        <ol class="steps">${ex.steps.map((s, i) => renderStep(ex, s, i, inBody)).join('')}
         </ol>
       </article>`;
 }
@@ -133,6 +161,9 @@ const html = `<title>Train Today — Timing Review</title>
     --rule-soft: #eaf0ed;
     --chip-bg: #e6f4ed;
     --note-bg: #fdf6e6;
+    --loop-bg: #e2edf8;
+    --loop-ink: #1f5c96;
+    --loop-tint: #f6fafd;
     --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
     --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
@@ -150,6 +181,9 @@ const html = `<title>Train Today — Timing Review</title>
       --rule-soft: #1e2321;
       --chip-bg: #0d2e1f;
       --note-bg: #241d0c;
+      --loop-bg: #10273a;
+      --loop-ink: #6fb4f0;
+      --loop-tint: #111820;
     }
   }
   :root[data-theme="dark"] {
@@ -165,6 +199,9 @@ const html = `<title>Train Today — Timing Review</title>
     --rule-soft: #1e2321;
     --chip-bg: #0d2e1f;
     --note-bg: #241d0c;
+    --loop-bg: #10273a;
+    --loop-ink: #6fb4f0;
+    --loop-tint: #111820;
   }
 
   * { box-sizing: border-box; }
@@ -339,6 +376,15 @@ const html = `<title>Train Today — Timing Review</title>
     border: 1px solid var(--rule);
     color: var(--ink-faint);
     font-weight: 400;
+  }
+  .timing--loop { background: var(--loop-bg); color: var(--loop-ink); }
+  .step--looped { background: var(--loop-tint); }
+  .looped {
+    align-self: flex-start;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    color: var(--loop-ink);
   }
   @media (max-width: 560px) {
     .step { grid-template-columns: 22px 1fr; }

@@ -32,9 +32,12 @@ const ID_ALIASES = { wallPassing: 'passAndMove' };
 const errors = [];
 const warnings = [];
 const notes = [];
+const loops = [];
+const selfPaced = [];
 
 const fail = (m) => errors.push(m);
 const warn = (m) => warnings.push(m);
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
 
 // ── Extract the original ACTIVITIES literal from index.html ─────────────────
 
@@ -66,7 +69,7 @@ function extractOriginalActivities(html) {
 
 // ── Timing validation ───────────────────────────────────────────────────────
 
-function validateTiming(t, where) {
+function validateTiming(t, where, stepIndex, stepCount) {
   if (t === null) return { timed: 0, kind: 'none' };
   if (typeof t !== 'object') { fail(`${where}: timing must be an object or null`); return { timed: 0 }; }
 
@@ -87,23 +90,28 @@ function validateTiming(t, where) {
       return { timed: (t.count || 0) * 3 * sides, kind: 'reps' };
     }
     case 'interval': {
-      // work and reps may BOTH be null: a self-paced work phase (sprint a
-      // distance, run one ladder pass) that the athlete taps to end, followed
-      // by a rest countdown. Common here — many drills are distance-based.
+      // An interval describes work that happens WITHIN this step. If the work
+      // is described in earlier steps and this step only says "rest and
+      // repeat", it is a loop, not an interval — see the loop case below.
       if (t.work !== null && t.reps !== null) {
         fail(`${where}: interval cannot set both work and reps — pick time or count`);
       }
       if (t.work !== null) posInt(t.work, 'work');
       if (t.reps !== null) posInt(t.reps, 'reps');
-      if (t.work === null && t.reps === null && t.rest === 0) {
-        fail(`${where}: interval is entirely untimed (self-paced work, no rest) — use null timing instead`);
-      }
       if (!Number.isInteger(t.rest) || t.rest < 0) fail(`${where}: rest must be a non-negative integer`);
       posInt(t.rounds, 'rounds');
       if (t.each !== null && typeof t.each !== 'string') fail(`${where}: each must be a string or null`);
-      // Self-paced rounds get a nominal 30s allowance so the duration estimate
-      // isn't wildly low; it's a sanity check, not a scheduling input.
+
+      // Self-paced work inside the step is legal, but it is the exact shape
+      // that hides a mis-modelled loop, so every instance gets surfaced for a
+      // human to confirm the work really is described in THIS step.
       const SELF_PACED_ALLOWANCE = 30;
+      if (t.work === null && t.reps === null) {
+        if (t.rest === 0) {
+          fail(`${where}: interval has no work, no reps and no rest — nothing to time`);
+        }
+        selfPaced.push(where);
+      }
       const perRound = t.work !== null ? t.work
         : t.reps !== null ? t.reps * 3
         : SELF_PACED_ALLOWANCE;
@@ -112,6 +120,32 @@ function validateTiming(t, where) {
       // step text explicitly describes a trailing rest (rounds === 1).
       const rests = rounds > 1 ? (rounds - 1) : 1;
       return { timed: perRound * rounds + (t.rest || 0) * rests, kind: 'interval' };
+    }
+    case 'loop': {
+      // This step is the rest phase plus a jump back to an earlier step. The
+      // work lives in steps repeatFrom..(this step - 1).
+      posInt(t.repeatFrom, 'repeatFrom');
+      posInt(t.rounds, 'rounds');
+      posInt(t.restEvery, 'restEvery');
+      if (!Number.isInteger(t.rest) || t.rest <= 0) {
+        fail(`${where}: loop rest must be a positive integer (a loop with no rest is just a repeat count)`);
+      }
+      const here = stepIndex + 1;
+      if (t.repeatFrom >= here) {
+        fail(`${where}: repeatFrom (${t.repeatFrom}) must point at an earlier step than this one (${here})`);
+      }
+      if (t.repeatFrom > stepCount) {
+        fail(`${where}: repeatFrom (${t.repeatFrom}) is past the end of the exercise`);
+      }
+      if (t.rounds % t.restEvery !== 0) {
+        warn(`${where}: rounds (${t.rounds}) is not a multiple of restEvery (${t.restEvery}) — the last group is short`);
+      }
+      const bodySteps = here - t.repeatFrom;
+      loops.push(`${where}: repeats steps ${t.repeatFrom}-${here - 1} (${plural(bodySteps, 'step')}) × ${t.rounds}, ${t.rest}s rest every ${t.restEvery}`);
+      // The looped body is self-paced by construction; allow a nominal 30s per
+      // round plus the actual rest time.
+      const restCount = Math.floor(t.rounds / t.restEvery);
+      return { timed: 30 * t.rounds + t.rest * Math.max(restCount - 1, 0), kind: 'loop' };
     }
     default:
       fail(`${where}: unknown timing type ${JSON.stringify(t.type)}`);
@@ -204,7 +238,7 @@ for (const ex of exercises) {
       fail(`${where} step ${i + 1}: text must be a non-empty string`);
     }
     if (!('timing' in step)) fail(`${where} step ${i + 1}: missing timing key (use null for untimed)`);
-    const r = validateTiming(step.timing, `${where} step ${i + 1}`);
+    const r = validateTiming(step.timing, `${where} step ${i + 1}`, i, ex.steps.length);
     if (step.timing !== null) timedSteps++;
     derived += r.timed;
   });
@@ -239,6 +273,17 @@ console.log(`  exercises      ${exercises.length}  (${steppedCount} stepped, ${o
 console.log(`  steps          ${totalSteps}  (${timedSteps} timed, ${totalSteps - timedSteps} tap-to-advance)`);
 console.log(`  original ids   ${Object.keys(original).length} in index.html\n`);
 
+if (loops.length) {
+  console.log('Multi-step loops (work lives in the repeated steps, not the loop step):');
+  for (const l of loops) console.log(`  ↻ ${l}`);
+  console.log('');
+}
+if (selfPaced.length) {
+  console.log('Self-paced intervals — CONFIRM the work is described in this step,');
+  console.log('not an earlier one. If it is earlier, this should be a loop:');
+  for (const s of selfPaced) console.log(`  ? ${s}`);
+  console.log('');
+}
 if (notes.length) {
   console.log('Notes:');
   for (const n of notes) console.log(`  · ${n}`);

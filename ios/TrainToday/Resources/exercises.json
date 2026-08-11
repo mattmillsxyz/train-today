@@ -50,7 +50,7 @@
         { "text": "Set up 5 cones (or water bottles, shoes, anything!) in a straight line, about 3 feet apart.", "timing": null },
         { "text": "Dribble through them using only the inside of your foot. Go slow and controlled first.", "timing": null },
         { "text": "Come back through using the outside of your foot.", "timing": null },
-        { "text": "Rest 30 seconds, then repeat. Try to go a little faster each set.", "timing": { "type": "interval", "work": null, "reps": null, "each": null, "rest": 30, "rounds": 3 } },
+        { "text": "Rest 30 seconds, then repeat. Try to go a little faster each set.", "timing": { "type": "loop", "repeatFrom": 2, "rounds": 3, "rest": 30, "restEvery": 1 } },
         { "text": "Bonus: time yourself and try to beat your record!", "timing": null }
       ]
     },
@@ -163,7 +163,7 @@
         { "text": "Set up 4 cones in a square about 5 yards apart.", "timing": null },
         { "text": "Sprint forward to the first cone, shuffle sideways to the second, backpedal to the third, shuffle back to start.", "timing": null },
         { "text": "This is called a 4-corner drill. It's used by real NFL players!", "timing": null },
-        { "text": "Do 4 rounds, resting 30 seconds between each.", "timing": { "type": "interval", "work": null, "reps": null, "each": null, "rest": 30, "rounds": 4 } },
+        { "text": "Do 4 rounds, resting 30 seconds between each.", "timing": { "type": "loop", "repeatFrom": 2, "rounds": 4, "rest": 30, "restEvery": 1 } },
         { "text": "Try to keep your hips low and stay on the balls of your feet. No flat-footed running!", "timing": null }
       ]
     },
@@ -181,7 +181,7 @@
         { "text": "Mark a start and end point about 30-40 yards apart.", "timing": null },
         { "text": "Sprint as FAST as you can from one end to the other.", "timing": null },
         { "text": "Walk back slowly. This is your rest.", "timing": null },
-        { "text": "Do 8 sprints total. Rest 45 seconds after every 2 sprints.", "timing": { "type": "interval", "work": null, "reps": 2, "each": null, "rest": 45, "rounds": 4 } }
+        { "text": "Do 8 sprints total. Rest 45 seconds after every 2 sprints.", "timing": { "type": "loop", "repeatFrom": 3, "rounds": 8, "rest": 45, "restEvery": 2 } }
       ]
     },
     {
@@ -212,7 +212,7 @@
         { "text": "Set up 4 cones in a line: 5 yards, 10 yards, 15 yards, and 20 yards from your start.", "timing": null },
         { "text": "Sprint to the first cone, touch it (or the ground), sprint back to start.", "timing": null },
         { "text": "Sprint to the second cone, back to start. Then third, then fourth.", "timing": null },
-        { "text": "That's 1 full suicide. Rest 45 seconds and repeat.", "timing": { "type": "interval", "work": null, "reps": null, "each": null, "rest": 45, "rounds": 4 } },
+        { "text": "That's 1 full suicide. Rest 45 seconds and repeat.", "timing": { "type": "loop", "repeatFrom": 2, "rounds": 4, "rest": 45, "restEvery": 1 } },
         { "text": "Try to complete 3-4 suicides. These are tough, so give everything!", "timing": null }
       ]
     },
@@ -229,7 +229,7 @@
         { "text": "Run through stepping one foot in each box as fast as you can.", "timing": null },
         { "text": "Try lateral shuffles: step side to side through each box.", "timing": null },
         { "text": "Try the in-in-out-out pattern: both feet in, both feet out the sides, repeat.", "timing": null },
-        { "text": "Rest 20 seconds between each pass. Do 3 passes of each pattern.", "timing": { "type": "interval", "work": null, "reps": null, "each": null, "rest": 20, "rounds": 3 } }
+        { "text": "Rest 20 seconds between each pass. Do 3 passes of each pattern.", "timing": { "type": "loop", "repeatFrom": 2, "rounds": 3, "rest": 20, "restEvery": 1 } }
       ]
     },
 
@@ -424,7 +424,7 @@
         { "text": "Keep your chest up and hands out in front (or on your hips) for balance.", "timing": null },
         { "text": "Waddle forward one small step at a time, staying low the whole way — like a duck!", "timing": null },
         { "text": "Walk 15 yards forward, then waddle backward 15 yards to reset.", "timing": null },
-        { "text": "Rest 30 seconds, repeat 3 times. Burns your legs but builds serious hip and knee control.", "timing": { "type": "interval", "work": null, "reps": null, "each": null, "rest": 30, "rounds": 3 } }
+        { "text": "Rest 30 seconds, repeat 3 times. Burns your legs but builds serious hip and knee control.", "timing": { "type": "loop", "repeatFrom": 4, "rounds": 3, "rest": 30, "restEvery": 1 } }
       ]
     },
     {
@@ -491,7 +491,7 @@
         { "text": "Mark a 50-yard distance (about 45 steps).", "timing": null },
         { "text": "Sprint at full effort from one end to the other.", "timing": null },
         { "text": "Walk back slowly. This is your rest period.", "timing": null },
-        { "text": "Do 6 sprints. Rest 1 minute after every 2 sprints. Focus on FORM: drive your knees up, pump your arms!", "timing": { "type": "interval", "work": null, "reps": 2, "each": null, "rest": 60, "rounds": 3 } }
+        { "text": "Do 6 sprints. Rest 1 minute after every 2 sprints. Focus on FORM: drive your knees up, pump your arms!", "timing": { "type": "loop", "repeatFrom": 3, "rounds": 6, "rest": 60, "restEvery": 2 } }
       ]
     },
     {
