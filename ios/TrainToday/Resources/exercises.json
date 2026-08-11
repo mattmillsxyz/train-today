@@ -1,0 +1,548 @@
+{
+  "version": 1,
+  "note": "Canonical exercise library for the Train Today iOS app. Step text is preserved verbatim from the original web app; only timing metadata has been added.",
+  "tags": ["warmup", "soccer", "football", "cardio", "plyo", "strength", "balance", "track", "stretch"],
+  "exercises": [
+    {
+      "id": "dynamicWarmup",
+      "name": "Dynamic Warmup",
+      "tag": "warmup",
+      "displayDuration": "8 min",
+      "estimatedMinutes": 8,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Jog in place for 1 minute to get your heart rate up.", "timing": { "type": "work", "seconds": 60 } },
+        { "text": "High knees: lift each knee up to your belly button while jogging, for 30 seconds.", "timing": { "type": "work", "seconds": 30 } },
+        { "text": "Butt kicks: kick your heels up toward your butt while jogging, for 30 seconds.", "timing": { "type": "work", "seconds": 30 } },
+        { "text": "Leg swings: hold a wall or fence, swing each leg forward and back 10 times.", "timing": { "type": "reps", "count": 10, "each": "leg" } },
+        { "text": "Arm circles: big circles forward 10 times, then backward 10 times.", "timing": { "type": "reps", "count": 10, "each": "direction" } },
+        { "text": "Hip circles: hands on hips, make big circles with your hips, 10 each way.", "timing": { "type": "reps", "count": 10, "each": "direction" } },
+        { "text": "Lateral shuffles: side-step quickly back and forth, for 30 seconds.", "timing": { "type": "work", "seconds": 30 } }
+      ]
+    },
+
+    {
+      "id": "jugglingBasic",
+      "name": "Juggling Practice",
+      "tag": "soccer",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "openBlock",
+      "prMetric": { "label": "Best juggling streak", "unit": "count", "higherIsBetter": true },
+      "steps": [
+        { "text": "Drop the ball, let it bounce once, then kick it up with the top of your foot (laces). Catch it. Repeat.", "timing": null },
+        { "text": "Once you feel comfortable, try to kick it twice before catching it.", "timing": null },
+        { "text": "Keep your foot flat when you kick. Imagine your foot is a shelf the ball sits on.", "timing": null },
+        { "text": "Count your best streak! Write it down and try to beat it tomorrow.", "timing": null },
+        { "text": "If you get good, try alternating feet: right, left, right, left.", "timing": null }
+      ]
+    },
+    {
+      "id": "coneDribbling",
+      "name": "Cone Dribbling",
+      "tag": "soccer",
+      "displayDuration": "12 min · 3 sets",
+      "estimatedMinutes": 12,
+      "mode": "stepped",
+      "prMetric": { "label": "Fastest cone run", "unit": "seconds", "higherIsBetter": false },
+      "steps": [
+        { "text": "Set up 5 cones (or water bottles, shoes, anything!) in a straight line, about 3 feet apart.", "timing": null },
+        { "text": "Dribble through them using only the inside of your foot. Go slow and controlled first.", "timing": null },
+        { "text": "Come back through using the outside of your foot.", "timing": null },
+        { "text": "Rest 30 seconds, then repeat. Try to go a little faster each set.", "timing": { "type": "interval", "work": null, "reps": null, "each": null, "rest": 30, "rounds": 3 } },
+        { "text": "Bonus: time yourself and try to beat your record!", "timing": null }
+      ]
+    },
+    {
+      "id": "wallPassing",
+      "name": "Wall Passing",
+      "tag": "soccer",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "openBlock",
+      "prMetric": null,
+      "steps": [
+        { "text": "Stand about 6 feet from a wall or rebounder.", "timing": null },
+        { "text": "Pass the ball firmly against the wall with the inside of your foot.", "timing": null },
+        { "text": "Control the return with your opposite foot. Soft touch!", "timing": null },
+        { "text": "Try 20 passes with your right foot, then 20 with your left foot.", "timing": null },
+        { "text": "Move back a few feet once you're comfortable and repeat.", "timing": null }
+      ]
+    },
+    {
+      "id": "shootingDrill",
+      "name": "Shooting Practice",
+      "tag": "soccer",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "openBlock",
+      "prMetric": null,
+      "steps": [
+        { "text": "Set up a goal (use cones or pick a spot on a wall/fence).", "timing": null },
+        { "text": "Start 10 feet away. Shoot using your laces and make sure you follow through!", "timing": null },
+        { "text": "Take 10 shots from straight on, then 10 from the left side, then 10 from the right.", "timing": null },
+        { "text": "After each shot, jog to get the ball. Don't just walk!", "timing": null },
+        { "text": "Try aiming for corners (low left, low right) instead of straight at the middle.", "timing": null }
+      ]
+    },
+    {
+      "id": "firstTouchDrill",
+      "name": "First Touch Drill",
+      "tag": "soccer",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "openBlock",
+      "prMetric": null,
+      "steps": [
+        { "text": "Toss the ball up in the air about head height. Let it drop.", "timing": null },
+        { "text": "Stop the ball dead with the sole (bottom) of your foot before it bounces twice.", "timing": null },
+        { "text": "Then try stopping it with the inside of your foot.", "timing": null },
+        { "text": "Do 15 reps each foot. The goal is a soft, controlled touch, not kicking it away.", "timing": { "type": "reps", "count": 15, "each": "foot" } },
+        { "text": "Challenge: toss higher and try to chest-trap it, then foot trap before it bounces.", "timing": null }
+      ]
+    },
+    {
+      "id": "insideOutsideDribble",
+      "name": "Inside/Outside Dribble",
+      "tag": "soccer",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "openBlock",
+      "prMetric": null,
+      "steps": [
+        { "text": "In an open space, dribble forward tapping the ball with the inside of your right foot, then the outside.", "timing": null },
+        { "text": "Inside tap, outside tap, inside tap, outside tap. Keep a rhythm.", "timing": null },
+        { "text": "Do this for 20 yards, then turn around and come back.", "timing": null },
+        { "text": "Repeat 4 times, then switch to your left foot.", "timing": { "type": "reps", "count": 4, "each": "foot" } },
+        { "text": "This improves your ball control and makes you harder to defend.", "timing": null }
+      ]
+    },
+
+    {
+      "id": "routeRunning",
+      "name": "Route Running",
+      "tag": "football",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "openBlock",
+      "prMetric": null,
+      "steps": [
+        { "text": "Set up 2 cones: one where you start, one 10 yards ahead.", "timing": null },
+        { "text": "Run hard to the cone, then cut sharply to the right (out route). Raise your hands like you're catching.", "timing": null },
+        { "text": "Jog back. Repeat, this time cutting to the left.", "timing": null },
+        { "text": "Do 6 reps each direction. Focus on planting your outside foot hard before cutting.", "timing": { "type": "reps", "count": 6, "each": "direction" } },
+        { "text": "Advanced: add a third cone and practice a corner route. Go straight, then cut out at 45°.", "timing": null }
+      ]
+    },
+    {
+      "id": "handCatching",
+      "name": "Catching Drills",
+      "tag": "football",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "openBlock",
+      "prMetric": null,
+      "steps": [
+        { "text": "Toss a football up and catch with just your fingertips, not your palms.", "timing": null },
+        { "text": "Run 5 yards, turn around, catch a toss. Eyes on the ball the whole time, not the catcher.", "timing": null },
+        { "text": "Try catching while looking away, then turning at the last second.", "timing": null },
+        { "text": "10 catches straight on, then run routes and catch: 5 cuts left, 5 cuts right.", "timing": null },
+        { "text": "Remember: catch the ball, THEN tuck it in. Don't tuck early!", "timing": null }
+      ]
+    },
+    {
+      "id": "footballAgility",
+      "name": "Football Agility",
+      "tag": "football",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Set up 4 cones in a square about 5 yards apart.", "timing": null },
+        { "text": "Sprint forward to the first cone, shuffle sideways to the second, backpedal to the third, shuffle back to start.", "timing": null },
+        { "text": "This is called a 4-corner drill. It's used by real NFL players!", "timing": null },
+        { "text": "Do 4 rounds, resting 30 seconds between each.", "timing": { "type": "interval", "work": null, "reps": null, "each": null, "rest": 30, "rounds": 4 } },
+        { "text": "Try to keep your hips low and stay on the balls of your feet. No flat-footed running!", "timing": null }
+      ]
+    },
+
+    {
+      "id": "sprintIntervals",
+      "name": "Sprint Intervals",
+      "tag": "cardio",
+      "displayDuration": "12 min",
+      "estimatedMinutes": 12,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Find a flat area: a backyard, street, or park works great.", "timing": null },
+        { "text": "Mark a start and end point about 30-40 yards apart.", "timing": null },
+        { "text": "Sprint as FAST as you can from one end to the other.", "timing": null },
+        { "text": "Walk back slowly. This is your rest.", "timing": null },
+        { "text": "Do 8 sprints total. Rest 45 seconds after every 2 sprints.", "timing": { "type": "interval", "work": null, "reps": 2, "each": null, "rest": 45, "rounds": 4 } }
+      ]
+    },
+    {
+      "id": "bikeRide",
+      "name": "Bike Ride",
+      "tag": "cardio",
+      "displayDuration": "20 min",
+      "estimatedMinutes": 20,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Gear up: helmet on, no shortcuts!", "timing": null },
+        { "text": "Ride at a comfortable pace for the first 5 minutes to warm up your legs.", "timing": { "type": "work", "seconds": 300 } },
+        { "text": "For the middle 10 minutes, try to go a little faster. You should be breathing harder.", "timing": { "type": "work", "seconds": 600 } },
+        { "text": "Cool down the last 5 minutes at an easy pace.", "timing": { "type": "work", "seconds": 300 } },
+        { "text": "Try to explore a slightly different route each time!", "timing": null }
+      ]
+    },
+    {
+      "id": "suicideSprints",
+      "name": "Suicide Sprints",
+      "tag": "cardio",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "stepped",
+      "prMetric": { "label": "Fastest suicide", "unit": "seconds", "higherIsBetter": false },
+      "steps": [
+        { "text": "Set up 4 cones in a line: 5 yards, 10 yards, 15 yards, and 20 yards from your start.", "timing": null },
+        { "text": "Sprint to the first cone, touch it (or the ground), sprint back to start.", "timing": null },
+        { "text": "Sprint to the second cone, back to start. Then third, then fourth.", "timing": null },
+        { "text": "That's 1 full suicide. Rest 45 seconds and repeat.", "timing": { "type": "interval", "work": null, "reps": null, "each": null, "rest": 45, "rounds": 4 } },
+        { "text": "Try to complete 3-4 suicides. These are tough, so give everything!", "timing": null }
+      ]
+    },
+    {
+      "id": "agilityLadder",
+      "name": "Agility Ladder Work",
+      "tag": "cardio",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "No ladder? Use chalk or tape on the ground to make 10 boxes, each about 18 inches.", "timing": null },
+        { "text": "Run through stepping one foot in each box as fast as you can.", "timing": null },
+        { "text": "Try lateral shuffles: step side to side through each box.", "timing": null },
+        { "text": "Try the in-in-out-out pattern: both feet in, both feet out the sides, repeat.", "timing": null },
+        { "text": "Rest 20 seconds between each pass. Do 3 passes of each pattern.", "timing": { "type": "interval", "work": null, "reps": null, "each": null, "rest": 20, "rounds": 3 } }
+      ]
+    },
+
+    {
+      "id": "boxJumps",
+      "name": "Box Jumps",
+      "tag": "plyo",
+      "displayDuration": "8 min · 3×8",
+      "estimatedMinutes": 8,
+      "mode": "stepped",
+      "prMetric": { "label": "Highest box", "unit": "inches", "higherIsBetter": true },
+      "steps": [
+        { "text": "Find a sturdy box, step, or ledge about 12-18 inches high.", "timing": null },
+        { "text": "Stand about 1 foot in front. Bend your knees, swing your arms back.", "timing": null },
+        { "text": "Explode up: swing arms forward, jump, and land SOFTLY on top with bent knees.", "timing": null },
+        { "text": "Step back down (don't jump down). Reset and go again.", "timing": null },
+        { "text": "Do 8 jumps, rest 30 seconds, repeat 3 times. LAND SOFT, no loud thuds!", "timing": { "type": "interval", "work": null, "reps": 8, "each": null, "rest": 30, "rounds": 3 } }
+      ]
+    },
+    {
+      "id": "broadJumps",
+      "name": "Broad Jumps",
+      "tag": "plyo",
+      "displayDuration": "8 min · 3×6",
+      "estimatedMinutes": 8,
+      "mode": "stepped",
+      "prMetric": { "label": "Longest broad jump", "unit": "inches", "higherIsBetter": true },
+      "steps": [
+        { "text": "Stand with feet shoulder-width apart. Bend your knees and swing arms back.", "timing": null },
+        { "text": "Jump as FAR forward as you can. Use your arms to help propel you.", "timing": null },
+        { "text": "Land softly with both feet, knees bent like a shock absorber.", "timing": null },
+        { "text": "Mark where you landed. Try to beat your distance each jump!", "timing": null },
+        { "text": "Do 6 jumps, rest 30 seconds, repeat 3 times.", "timing": { "type": "interval", "work": null, "reps": 6, "each": null, "rest": 30, "rounds": 3 } }
+      ]
+    },
+    {
+      "id": "lateralBounds",
+      "name": "Lateral Bounds",
+      "tag": "plyo",
+      "displayDuration": "8 min · 3×8",
+      "estimatedMinutes": 8,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Stand on your right foot. Bend your knee slightly.", "timing": null },
+        { "text": "Jump sideways to the left, landing on your LEFT foot only. Balance for 1 second.", "timing": null },
+        { "text": "Then jump back to the right, landing on your RIGHT foot. That's 1 rep.", "timing": null },
+        { "text": "Keep your chest up and land soft. Pretend the floor is hot!", "timing": null },
+        { "text": "Do 8 total bounds, rest 30 seconds, repeat 3 times.", "timing": { "type": "interval", "work": null, "reps": 8, "each": null, "rest": 30, "rounds": 3 } }
+      ]
+    },
+    {
+      "id": "jumpSquats",
+      "name": "Jump Squats",
+      "tag": "plyo",
+      "displayDuration": "8 min · 3×10",
+      "estimatedMinutes": 8,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Stand with feet shoulder-width apart, toes pointing slightly out.", "timing": null },
+        { "text": "Lower into a squat with thighs parallel to the ground and chest up.", "timing": null },
+        { "text": "Explode up and jump as high as you can!", "timing": null },
+        { "text": "Land softly back in the squat position. Don't let your knees cave in.", "timing": null },
+        { "text": "Do 10 jump squats, rest 30 seconds, repeat 3 sets.", "timing": { "type": "interval", "work": null, "reps": 10, "each": null, "rest": 30, "rounds": 3 } }
+      ]
+    },
+
+    {
+      "id": "pushups",
+      "name": "Push-Ups",
+      "tag": "strength",
+      "displayDuration": "6 min · 3×10",
+      "estimatedMinutes": 6,
+      "mode": "stepped",
+      "prMetric": { "label": "Most push-ups in a set", "unit": "count", "higherIsBetter": true },
+      "steps": [
+        { "text": "Start in a plank: hands slightly wider than shoulders, body in a straight line.", "timing": null },
+        { "text": "Lower your chest to just above the ground. Keep elbows at a 45° angle, not flared wide.", "timing": null },
+        { "text": "Push back up to start. That's 1 rep.", "timing": null },
+        { "text": "Keep your core tight the whole time. No sagging hips!", "timing": null },
+        { "text": "Do 10, rest 30 seconds, repeat 3 sets. Can't do 10? Do 5 on your knees. That's great too!", "timing": { "type": "interval", "work": null, "reps": 10, "each": null, "rest": 30, "rounds": 3 } }
+      ]
+    },
+    {
+      "id": "mountainClimbers",
+      "name": "Mountain Climbers",
+      "tag": "strength",
+      "displayDuration": "6 min · 3×20 sec",
+      "estimatedMinutes": 6,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Start in a push-up position with arms straight and body flat like a board.", "timing": null },
+        { "text": "Drive your right knee toward your chest, then quickly switch: left knee in, right leg out.", "timing": null },
+        { "text": "Keep alternating fast, like you're running in place horizontally.", "timing": null },
+        { "text": "Keep hips down. Don't let your butt stick up in the air.", "timing": null },
+        { "text": "Go for 20 seconds, rest 20 seconds. Repeat 3 times. It should burn!", "timing": { "type": "interval", "work": 20, "reps": null, "each": null, "rest": 20, "rounds": 3 } }
+      ]
+    },
+    {
+      "id": "tricepDips",
+      "name": "Tricep Dips",
+      "tag": "strength",
+      "displayDuration": "6 min · 3×10",
+      "estimatedMinutes": 6,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Find a sturdy chair, bench, or low step. Sit on the edge.", "timing": null },
+        { "text": "Put your hands next to your hips, fingers pointing forward.", "timing": null },
+        { "text": "Slide your butt off the edge, legs out in front with knees slightly bent.", "timing": null },
+        { "text": "Bend elbows and lower yourself down until elbows reach 90°.", "timing": null },
+        { "text": "Push back up to start. That's 1 rep. Do 10, rest 30 seconds, 3 sets.", "timing": { "type": "interval", "work": null, "reps": 10, "each": null, "rest": 30, "rounds": 3 } }
+      ]
+    },
+    {
+      "id": "plankHold",
+      "name": "Plank Hold",
+      "tag": "strength",
+      "displayDuration": "5 min · 3×30 sec",
+      "estimatedMinutes": 5,
+      "mode": "stepped",
+      "prMetric": { "label": "Longest plank", "unit": "seconds", "higherIsBetter": true },
+      "steps": [
+        { "text": "Get in push-up position. Drop to your forearms with elbows under shoulders.", "timing": null },
+        { "text": "Body should be straight from head to heels, like a wooden plank.", "timing": null },
+        { "text": "Squeeze your belly button toward your spine. Don't hold your breath!", "timing": null },
+        { "text": "Hold for 30 seconds. Rest 20 seconds. Repeat 3 times.", "timing": { "type": "interval", "work": 30, "reps": null, "each": null, "rest": 20, "rounds": 3 } },
+        { "text": "Too easy? Lift one foot off the ground to make it harder.", "timing": null }
+      ]
+    },
+    {
+      "id": "squats",
+      "name": "Bodyweight Squats",
+      "tag": "strength",
+      "displayDuration": "6 min · 3×12",
+      "estimatedMinutes": 6,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Stand with feet shoulder-width apart, toes pointed out slightly.", "timing": null },
+        { "text": "Stretch your arms out in front for balance.", "timing": null },
+        { "text": "Sit back and down like you're sitting into a chair. Chest stays up!", "timing": null },
+        { "text": "Lower until thighs are parallel to the ground (or as low as comfortable).", "timing": null },
+        { "text": "Drive through your heels to stand back up. Do 12, rest 30 seconds, 3 sets.", "timing": { "type": "interval", "work": null, "reps": 12, "each": null, "rest": 30, "rounds": 3 } }
+      ]
+    },
+    {
+      "id": "burpees",
+      "name": "Burpees",
+      "tag": "strength",
+      "displayDuration": "6 min · 3×6",
+      "estimatedMinutes": 6,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Stand up straight. Drop hands to the floor, jump feet back to a plank.", "timing": null },
+        { "text": "Do one push-up (or skip it if you're tired).", "timing": null },
+        { "text": "Jump feet back to your hands, then explode up: jump and clap overhead!", "timing": null },
+        { "text": "Land soft, immediately go into the next one.", "timing": null },
+        { "text": "Do 6, rest 40 seconds, repeat 3 sets. These are HARD but make you super athletic!", "timing": { "type": "interval", "work": null, "reps": 6, "each": null, "rest": 40, "rounds": 3 } }
+      ]
+    },
+    {
+      "id": "lunges",
+      "name": "Walking Lunges",
+      "tag": "strength",
+      "displayDuration": "6 min · 3×10 each leg",
+      "estimatedMinutes": 6,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Stand tall, feet together. Step your right foot forward about 2 feet.", "timing": null },
+        { "text": "Lower your back knee toward the ground. Front thigh should be parallel to the floor.", "timing": null },
+        { "text": "Push up through your front heel and bring your back foot forward. That's 1 rep.", "timing": null },
+        { "text": "Keep your chest up and don't let your front knee go past your toes.", "timing": null },
+        { "text": "Do 10 lunges each leg, rest 30 seconds, repeat 3 sets.", "timing": { "type": "interval", "work": null, "reps": 10, "each": "leg", "rest": 30, "rounds": 3 } }
+      ]
+    },
+
+    {
+      "id": "duckWalks",
+      "name": "Duck Walks",
+      "tag": "balance",
+      "displayDuration": "5 min · 3×15 yd",
+      "estimatedMinutes": 5,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Squat down like you're sitting in a low chair, thighs about parallel to the ground.", "timing": null },
+        { "text": "Keep your chest up and hands out in front (or on your hips) for balance.", "timing": null },
+        { "text": "Waddle forward one small step at a time, staying low the whole way — like a duck!", "timing": null },
+        { "text": "Walk 15 yards forward, then waddle backward 15 yards to reset.", "timing": null },
+        { "text": "Rest 30 seconds, repeat 3 times. Burns your legs but builds serious hip and knee control.", "timing": { "type": "interval", "work": null, "reps": null, "each": null, "rest": 30, "rounds": 3 } }
+      ]
+    },
+    {
+      "id": "calfRaises",
+      "name": "Calf Raises",
+      "tag": "balance",
+      "displayDuration": "5 min · 3×15",
+      "estimatedMinutes": 5,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Stand tall, feet hip-width apart. Hold a wall or chair if you need help balancing.", "timing": null },
+        { "text": "Toes pointing straight ahead: rise onto your tiptoes as high as you can, then slowly lower. Do 15 reps.", "timing": { "type": "interval", "work": null, "reps": 15, "each": null, "rest": 30, "rounds": 1 } },
+        { "text": "Turn your toes OUT (heels together, like a V) and do 15 more.", "timing": { "type": "interval", "work": null, "reps": 15, "each": null, "rest": 30, "rounds": 1 } },
+        { "text": "Turn your toes IN (pigeon-toed) and do a final 15. Different angles hit different parts of your calf!", "timing": { "type": "interval", "work": null, "reps": 15, "each": null, "rest": 30, "rounds": 1 } },
+        { "text": "Rest 30 seconds between each set of 15. Go slow on the way down — that's where the real work happens.", "timing": null }
+      ]
+    },
+    {
+      "id": "singleLegBalance",
+      "name": "Single-Leg Balance",
+      "tag": "balance",
+      "displayDuration": "5 min",
+      "estimatedMinutes": 5,
+      "mode": "stepped",
+      "prMetric": { "label": "Longest single-leg balance", "unit": "seconds", "higherIsBetter": true },
+      "steps": [
+        { "text": "Stand on your right foot, arms out to your sides like airplane wings.", "timing": null },
+        { "text": "Hold as still as you can for 30 seconds. Pick a spot on the wall to stare at — it helps!", "timing": { "type": "work", "seconds": 30 } },
+        { "text": "Switch to your left foot and hold for 30 seconds.", "timing": { "type": "work", "seconds": 30 } },
+        { "text": "Level up: try closing your eyes for 10 seconds on each foot.", "timing": { "type": "interval", "work": 10, "reps": null, "each": "foot", "rest": 0, "rounds": 2 } },
+        { "text": "Level up more: bend your standing knee slightly and hold 30 seconds each leg.", "timing": { "type": "interval", "work": 30, "reps": null, "each": "leg", "rest": 0, "rounds": 2 } },
+        { "text": "Do 2 full rounds (both legs, all challenges).", "timing": null }
+      ]
+    },
+    {
+      "id": "cariocaSteps",
+      "name": "Carioca Steps",
+      "tag": "balance",
+      "displayDuration": "6 min",
+      "estimatedMinutes": 6,
+      "mode": "openBlock",
+      "prMetric": null,
+      "steps": [
+        { "text": "Stand sideways to the direction you're going to travel. Pick a 15-20 yard path.", "timing": null },
+        { "text": "Cross your right foot OVER your left, then step your left foot out to the side.", "timing": null },
+        { "text": "Next cross your right foot BEHIND your left, then step your left foot out again.", "timing": null },
+        { "text": "Keep alternating over-behind-over-behind as you travel sideways. Hips stay facing forward the whole time.", "timing": null },
+        { "text": "Go 15-20 yards, then switch directions and lead with your left foot going back.", "timing": null },
+        { "text": "Do 4 total passes (2 each direction), moving a little faster once you feel confident.", "timing": { "type": "reps", "count": 4, "each": null } }
+      ]
+    },
+
+    {
+      "id": "trackSprints",
+      "name": "Track Sprints",
+      "tag": "track",
+      "displayDuration": "12 min",
+      "estimatedMinutes": 12,
+      "mode": "stepped",
+      "prMetric": { "label": "Fastest 50 yards", "unit": "seconds", "higherIsBetter": false },
+      "steps": [
+        { "text": "Find a straight path: a driveway, sidewalk, or field works great.", "timing": null },
+        { "text": "Mark a 50-yard distance (about 45 steps).", "timing": null },
+        { "text": "Sprint at full effort from one end to the other.", "timing": null },
+        { "text": "Walk back slowly. This is your rest period.", "timing": null },
+        { "text": "Do 6 sprints. Rest 1 minute after every 2 sprints. Focus on FORM: drive your knees up, pump your arms!", "timing": { "type": "interval", "work": null, "reps": 2, "each": null, "rest": 60, "rounds": 3 } }
+      ]
+    },
+    {
+      "id": "strideDrills",
+      "name": "Running Form Drills",
+      "tag": "track",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "A-skips: march forward with an exaggerated knee drive, skipping. 20 yards.", "timing": null },
+        { "text": "B-skips: same as A-skips, but kick your leg out at the top. 20 yards.", "timing": null },
+        { "text": "High knees: sprint in place driving knees as high as possible, for 20 seconds.", "timing": { "type": "work", "seconds": 20 } },
+        { "text": "Butt kicks: sprint in place kicking heels to your butt, for 20 seconds.", "timing": { "type": "work", "seconds": 20 } },
+        { "text": "Straight-leg bounds: jump forward off alternate feet with straight legs. 20 yards. Rest, repeat 2x.", "timing": { "type": "interval", "work": null, "reps": null, "each": null, "rest": 30, "rounds": 2 } }
+      ]
+    },
+
+    {
+      "id": "coolDownStretch",
+      "name": "Cool Down Stretch",
+      "tag": "stretch",
+      "displayDuration": "8 min",
+      "estimatedMinutes": 8,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Quad stretch: stand on one leg, pull your other heel to your butt. Hold 20 seconds each leg.", "timing": { "type": "interval", "work": 20, "reps": null, "each": "leg", "rest": 0, "rounds": 2 } },
+        { "text": "Hamstring stretch: sit on the ground, legs out, reach toward your toes. Hold 30 seconds.", "timing": { "type": "work", "seconds": 30 } },
+        { "text": "Hip flexor stretch: kneel on one knee, lean your hips forward. Hold 20 seconds each side.", "timing": { "type": "interval", "work": 20, "reps": null, "each": "side", "rest": 0, "rounds": 2 } },
+        { "text": "Seated butterfly: sit with feet together, press knees toward the ground. Hold 30 seconds.", "timing": { "type": "work", "seconds": 30 } },
+        { "text": "Shoulder cross: pull one arm across your chest, hold with the other. 20 seconds each arm.", "timing": { "type": "interval", "work": 20, "reps": null, "each": "arm", "rest": 0, "rounds": 2 } },
+        { "text": "Child's pose: kneel and reach arms forward, rest forehead down. Hold 30 seconds. Breathe slow!", "timing": { "type": "work", "seconds": 30 } }
+      ]
+    },
+    {
+      "id": "hipMobility",
+      "name": "Hip Mobility",
+      "tag": "stretch",
+      "displayDuration": "6 min",
+      "estimatedMinutes": 6,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        { "text": "Hip circles: hands on hips, make big slow circles, 10 each direction.", "timing": { "type": "reps", "count": 10, "each": "direction" } },
+        { "text": "Pigeon pose: from push-up position, bring right knee to right wrist, extend left leg back. Hold 30 seconds.", "timing": { "type": "work", "seconds": 30 } },
+        { "text": "Switch legs. Hold 30 seconds.", "timing": { "type": "work", "seconds": 30 } },
+        { "text": "Deep squat hold: feet slightly wider than hips, squat all the way down, hold for 30 seconds.", "timing": { "type": "work", "seconds": 30 } },
+        { "text": "Lateral lunge stretch: step wide right, bend right knee, keep left leg straight. Hold 20 seconds each side.", "timing": { "type": "interval", "work": 20, "reps": null, "each": "side", "rest": 0, "rounds": 2 } }
+      ]
+    }
+  ]
+}
