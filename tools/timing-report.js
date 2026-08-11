@@ -21,7 +21,7 @@ const JUDGEMENT_CALLS = {
   'trackSprints:5': 'Same shape as Sprint Intervals: the sprint-and-walk-back pair 6 times, 60s rest after every second one.',
   'calfRaises:2': 'The "rest 30 seconds between each set" instruction lives in step 5 but applies to steps 2-4. Attached a trailing 30s rest to each variation.',
   'coneDribbling:4': 'The 3 sets come from the "12 min · 3 sets" duration label — the step text alone only says "repeat".',
-  'footballAgility:4': 'The loop spans steps 2-3, so the "used by real NFL players!" line in step 3 gets shown again each round. Harmless, but reordering it after the loop would read better.',
+  'footballAgility:4': 'The loop spans steps 2-3, but step 3 is a cue rather than an action, so it never gates a round — it shows during the work instead. No reorder needed after all.',
   'singleLegBalance:4': '"10 seconds on each foot" — 2 rounds with no rest between, so it flows straight from one foot to the other.',
   'strideDrills:5': 'The only self-paced interval left: the bounds are described in this same step, so it stays an interval rather than a loop.',
   'cariocaSteps': 'Left as an open block despite the "4 passes" count — it is travel-based technique practice, not a timed set.',
@@ -104,26 +104,31 @@ function renderStep(ex, step, i, inBody) {
   const d = describe(step.timing);
   const note = JUDGEMENT_CALLS[`${ex.id}:${n}`];
   const loop = inBody.get(n);
-  const cls = ['step'];
-  if (!d) cls.push('step--untimed');
+  const cls = ['step', `step--${step.role}`];
   if (loop) cls.push('step--looped');
+  const isAction = step.role === 'action';
   return `
         <li class="${cls.join(' ')}">
           <span class="step__n">${n}</span>
           <div class="step__body">
             <p class="step__text">${esc(step.text)}</p>
-            ${loop ? `<span class="looped">↻ repeats ${loop.rounds}×</span>` : ''}
+            <span class="roles">
+              <span class="role role--${step.role}">${step.role}</span>
+              ${loop ? `<span class="looped">↻ repeats ${loop.rounds}×</span>` : ''}
+            </span>
             ${note ? `<p class="step__note">${esc(note)}</p>` : ''}
           </div>
           ${d
             ? `<span class="timing timing--${d.kind}">${esc(d.label)}</span>`
-            : `<span class="timing timing--none">tap to advance</span>`}
+            : isAction
+              ? `<span class="timing timing--none">tap to advance</span>`
+              : `<span class="timing timing--off">not a gate</span>`}
         </li>`;
 }
 
 function renderExercise(ex) {
-  const timed = ex.steps.filter((s) => s.timing !== null).length;
   const inBody = loopBodies(ex);
+  const actions = ex.steps.filter((s) => s.role === 'action').length;
   return `
       <article class="ex" id="${esc(ex.id)}">
         <header class="ex__head">
@@ -131,7 +136,9 @@ function renderExercise(ex) {
           <div class="ex__meta">
             <span class="chip chip--${esc(ex.mode)}">${ex.mode === 'stepped' ? 'Stepped' : 'Open block'}</span>
             <span class="ex__dur">${esc(ex.displayDuration)}</span>
-            <span class="ex__count">${timed}/${ex.steps.length} timed</span>
+            <span class="ex__count">${ex.mode === 'stepped'
+              ? `${actions} of ${ex.steps.length} steps in the walkthrough`
+              : `${ex.steps.length} steps shown alongside`}</span>
           </div>
           ${ex.prMetric ? `<p class="ex__pr">Tracks a record — ${esc(ex.prMetric.label)} <span>(${esc(ex.prMetric.unit)}, ${ex.prMetric.higherIsBetter ? 'higher' : 'lower'} is better)</span></p>` : ''}
           ${JUDGEMENT_CALLS[ex.id] ? `<p class="step__note">${esc(JUDGEMENT_CALLS[ex.id])}</p>` : ''}
@@ -140,6 +147,19 @@ function renderExercise(ex) {
         </ol>
       </article>`;
 }
+
+const stepped = exercises.filter((e) => e.mode === 'stepped');
+const steppedCount = stepped.length;
+const steppedStepCount = stepped.reduce((n, e) => n + e.steps.length, 0);
+const gateCount = stepped.reduce((n, e) => n + e.steps.filter((s) => s.role === 'action').length, 0);
+const withMedia = exercises.filter((e) => e.media !== null).length;
+
+const ROLE_BLURB = [
+  ['setup', 'gather equipment and mark out space — shown before the timer starts'],
+  ['form', 'how the movement works — reference on the get-ready screen, reachable mid-set'],
+  ['cue', 'coaching reminder — shown and spoken during the work, never a gate'],
+  ['action', 'the real work — the only role that advances the walkthrough'],
+];
 
 const byTag = TAG_ORDER.map((tag) => ({
   tag,
@@ -378,6 +398,30 @@ const html = `<title>Train Today — Timing Review</title>
     font-weight: 400;
   }
   .timing--loop { background: var(--loop-bg); color: var(--loop-ink); }
+  .timing--off {
+    background: transparent;
+    color: var(--ink-faint);
+    border: 1px dashed var(--rule);
+    font-weight: 400;
+  }
+  .roles { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .role {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+  }
+  .role--action { background: var(--chip-bg); color: var(--green); font-weight: 600; }
+  .role--setup  { border-color: var(--rule); color: var(--ink-faint); }
+  .role--form   { border-color: var(--rule); color: var(--ink-faint); }
+  .role--cue    { background: var(--note-bg); color: var(--amber); }
+  /* Non-action steps never gate the walkthrough — recede them. */
+  .step--setup .step__text,
+  .step--form .step__text,
+  .step--cue .step__text { color: var(--ink-soft); }
   .step--looped { background: var(--loop-tint); }
   .looped {
     align-self: flex-start;
@@ -395,15 +439,26 @@ const html = `<title>Train Today — Timing Review</title>
 <div class="wrap">
   <header class="mast">
     <h1>Timing review</h1>
-    <p>Every step of the exercise library, paired with the countdown behaviour assigned to it. Step text is unchanged from the web app — only timing was added.</p>
+    <p>Every step of the exercise library, paired with the role and countdown behaviour assigned to it. Step text is unchanged from the web app — only metadata was added.</p>
     <dl class="tally">
       <div><dt>Exercises</dt><dd>${exercises.length}</dd></div>
       <div><dt>Steps</dt><dd>${totalSteps}</dd></div>
       <div><dt>Timed</dt><dd>${timedSteps}</dd></div>
-      <div><dt>Open blocks</dt><dd>${openBlocks.length}</dd></div>
+      <div><dt>Walkthrough</dt><dd>${gateCount}</dd></div>
+      <div><dt>Demo clips</dt><dd>${withMedia}/${exercises.length}</dd></div>
       <div><dt>Need a call</dt><dd>${flagged.length}</dd></div>
     </dl>
   </header>
+
+  <section>
+    <h2>What the walkthrough actually shows</h2>
+    <p class="lede">Only <strong>action</strong> steps advance the walkthrough. Setup is gathered on the get-ready screen, form is reference he reads before starting, and cues appear during the work rather than blocking it. Across the ${steppedCount} stepped exercises that is <strong>${gateCount} screens instead of ${steppedStepCount}</strong>.</p>
+    <div class="calls">
+      <div class="call" style="background:transparent;border-color:var(--rule)">
+        <p class="call__note">${ROLE_BLURB.map(([r, t]) => `<span class="role role--${r}">${r}</span> ${esc(t)}`).join('<br>')}</p>
+      </div>
+    </div>
+  </section>
 
   <section>
     <h2>Worth your eyes first</h2>

@@ -24,6 +24,9 @@ const HTML_PATH = path.join(ROOT, 'index.html');
 const TAGS = ['warmup', 'soccer', 'football', 'cardio', 'plyo', 'strength', 'balance', 'track', 'stretch'];
 const MODES = ['stepped', 'openBlock'];
 const UNITS = ['count', 'seconds', 'inches', 'feet'];
+const ROLES = ['setup', 'form', 'cue', 'action'];
+const MEDIA_KINDS = ['loop', 'clip'];
+const ASSET_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 // index.html defines the drill as `passAndMove` but the schedule references it
 // as `wallPassing` via an alias assignment. The JSON canonicalizes to one id.
@@ -34,10 +37,31 @@ const warnings = [];
 const notes = [];
 const loops = [];
 const selfPaced = [];
+const roleCounts = {};
+const noMedia = [];
 
 const fail = (m) => errors.push(m);
 const warn = (m) => warnings.push(m);
 const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+
+/**
+ * media.asset is a logical name the app resolves however it likes — bundled,
+ * downloaded, streamed. Filenames, extensions and URLs are rejected so that
+ * changing delivery never requires touching content.
+ */
+function validateMedia(m, where) {
+  if (m === null) return;
+  if (typeof m !== 'object') { fail(`${where}: media must be an object or null`); return; }
+  if (typeof m.asset !== 'string' || !ASSET_RE.test(m.asset)) {
+    fail(`${where}: media.asset must be a lowercase slug (got ${JSON.stringify(m.asset)})`);
+  }
+  if (/\.\w{2,4}$/.test(m.asset || '') || /[/:]/.test(m.asset || '')) {
+    fail(`${where}: media.asset looks like a filename or URL — use a logical name so delivery can change`);
+  }
+  if (!MEDIA_KINDS.includes(m.kind)) {
+    fail(`${where}: media.kind must be one of ${MEDIA_KINDS.join(', ')}`);
+  }
+}
 
 // ── Extract the original ACTIVITIES literal from index.html ─────────────────
 
@@ -238,6 +262,17 @@ for (const ex of exercises) {
       fail(`${where} step ${i + 1}: text must be a non-empty string`);
     }
     if (!('timing' in step)) fail(`${where} step ${i + 1}: missing timing key (use null for untimed)`);
+
+    if (!ROLES.includes(step.role)) {
+      fail(`${where} step ${i + 1}: role must be one of ${ROLES.join(', ')} (got ${JSON.stringify(step.role)})`);
+    }
+    // Anything carrying a clock is work by definition; setup/form/cue never gate.
+    if (step.timing !== null && step.role !== 'action') {
+      fail(`${where} step ${i + 1}: has timing but role is '${step.role}' — timed steps must be action`);
+    }
+    if (!('media' in step)) fail(`${where} step ${i + 1}: missing media key (use null for none)`);
+    validateMedia(step.media, `${where} step ${i + 1}`);
+    roleCounts[step.role] = (roleCounts[step.role] || 0) + 1;
     const r = validateTiming(step.timing, `${where} step ${i + 1}`, i, ex.steps.length);
     if (step.timing !== null) timedSteps++;
     derived += r.timed;
@@ -246,6 +281,14 @@ for (const ex of exercises) {
   if (ex.mode === 'stepped' && !ex.steps.some((s) => s.timing !== null)) {
     fail(`${where}: mode is 'stepped' but no step has timing — should this be 'openBlock'?`);
   }
+  if (!('media' in ex)) fail(`${where}: missing media key (use null for none)`);
+  validateMedia(ex.media, where);
+  if (ex.media === null) noMedia.push(ex.id);
+
+  // The walkthrough advances through action steps only. An exercise with none
+  // would open and immediately finish.
+  const actions = ex.steps.filter((s) => s.role === 'action').length;
+  if (actions === 0) fail(`${where}: no action steps — the walkthrough would have nothing to do`);
   if (ex.mode === 'openBlock') {
     notes.push(`${where}: openBlock — whole-exercise ${ex.estimatedMinutes} min clock`);
   } else {
@@ -270,7 +313,13 @@ for (const id of Object.keys(original)) {
 
 console.log('Train Today — content validation\n');
 console.log(`  exercises      ${exercises.length}  (${steppedCount} stepped, ${openCount} openBlock)`);
-console.log(`  steps          ${totalSteps}  (${timedSteps} timed, ${totalSteps - timedSteps} tap-to-advance)`);
+console.log(`  steps          ${totalSteps}  (${timedSteps} timed, ${totalSteps - timedSteps} untimed)`);
+console.log(`  roles          ${ROLES.map((r) => `${roleCounts[r] || 0} ${r}`).join(', ')}`);
+const gates = exercises
+  .filter((e) => e.mode === 'stepped')
+  .reduce((n, e) => n + e.steps.filter((s) => s.role === 'action').length, 0);
+console.log(`  walkthrough    ${gates} action steps across stepped exercises`);
+console.log(`  media          ${exercises.length - noMedia.length}/${exercises.length} exercises have a demo asset`);
 console.log(`  original ids   ${Object.keys(original).length} in index.html\n`);
 
 if (loops.length) {
