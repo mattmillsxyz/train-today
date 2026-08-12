@@ -1,18 +1,44 @@
-# Train Today → Native iOS App
+# Train Today → DRILL, a native iOS app
 
 ## Where this stands
 
 Working branch: `claude/exercises-steps-listing-uuzzxl`.
 
-**Phase 1 (content) is done and verified.** `ios/TrainToday/Resources/exercises.json` holds all 33
-exercises — 170 steps carrying `role`, `timing` and a nullable `media` slot. Two tools support it:
+**Phases 0 through 7 are built and verified on the Mac.** The app compiles, runs in the simulator
+and passes 60 unit tests; the marketing site renders clean at 320/390/768/1280 in both themes with
+no horizontal overflow and no dead links. What remains is Phase 8: App Store assets, listing copy
+and submission.
 
 ```sh
-node tools/validate-content.js   # schema + proves step text still matches index.html verbatim
-node tools/timing-report.js > review.html   # human-readable review of every timing decision
+cd ios && xcodebuild -project DRILL.xcodeproj -scheme DRILL \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro' test
+node tools/validate-content.js            # schema + step text still matches the web app verbatim
+node tools/build-site-exercises.js        # regenerates site/exercises.html
 ```
 
-Nothing Swift exists yet. Phases 2 (marketing site) and 3+ (the app) are open.
+### Decisions taken after this plan was written
+
+- **The app is called DRILL.** Home-screen name `DRILL`; App Store name
+  *DRILL: Youth Sports Training*; subtitle *Soccer, football, track, strength*. Bundle id
+  `com.trainwithdrill.drill`, domain `trainwithdrill.com`. The Xcode target, module, directories
+  and tooling paths were all renamed to match. **Still to verify: that the App Store name is free.**
+- **The week strip is gone; there is a Calendar tab.** Today is now just today's session. A
+  scrollable Monday-first month grid colours every day by status — done, partly, scheduled,
+  missed, rest — and tapping a day opens it on Today. The heat map that was planned for Progress
+  was dropped as duplicative; Progress keeps the streak, the headline numbers, badges and records.
+- **The onboarding welcome screen is full-bleed brand**, not a padded bullet list: near-black
+  ground, green runner mark, DRILL wordmark at display size, feature cards animating in.
+
+### Two things worth remembering
+
+- **`Set` iteration order is not stable across instances in Swift.** Building an exercise pool by
+  iterating a `Set<Tag>` made the generator non-deterministic — the same seed and date produced
+  different sessions depending on when they were asked for. The year-long determinism property
+  test caught it. `ExerciseLibrary.exercises(taggedAnyOf:)` now sorts, and a regression test pins it.
+- **The session budget needs reserving up front.** Spending the whole budget on the focus sport
+  first meant one 20-minute bike ride could eat the day, leaving an all-cardio session with no
+  finisher. The generator now holds back the cheapest secondary drill and the cheapest finisher
+  before it spends anything.
 
 ### Walkthrough design (agreed after the plan below was written)
 
@@ -71,7 +97,8 @@ Approach: mechanical first pass by regex, then hand-correction, then **your revi
 actual training content and the timings should be right. Do this early; everything downstream reads
 this model.
 
-Also verify early: that the name "Train Today" is free on the App Store.
+Also verify early: that the App Store name is free. *(Superseded — the app is now called DRILL;
+see the decisions at the top. The check itself is still outstanding.)*
 
 *(Dropping HealthKit removed the other week-1 risk — child accounts under Family Sharing have
 restrictions around Health data that would have needed verifying on his actual device before the
@@ -120,7 +147,7 @@ counter with no clock, `.interval` walks rounds and counts down only the rest ph
 phase when it's time-based, as in "Hold 30 seconds. Rest 20 seconds. Repeat 3 times").
 `estimatedMinutes` is now derived from the steps rather than parsed back out of a display string.
 
-`ios/TrainToday/Resources/exercises.json` is the sole home for this content. With the web app retired
+`ios/DRILL/Resources/exercises.json` is the sole home for this content. With the web app retired
 there's nothing to sync it to — the earlier plan's `tools/sync-content.js` is no longer needed.
 
 ---
@@ -242,26 +269,34 @@ Deployment target **iOS 17.0** — needed for SwiftData, and broad enough in 202
 
 ## Build order
 
-Phases 1 and 2 are fully verifiable in this Linux container. Everything from Phase 3 on requires
-Xcode on your Mac — I can write the Swift, but I cannot compile or run it here.
+0. ✅ **Foundations** — Xcode project under `ios/`, iOS 17 target, 1024 app icon.
+1. ✅ **Content migration** — `exercises.json` with structured steps, validation script, review pass.
+2. ✅ **Marketing site** — landing, privacy, terms, support, generated exercises showcase.
+3. ✅ **Plan generator + Today** — replaces the fixed rotation; deterministic and property-tested.
+4. ✅ **Per-step timer** — phase expansion, speech, haptics, the three-buzzer finish.
+5. ✅ **Onboarding + Settings** — including the redesigned welcome screen.
+6. ✅ **Reminders** — one repeating local trigger per training day.
+7. ✅ **Streaks, badges, PRs, progress** — plus the Calendar tab.
+8. ⬜ **App Store prep** — screenshots per device class, listing copy, submission.
 
-0. **Foundations** — Xcode project under `ios/`, iOS 17 target, app icon.
-1. **Content migration** — `exercises.json` with structured steps + a validation script + your review
-   pass. *Largest task; gates everything after it.* ✅ verifiable here
-2. **Marketing site** — landing, privacy, terms, support, exercises showcase. ✅ verifiable here
-3. **Plan generator + Today** — feature parity with the web app.
-4. **Per-step timer** — feature #2, with audio + haptics.
-5. **Onboarding + Settings** — feature #1.
-6. **Reminders** — feature #3.
-7. **Streaks, badges, PRs, progress** — feature #4.
-8. **App Store prep** — screenshots, description, submission.
+### What Phase 8 still needs
+
+- **Verify the App Store name is free** before anything else.
+- **A real 1024 icon — the current one is rejected and must not ship.** It is the old web app's
+  runner glyph upscaled from the 256px favicon, and it is essentially the watchOS Workout icon.
+  Exploration so far, with contact sheets and the scripts that generated them, is in
+  [`docs/icon-exploration/`](icon-exploration/README.md); the live direction is a DRILL wordmark
+  in a heavy condensed face. Note the font-licensing constraint recorded there.
+- Screenshots per device class, listing copy, the privacy questionnaire (answer: Data Not
+  Collected), age rating 4+, and the support/privacy URLs — both live on the site already.
+- Point `trainwithdrill.com` at the site and confirm `/app/` still serves the old web app.
 
 ---
 
 ## Files
 
 **New:**
-- `ios/TrainToday.xcodeproj` and `ios/TrainToday/` — `Models/` (`Exercise`, `PlanGenerator`,
+- `ios/DRILL.xcodeproj` and `ios/DRILL/` — `Models/` (`Exercise`, `PlanGenerator`,
   `PlanSettings`), `Views/` (`Onboarding`, `Today`, `Timer`, `Progress`, `Settings`),
   `Services/` (`NotificationService`, `Store`), `Resources/exercises.json`
 - `site/` — marketing site: `index.html`, `privacy.html`, `terms.html`, `support.html`,

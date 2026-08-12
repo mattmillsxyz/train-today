@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * Validates ios/TrainToday/Resources/exercises.json.
+ * Validates ios/DRILL/Resources/exercises.json.
  *
  * The important check is fidelity: every step's text must match the original
- * web app's ACTIVITIES literal in index.html character for character. The
+ * web app's ACTIVITIES literal in site/app/index.html character for character. The
  * migration adds timing metadata and nothing else — no rewording, no dropped
  * steps, no reordering.
  *
@@ -18,8 +18,8 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const JSON_PATH = path.join(ROOT, 'ios/TrainToday/Resources/exercises.json');
-const HTML_PATH = path.join(ROOT, 'index.html');
+const JSON_PATH = path.join(ROOT, 'ios/DRILL/Resources/exercises.json');
+const HTML_PATH = path.join(ROOT, 'site/app/index.html');
 
 const TAGS = ['warmup', 'soccer', 'football', 'cardio', 'plyo', 'strength', 'balance', 'track', 'stretch'];
 const MODES = ['stepped', 'openBlock'];
@@ -63,12 +63,12 @@ function validateMedia(m, where) {
   }
 }
 
-// ── Extract the original ACTIVITIES literal from index.html ─────────────────
+// ── Extract the original ACTIVITIES literal from site/app/index.html ─────────────────
 
 function extractOriginalActivities(html) {
   const marker = 'const ACTIVITIES = ';
   const start = html.indexOf(marker);
-  if (start === -1) throw new Error('Could not find `const ACTIVITIES = ` in index.html');
+  if (start === -1) throw new Error('Could not find `const ACTIVITIES = ` in site/app/index.html');
 
   // Brace-match from the opening { to its partner, ignoring braces inside
   // string literals (step text contains none, but be safe).
@@ -189,7 +189,7 @@ try {
 try {
   original = extractOriginalActivities(fs.readFileSync(HTML_PATH, 'utf8'));
 } catch (e) {
-  console.error(`FATAL: could not read original content from index.html\n  ${e.message}`);
+  console.error(`FATAL: could not read original content from site/app/index.html\n  ${e.message}`);
   process.exit(1);
 }
 
@@ -228,7 +228,7 @@ for (const ex of exercises) {
   const originalId = ID_ALIASES[ex.id] || ex.id;
   const orig = original[originalId];
   if (!orig) {
-    fail(`${where}: no matching exercise in index.html (looked for '${originalId}')`);
+    fail(`${where}: no matching exercise in site/app/index.html (looked for '${originalId}')`);
   } else {
     if (orig.name !== ex.name) {
       fail(`${where}: name changed — was ${JSON.stringify(orig.name)}, now ${JSON.stringify(ex.name)}`);
@@ -311,7 +311,7 @@ for (const id of Object.keys(original)) {
 
 // ── Report ──────────────────────────────────────────────────────────────────
 
-console.log('Train Today — content validation\n');
+console.log('DRILL — content validation\n');
 console.log(`  exercises      ${exercises.length}  (${steppedCount} stepped, ${openCount} openBlock)`);
 console.log(`  steps          ${totalSteps}  (${timedSteps} timed, ${totalSteps - timedSteps} untimed)`);
 console.log(`  roles          ${ROLES.map((r) => `${roleCounts[r] || 0} ${r}`).join(', ')}`);
@@ -320,7 +320,7 @@ const gates = exercises
   .reduce((n, e) => n + e.steps.filter((s) => s.role === 'action').length, 0);
 console.log(`  walkthrough    ${gates} action steps across stepped exercises`);
 console.log(`  media          ${exercises.length - noMedia.length}/${exercises.length} exercises have a demo asset`);
-console.log(`  original ids   ${Object.keys(original).length} in index.html\n`);
+console.log(`  original ids   ${Object.keys(original).length} in site/app/index.html\n`);
 
 if (loops.length) {
   console.log('Multi-step loops (work lives in the repeated steps, not the loop step):');
@@ -350,4 +350,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`PASSED — all step text matches index.html verbatim${warnings.length ? `, ${warnings.length} warning(s)` : ''}`);
+console.log(`PASSED — all step text matches site/app/index.html verbatim${warnings.length ? `, ${warnings.length} warning(s)` : ''}`);

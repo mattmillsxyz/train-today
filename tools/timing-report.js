@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 
 const doc = JSON.parse(
-  fs.readFileSync(path.join(__dirname, '../ios/TrainToday/Resources/exercises.json'), 'utf8')
+  fs.readFileSync(path.join(__dirname, '../ios/DRILL/Resources/exercises.json'), 'utf8')
 );
 
 // Places where the prose was ambiguous and a call had to be made. Keyed by
@@ -166,7 +166,7 @@ const byTag = TAG_ORDER.map((tag) => ({
   items: exercises.filter((e) => e.tag === tag),
 })).filter((g) => g.items.length);
 
-const html = `<title>Train Today — Timing Review</title>
+const html = `<title>DRILL — Timing Review</title>
 <style>
   :root {
     --green: #16a869;
