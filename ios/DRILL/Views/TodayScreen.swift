@@ -36,6 +36,7 @@ struct TodayScreen: View {
         }
         .scrollDismissesKeyboard(.immediately)
         .background(Theme.bg)
+        .topSafeAreaCover()
         .fullScreenCover(item: $running) { exercise in
             WalkthroughScreen(exercise: exercise, dayKey: dayKey) { completed in
                 if completed { complete(exercise) }

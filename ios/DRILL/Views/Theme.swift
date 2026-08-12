@@ -57,4 +57,19 @@ extension View {
         frame(maxWidth: Theme.maxContentWidth)
             .frame(maxWidth: .infinity)
     }
+
+    /// Fills the top safe area so scrolling content does not run under the
+    /// status bar and the Dynamic Island.
+    ///
+    /// Screens wrapped in a `NavigationStack` get this for free from the
+    /// navigation bar. Today has no bar of its own, so without this its cards
+    /// scroll up behind the clock.
+    func topSafeAreaCover(_ color: Color = Theme.bg) -> some View {
+        overlay(alignment: .top) {
+            Color.clear
+                .frame(height: 0)
+                .background(color.ignoresSafeArea(edges: .top))
+                .allowsHitTesting(false)
+        }
+    }
 }

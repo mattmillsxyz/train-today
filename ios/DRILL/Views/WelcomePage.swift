@@ -1,127 +1,118 @@
 import SwiftUI
 
-/// The first thing anyone sees. It gets the brand's full-bleed treatment —
-/// near-black ground, the green runner mark, the wordmark at display size —
-/// rather than the same padded white page as the rest of onboarding.
+/// The first thing anyone sees. Full-bleed near-black, the wordmark at display
+/// size, and the sport emojis from the picker drifting behind it.
 ///
-/// It animates in on appear because a static wall of text is exactly what this
-/// screen was before, and an 8-12 year old decides whether an app is worth their
-/// time in about two seconds.
+/// It moves on purpose. A static list of bullet points is exactly what this
+/// screen was before, and an 8-12 year old decides whether an app is worth
+/// their time in about two seconds. Everything here is decorative, so it all
+/// stands still when the system asks for reduced motion.
 struct WelcomePage: View {
     let onContinue: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var appeared = false
+    @State private var glowing = false
 
     var body: some View {
         GeometryReader { geo in
             ZStack {
                 background
+                EmojiDrift()
 
                 VStack(spacing: 0) {
-                    Spacer(minLength: geo.size.height * 0.06)
-
-                    mark
-                        .scaleEffect(appeared ? 1 : 0.7)
-                        .opacity(appeared ? 1 : 0)
+                    Spacer(minLength: geo.size.height * 0.13)
 
                     wordmark
-                        .padding(.top, 22)
+                        .scaleEffect(appeared ? 1 : 0.84)
                         .opacity(appeared ? 1 : 0)
-                        .offset(y: appeared ? 0 : 16)
 
-                    Text("Multi-sport training for young athletes")
-                        .font(.system(size: 17, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.65))
-                        .multilineTextAlignment(.center)
-                        .padding(.top, 10)
-                        .padding(.horizontal, 32)
+                    tagline
+                        .padding(.top, 16)
+                        .padding(.horizontal, 28)
                         .opacity(appeared ? 1 : 0)
-                        .offset(y: appeared ? 0 : 16)
+                        .offset(y: appeared ? 0 : 18)
+                        .animation(.spring(response: 0.6, dampingFraction: 0.8).delay(0.12), value: appeared)
 
-                    Spacer(minLength: 20)
+                    blurb
+                        .padding(.top, 14)
+                        .padding(.horizontal, 36)
+                        .opacity(appeared ? 1 : 0)
+                        .offset(y: appeared ? 0 : 18)
+                        .animation(.spring(response: 0.6, dampingFraction: 0.8).delay(0.22), value: appeared)
 
-                    features
-                        .padding(.horizontal, 20)
-
-                    Spacer(minLength: 16)
+                    Spacer(minLength: 24)
 
                     startButton
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 24)
+                        .opacity(appeared ? 1 : 0)
+                        .offset(y: appeared ? 0 : 20)
+                        .animation(.spring(response: 0.6, dampingFraction: 0.82).delay(0.34), value: appeared)
+
+                    footnote
+                        .padding(.top, 14)
                         .padding(.bottom, max(geo.safeAreaInsets.bottom, 20) + 8)
                         .opacity(appeared ? 1 : 0)
+                        .animation(.easeOut(duration: 0.5).delay(0.46), value: appeared)
                 }
             }
         }
         .ignoresSafeArea()
         .onAppear {
             guard !appeared else { return }
-            withAnimation(.spring(response: 0.65, dampingFraction: 0.7)) { appeared = true }
+            withAnimation(.spring(response: 0.7, dampingFraction: 0.72)) { appeared = true }
+            glowing = true
         }
     }
 
     // MARK: - Pieces
 
-    /// A green glow behind the mark, fading into the app's near-black.
+    /// A green glow behind the wordmark, breathing slowly, fading into the
+    /// app's near-black.
     private var background: some View {
         ZStack {
             Theme.ink
             RadialGradient(
-                colors: [Theme.green.opacity(0.35), Theme.green.opacity(0.06), .clear],
-                center: UnitPoint(x: 0.5, y: 0.28),
+                colors: [Theme.green.opacity(0.34), Theme.green.opacity(0.07), .clear],
+                center: UnitPoint(x: 0.5, y: 0.24),
                 startRadius: 10,
-                endRadius: 460
+                endRadius: 470
+            )
+            .scaleEffect(glowing ? 1.07 : 0.94)
+            .animation(
+                reduceMotion ? nil : .easeInOut(duration: 4.5).repeatForever(autoreverses: true),
+                value: glowing
             )
         }
-    }
-
-    private var mark: some View {
-        Image(systemName: "figure.run")
-            .font(.system(size: 76, weight: .black))
-            .foregroundStyle(Theme.green)
-            .frame(width: 132, height: 132)
-            .background(.white.opacity(0.06), in: .circle)
-            .overlay(Circle().strokeBorder(Theme.green.opacity(0.35), lineWidth: 2))
-            .shadow(color: Theme.green.opacity(0.45), radius: 30)
     }
 
     private var wordmark: some View {
         Text("DRILL")
-            .font(.system(size: 68, weight: .black, design: .rounded))
-            .kerning(6)
+            .font(.system(size: 82, weight: .black).width(.compressed))
+            .kerning(3)
             .foregroundStyle(
                 LinearGradient(
                     colors: [.white, Theme.green],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
+                    startPoint: .top,
+                    endPoint: .bottom
                 )
             )
+            .shadow(color: Theme.green.opacity(0.5), radius: 28)
     }
 
-    private var features: some View {
-        VStack(spacing: 10) {
-            ForEach(Array(Self.points.enumerated()), id: \.offset) { index, point in
-                HStack(spacing: 14) {
-                    Image(systemName: point.symbol)
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(Theme.green)
-                        .frame(width: 30)
-                    Text(point.text)
-                        .font(.system(size: 15, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.9))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 13)
-                .background(.white.opacity(0.07), in: .rect(cornerRadius: 14))
-                .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(.white.opacity(0.08)))
-                .opacity(appeared ? 1 : 0)
-                .offset(y: appeared ? 0 : 24)
-                .animation(
-                    .spring(response: 0.5, dampingFraction: 0.8).delay(0.18 + Double(index) * 0.07),
-                    value: appeared
-                )
-            }
-        }
+    private var tagline: some View {
+        Text("Multi-sport training for young athletes")
+            .font(.system(size: 19, weight: .semibold))
+            .foregroundStyle(.white.opacity(0.92))
+            .multilineTextAlignment(.center)
+    }
+
+    private var blurb: some View {
+        Text("A fresh session every training day — timed, talked through, and built around the sports you actually play.")
+            .font(.system(size: 15))
+            .foregroundStyle(.white.opacity(0.55))
+            .multilineTextAlignment(.center)
+            .lineSpacing(3)
     }
 
     private var startButton: some View {
@@ -137,12 +128,96 @@ struct WelcomePage: View {
         .buttonStyle(.plain)
     }
 
-    private static let points: [(symbol: String, text: String)] = [
-        ("calendar.badge.clock", "A fresh session every training day"),
-        ("waveform", "Timers that talk you through every step"),
-        ("flame.fill", "Streaks, badges and records to beat"),
-        ("lock.shield.fill", "Everything stays on this phone. No account."),
+    private var footnote: some View {
+        Text("No account · Nothing leaves this phone")
+            .font(.system(size: 13, weight: .medium))
+            .foregroundStyle(.white.opacity(0.4))
+    }
+}
+
+// MARK: - Drifting emoji
+
+/// One emoji, bobbing.
+private struct Mote: Identifiable {
+    let id = UUID()
+    let emoji: String
+    /// Position in unit space, so the field scales from an SE to a Pro Max.
+    let x: CGFloat
+    let y: CGFloat
+    let size: CGFloat
+    let opacity: Double
+    /// Half the vertical travel: the mote runs from `+drift` to `-drift`.
+    let drift: CGFloat
+    let tilt: Double
+    let duration: Double
+    let delay: Double
+}
+
+/// The sport emojis from the picker, drifting behind the wordmark.
+///
+/// Purely decorative — hidden from VoiceOver, untappable, and still when
+/// reduced motion is on.
+private struct EmojiDrift: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    /// Hand-placed rather than randomised: random placement clumps, and the
+    /// text has to stay clear.
+    ///
+    /// The copy occupies two bands — wordmark through blurb at roughly
+    /// y 0.33–0.62, and the button and footnote from y 0.83 down — and both run
+    /// nearly the full width. So the motes live above, between and beside them,
+    /// never inside.
+    private static let motes: [Mote] = [
+        Mote(emoji: "⚽", x: 0.12, y: 0.085, size: 54, opacity: 0.32, drift: 16, tilt: 9, duration: 4.2, delay: 0.0),
+        Mote(emoji: "🏈", x: 0.88, y: 0.135, size: 44, opacity: 0.28, drift: 13, tilt: -7, duration: 5.1, delay: 0.5),
+        Mote(emoji: "🏁", x: 0.22, y: 0.215, size: 32, opacity: 0.22, drift: 11, tilt: 6, duration: 4.7, delay: 1.1),
+        Mote(emoji: "💪", x: 0.82, y: 0.255, size: 40, opacity: 0.26, drift: 14, tilt: -8, duration: 5.6, delay: 0.3),
+        Mote(emoji: "🤸", x: 0.15, y: 0.66, size: 48, opacity: 0.30, drift: 17, tilt: 10, duration: 4.4, delay: 0.8),
+        Mote(emoji: "⚖️", x: 0.87, y: 0.70, size: 34, opacity: 0.24, drift: 12, tilt: -6, duration: 5.3, delay: 1.4),
+        Mote(emoji: "🏃", x: 0.50, y: 0.785, size: 44, opacity: 0.26, drift: 15, tilt: 8, duration: 4.9, delay: 0.6),
+        // Small and faint, for depth.
+        Mote(emoji: "⚽", x: 0.74, y: 0.625, size: 24, opacity: 0.14, drift: 9, tilt: -5, duration: 6.0, delay: 1.7),
+        Mote(emoji: "💪", x: 0.28, y: 0.79, size: 22, opacity: 0.13, drift: 8, tilt: 5, duration: 5.8, delay: 2.1),
     ]
+
+    var body: some View {
+        GeometryReader { geo in
+            ForEach(Self.motes) { mote in
+                DriftingMote(mote: mote, still: reduceMotion)
+                    .position(x: mote.x * geo.size.width, y: mote.y * geo.size.height)
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+private struct DriftingMote: View {
+    let mote: Mote
+    let still: Bool
+
+    @State private var shown = false
+    @State private var up = false
+
+    var body: some View {
+        Text(mote.emoji)
+            .font(.system(size: mote.size))
+            .opacity(shown ? mote.opacity : 0)
+            .scaleEffect(shown ? 1 : 0.6)
+            .rotationEffect(.degrees(up ? mote.tilt : -mote.tilt))
+            .offset(y: up ? -mote.drift : mote.drift)
+            .onAppear {
+                withAnimation(.spring(response: 0.7, dampingFraction: 0.75).delay(mote.delay * 0.2)) {
+                    shown = true
+                }
+                guard !still else { return }
+                withAnimation(
+                    .easeInOut(duration: mote.duration).repeatForever(autoreverses: true).delay(mote.delay)
+                ) {
+                    up = true
+                }
+            }
+    }
 }
 
 #Preview {
