@@ -1,8 +1,9 @@
 # App icon exploration
 
-**Status: open.** The icon currently shipping in `ios/DRILL/Assets.xcassets` is a
-placeholder — it is the old web app's runner glyph, and it is essentially the watchOS
-Workout icon. It must not ship.
+**Status: closed — superseded.** None of these shipped. The icon is now the supplied
+DRILL wordmark; see [`brand/`](../../brand/README.md). This directory is kept only as a
+record of what was tried and why, and the font-licensing caveat below no longer applies
+since the final mark is artwork rather than type.
 
 Each `make*.js` writes 1024×1024 SVGs into its own directory; render and review with:
 

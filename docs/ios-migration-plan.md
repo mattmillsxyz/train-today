@@ -282,11 +282,12 @@ Deployment target **iOS 17.0** — needed for SwiftData, and broad enough in 202
 ### What Phase 8 still needs
 
 - **Verify the App Store name is free** before anything else.
-- **A real 1024 icon — the current one is rejected and must not ship.** It is the old web app's
-  runner glyph upscaled from the 256px favicon, and it is essentially the watchOS Workout icon.
-  Exploration so far, with contact sheets and the scripts that generated them, is in
-  [`docs/icon-exploration/`](icon-exploration/README.md); the live direction is a DRILL wordmark
-  in a heavy condensed face. Note the font-licensing constraint recorded there.
+- ~~A real 1024 icon.~~ **Done.** The runner glyph is gone — it was essentially the watchOS
+  Workout icon. The icon is now the supplied DRILL wordmark in green on the near-black
+  ground, and the same artwork is the logo in the app and across the site. Source and
+  regeneration steps are in [`brand/`](../brand/README.md); the earlier in-house
+  exploration is kept in [`docs/icon-exploration/`](icon-exploration/README.md) for
+  reference, and its font-licensing caveat no longer applies since the mark is artwork.
 - Screenshots per device class, listing copy, the privacy questionnaire (answer: Data Not
   Collected), age rating 4+, and the support/privacy URLs — both live on the site already.
 - Point `trainwithdrill.com` at the site and confirm `/app/` still serves the old web app.

@@ -86,19 +86,24 @@ struct WelcomePage: View {
         }
     }
 
+    /// The real wordmark rather than a system face standing in for it. The
+    /// artwork is a white-on-transparent mask, so the colour is painted
+    /// through its alpha.
     private var wordmark: some View {
-        Text("DRILL")
-            .font(.system(size: 82, weight: .black).width(.compressed))
-            .kerning(3)
-            .foregroundStyle(
-                LinearGradient(
-                    colors: [.white, Theme.green],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
+        Theme.green
+            .mask {
+                Image("Wordmark")
+                    .resizable()
+                    .scaledToFit()
+            }
+            .frame(width: Self.wordmarkWidth, height: Self.wordmarkWidth / Self.wordmarkAspect)
             .shadow(color: Theme.green.opacity(0.5), radius: 28)
+            .accessibilityLabel("DRILL")
     }
+
+    private static let wordmarkWidth: CGFloat = 268
+    /// 3164 × 846, the artwork's own proportions.
+    private static let wordmarkAspect: CGFloat = 3164.0 / 846.0
 
     private var tagline: some View {
         Text("Multi-sport training for young athletes")

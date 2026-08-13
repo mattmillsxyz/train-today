@@ -78,6 +78,17 @@ a { color: var(--green-dark); }
 
 .brand img { width: 30px; height: 30px; border-radius: 8px; display: block; }
 
+/* Masked rather than a coloured image, so the mark follows the theme's text
+   colour the way the brand text it replaced did. */
+.brand-word {
+  display: block;
+  width: 82px;
+  aspect-ratio: 3164 / 846;
+  background: var(--text);
+  -webkit-mask: url(img/wordmark-white.png) center / contain no-repeat;
+  mask: url(img/wordmark-white.png) center / contain no-repeat;
+}
+
 .site-nav {
   display: flex;
   gap: 18px;
@@ -98,7 +109,7 @@ a { color: var(--green-dark); }
 .hero {
   background: var(--ink);
   color: #fff;
-  padding: 72px 0 0;
+  padding: 72px 0 76px;
   position: relative;
   overflow: hidden;
 }
@@ -114,24 +125,22 @@ a { color: var(--green-dark); }
 
 .hero .wrap { position: relative; text-align: center; }
 
-.hero-mark {
-  width: 104px;
-  height: 104px;
-  border-radius: 26px;
-  display: block;
-  margin: 0 auto 24px;
-  box-shadow: 0 20px 60px rgba(34, 214, 138, 0.32);
+/* The wordmark is artwork, not type. The colour is painted through the mark's
+   own alpha, the same treatment the app's welcome screen uses.
+   3164 x 846 is the artwork's aspect ratio. */
+.hero h1 {
+  margin: 0;
+  line-height: 0;
 }
 
-.hero h1 {
-  font-size: clamp(44px, 10vw, 84px);
-  font-weight: 900;
-  letter-spacing: 6px;
-  line-height: 1;
-  background: linear-gradient(120deg, #fff, var(--green));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.hero-word {
+  display: block;
+  width: min(420px, 76vw);
+  aspect-ratio: 3164 / 846;
+  margin: 0 auto;
+  background: var(--green);
+  -webkit-mask: url(img/wordmark-white.png) center / contain no-repeat;
+  mask: url(img/wordmark-white.png) center / contain no-repeat;
 }
 
 .hero .tagline {
@@ -200,7 +209,6 @@ a { color: var(--green-dark); }
   border: 6px solid #222;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
   display: block;
-  margin-bottom: -6px;
 }
 
 .shots img:nth-child(2) { width: min(258px, 46vw); }

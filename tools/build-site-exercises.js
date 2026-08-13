@@ -98,7 +98,7 @@ const html = `<!DOCTYPE html>
 
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="/"><img src="img/icon-1024.png" alt=""> DRILL</a>
+    <a class="brand" href="/"><span class="brand-word" role="img" aria-label="DRILL"></span></a>
     <nav class="site-nav">
       <a href="index.html">Home</a>
       <a href="exercises.html" aria-current="page">Exercises</a>
