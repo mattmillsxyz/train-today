@@ -11,6 +11,9 @@ struct OnboardingFlow: View {
     @State private var page = 0
     @State private var draft = PlanSettings.default
     @State private var notificationDenied = false
+    /// Measured from the floating footer, so page content can be padded clear
+    /// of it. Seeded with roughly the real height to avoid a first-layout jump.
+    @State private var footerHeight: CGFloat = 84
 
     private let pageCount = 6
 
@@ -32,9 +35,23 @@ struct OnboardingFlow: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .animation(.easeInOut, value: page)
-
-            if !isWelcome {
-                footer
+            // An overlay rather than a sibling or a safe-area inset. Both of
+            // those shrink the pages, and content then stops dead against the
+            // controls instead of passing under them. An overlay leaves the
+            // pages full height; `page()` pads its content by the measured
+            // height so nothing ends up stranded underneath.
+            .overlay(alignment: .bottom) {
+                if !isWelcome {
+                    footer.background {
+                        GeometryReader { proxy in
+                            Color.clear
+                                .onAppear { footerHeight = proxy.size.height }
+                                .onChange(of: proxy.size.height) { _, height in
+                                    footerHeight = height
+                                }
+                        }
+                    }
+                }
             }
         }
         .background(isWelcome ? Theme.ink : Theme.bg)
@@ -176,31 +193,48 @@ struct OnboardingFlow: View {
             .appColumn()
             .padding(.horizontal, 20)
             .padding(.top, 24)
-            .padding(.bottom, 24)
+            .padding(.bottom, footerHeight + 12)
         }
     }
 
+    /// Floats over the page rather than sitting on a bar of its own, so the
+    /// background stays transparent and content passes underneath. Both
+    /// controls therefore carry their own solid shape — "Back" was bare text,
+    /// which is unreadable over a scrolling list.
+    ///
+    /// Padding lives inside each label so the whole capsule is the hit target,
+    /// not just the glyphs.
     private var footer: some View {
         HStack {
             if page > 0 {
-                Button("Back") { page -= 1 }
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(Theme.textSecondary)
+                Button { page -= 1 } label: {
+                    Text("Back")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(Theme.textSecondary)
+                        .padding(.horizontal, 22)
+                        .padding(.vertical, 14)
+                        .background(Theme.card, in: .capsule)
+                        .overlay(Capsule().strokeBorder(Theme.border))
+                }
+                .buttonStyle(.plain)
             }
             Spacer()
-            Button(page == pageCount - 1 ? "Start training" : "Next") {
+            Button {
                 Task { await next() }
+            } label: {
+                Text(page == pageCount - 1 ? "Start training" : "Next")
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundStyle(Theme.ink)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 14)
+                    .background(Theme.green, in: .capsule)
             }
-            .font(.system(size: 17, weight: .bold))
-            .foregroundStyle(Theme.ink)
-            .padding(.horizontal, 24)
-            .padding(.vertical, 14)
-            .background(Theme.green, in: .capsule)
             .buttonStyle(.plain)
             .disabled(nextDisabled)
             .opacity(nextDisabled ? 0.4 : 1)
         }
         .padding(.horizontal, 20)
+        .padding(.top, 10)
         .padding(.bottom, 20)
         .appColumn()
     }
