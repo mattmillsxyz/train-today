@@ -1,0 +1,9 @@
+# The marketing site is the root of trainwithdrill.com; the retired web app
+# lives on at /app/ until the iOS release, then both it and this redirect go.
+[build]
+  publish = "site"
+
+[[redirects]]
+  from = "/app"
+  to = "/app/"
+  status = 301

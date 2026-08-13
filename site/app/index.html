@@ -7,8 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0d0d0d">
-<meta name="robots" content="noindex">
-<title>All Exercises – Train Today</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Train Today</title>
+<meta property="og:title" content="Train Today">
+<meta property="og:description" content="A daily training app for young multi-sport athletes. Soccer, football, track, strength, cardio, and plyometrics.">
+<meta property="og:image" content="https://train-today.netlify.app/train-today-app-screenshot.png">
+<meta property="og:url" content="https://train-today.netlify.app/">
+<meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script>
@@ -25,6 +31,11 @@
     --green: #22D68A;
     --green-light: #0d2e1f;
     --green-dark: #16a869;
+    --blue: #4DA8FF;
+    --amber: #F0A500;
+    --red: #FF5C5C;
+    --purple: #A89BFF;
+    --pink: #FF7BAC;
     --text: #f0f0f0;
     --text-secondary: #888;
     --border: #2a2a2a;
@@ -61,7 +72,9 @@
     --card: #161616;
   }
 
-  html { background-color: var(--bg); }
+  html {
+    background-color: var(--bg);
+  }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: var(--bg);
@@ -90,6 +103,41 @@
     padding: 20px 16px 16px;
     border-radius: 20px 20px 0 0;
   }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-btn {
+    background: rgba(0,0,0,0.15);
+    border: none;
+    color: #0d0d0d;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-btn:active { background: rgba(255,255,255,0.35); }
+  .header-date-label {
+    font-size: 14px;
+    opacity: 0.8;
+    text-align: center;
+  }
+  .header-day-label {
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+  }
   .header-title {
     font-size: 24px;
     font-weight: 700;
@@ -102,15 +150,44 @@
     margin-top: 2px;
     text-align: center;
   }
-
-  /* SECTIONS */
-  .section-title {
+  .sport-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    justify-content: center;
+  }
+  .sport-pill {
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 4px 12px;
     font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--green-dark);
-    padding: 20px 4px 8px;
+    font-weight: 500;
+  }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    padding: 10px 16px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+  .progress-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+  .progress-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+  }
+  .progress-fill {
+    height: 4px;
+    background: var(--green);
+    border-radius: 2px;
+    transition: width 0.4s ease;
   }
 
   /* ACTIVITIES */
@@ -120,17 +197,10 @@
     background: var(--card);
     border-bottom: 1px solid var(--border);
   }
-  .activity-item:first-child {
-    border-radius: 20px 20px 0 0;
-    overflow: hidden;
-  }
   .activity-item:last-child {
     border-bottom: none;
     border-radius: 0 0 20px 20px;
     overflow: hidden;
-  }
-  .activities:has(.activity-item:only-child) .activity-item {
-    border-radius: 20px;
   }
   .activity-row {
     display: flex;
@@ -140,11 +210,39 @@
     cursor: pointer;
     user-select: none;
   }
+  .check-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .check-circle.done {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .check-icon {
+    display: none;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .check-circle.done .check-icon { display: block; }
+
   .activity-text { flex: 1; min-width: 0; }
   .activity-name {
     font-size: 18px;
     font-weight: 600;
     line-height: 1.3;
+  }
+  .activity-name.done {
+    text-decoration: line-through;
+    color: var(--text-secondary);
   }
   .activity-duration {
     font-size: 15px;
@@ -182,12 +280,20 @@
 
   .activity-detail {
     display: none;
-    padding: 0 16px 16px 16px;
+    padding: 0 16px 16px 56px;
     font-size: 16px;
     color: var(--text-secondary);
     line-height: 1.65;
   }
   .activity-detail.open { display: block; }
+  .detail-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--green-dark);
+    margin-bottom: 8px;
+  }
   .detail-steps {
     list-style: none;
     counter-reset: step;
@@ -216,6 +322,19 @@
     justify-content: center;
   }
 
+  /* REST DAY */
+  .rest-card {
+    margin: 32px 16px;
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 32px 20px;
+    text-align: center;
+  }
+  .rest-emoji { font-size: 48px; margin-bottom: 12px; }
+  .rest-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+  .rest-sub { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
   /* THEME TOGGLE */
   .theme-toggle-wrap {
     max-width: 600px;
@@ -238,6 +357,183 @@
   }
   .theme-toggle:hover { opacity: 0.8; }
   .theme-toggle:active { opacity: 0.4; }
+
+  /* WEEK STRIP */
+  .week-strip {
+    background: var(--green-dark);
+    padding: 8px 16px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    justify-content: center;
+  }
+  .week-strip::-webkit-scrollbar { display: none; }
+  .week-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 36px;
+    padding: 4px 4px;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .week-day.active { background: rgba(0,0,0,0.2); }
+  .week-day-name { font-size: 11px; color: rgba(0,0,0,0.6); text-transform: uppercase; letter-spacing: 0.3px; }
+  .week-day-num { font-size: 17px; font-weight: 600; color: #0d0d0d; }
+  .week-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(0,0,0,0.3); }
+  .week-dot.has-workout { background: rgba(0,0,0,0.6); }
+  .week-day.today .week-day-num {
+    background: #0d0d0d;
+    color: var(--green);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  /* START BUTTON */
+  .start-btn {
+    background: var(--green);
+    color: #0d0d0d;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    display: inline-block;
+  }
+  .start-btn:active { opacity: 0.8; }
+
+  /* TIMER OVERLAY */
+  #timerOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #22c55e;
+    z-index: 100;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #timerOverlay.active { display: flex; }
+
+  #timerTop {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 24px 20px;
+  }
+  #timerLabel {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+  #timerDisplay {
+    font-size: clamp(56px, 18vw, 100px);
+    font-weight: 700;
+    color: #000;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  #timerSteps {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px 140px;
+  }
+  #timerSteps ol {
+    list-style: none;
+    counter-reset: step;
+    margin: 0;
+    padding: 0;
+  }
+  #timerSteps li {
+    counter-increment: step;
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    line-height: 1.5;
+    align-items: flex-start;
+  }
+  #timerSteps li:last-child { border-bottom: none; }
+  #timerSteps li::before {
+    content: counter(step);
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+
+  #timerButtons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px 40px;
+    background: none;
+  }
+  .timer-btn {
+    background: #1aad52;
+    color: #000;
+    border: none;
+    border-radius: 32px;
+    padding: 14px 32px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    min-width: 120px;
+  }
+  .timer-btn:active { background: #178f44; }
+  .timer-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .timer-btn.finish {
+    background: #000;
+    color: #22c55e;
+  }
+  #timerRestartBtn {
+    background: #1aad52;
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  #timerRestartBtn:active { background: #178f44; }
 </style>
 </head>
 <body>
@@ -248,8 +544,21 @@
   <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode"></button>
 </div>
 
+<div id="timerOverlay">
+  <div id="timerTop">
+    <div id="timerLabel"></div>
+    <div id="timerDisplay">00:00</div>
+  </div>
+  <div id="timerSteps"><ol id="timerStepsList"></ol></div>
+  <div id="timerButtons">
+    <button id="timerRestartBtn" onclick="timerRestart()" title="Restart">↺</button>
+    <button class="timer-btn" id="timerPauseBtn" onclick="timerTogglePause()">Pause</button>
+    <button class="timer-btn finish" onclick="timerFinish()">Finish</button>
+  </div>
+</div>
+
 <script>
-// ─── ACTIVITY LIBRARY (mirrors index.html — keep in sync if edited) ────────
+// ─── ACTIVITY LIBRARY ──────────────────────────────────────────────────────
 
 const ACTIVITIES = {
 
@@ -575,7 +884,7 @@ const ACTIVITIES = {
     steps: [
       "Squat down like you're sitting in a low chair, thighs about parallel to the ground.",
       "Keep your chest up and hands out in front (or on your hips) for balance.",
-      "Waddle forward one small step at a time, staying low the whole way — like a duck!",
+      "Waddle forward one small step at a time, staying low the whole way, like a duck!",
       "Walk 15 yards forward, then waddle backward 15 yards to reset.",
       "Rest 30 seconds, repeat 3 times. Burns your legs but builds serious hip and knee control.",
     ]
@@ -589,7 +898,7 @@ const ACTIVITIES = {
       "Toes pointing straight ahead: rise onto your tiptoes as high as you can, then slowly lower. Do 15 reps.",
       "Turn your toes OUT (heels together, like a V) and do 15 more.",
       "Turn your toes IN (pigeon-toed) and do a final 15. Different angles hit different parts of your calf!",
-      "Rest 30 seconds between each set of 15. Go slow on the way down — that's where the real work happens.",
+      "Rest 30 seconds between each set of 15. Go slow on the way down, that's where the real work happens.",
     ]
   },
   singleLegBalance: {
@@ -598,7 +907,7 @@ const ACTIVITIES = {
     tag: "balance",
     steps: [
       "Stand on your right foot, arms out to your sides like airplane wings.",
-      "Hold as still as you can for 30 seconds. Pick a spot on the wall to stare at — it helps!",
+      "Hold as still as you can for 30 seconds. Pick a spot on the wall to stare at, it helps!",
       "Switch to your left foot and hold for 30 seconds.",
       "Level up: try closing your eyes for 10 seconds on each foot.",
       "Level up more: bend your standing knee slightly and hold 30 seconds each leg.",
@@ -673,54 +982,291 @@ const ACTIVITIES = {
   },
 };
 
-const CATEGORIES = [
-  { tag: 'warmup', label: 'Warmup' },
-  { tag: 'soccer', label: 'Soccer' },
-  { tag: 'football', label: 'Football' },
-  { tag: 'cardio', label: 'Cardio' },
-  { tag: 'plyo', label: 'Plyometrics' },
-  { tag: 'strength', label: 'Strength' },
-  { tag: 'balance', label: 'Balance & Agility' },
-  { tag: 'track', label: 'Track' },
-  { tag: 'stretch', label: 'Stretching' },
-];
+// ─── SCHEDULE BUILDER ──────────────────────────────────────────────────────
+
+// Epoch for week-cycle calculation (arbitrary fixed Monday)
+const EPOCH = new Date(2025, 5, 16); // June 16, 2025 (a Monday)
+
+function getWorkoutForDate(d) {
+  // Theme rotation: every day has a workout — he decides his own rest days
+  const weekPatterns = [
+    // Mon, Tue, Wed, Thu, Fri, Sat, Sun
+    ['soccer1','strength1','cardio1','soccer2','plyo1','football1','track1'],
+    ['balance1','strength2','soccer3','cardio2','football1','plyo2','soccer4'],
+    ['football1','plyo2','strength3','soccer5','cardio3','football2','track2'],
+    ['football2','strength4','soccer6','track2','plyo3','soccer1','strength1'],
+    ['soccer1','cardio4','strength5','soccer2','plyo1','football2','track1'],
+    ['soccer2','strength2','soccer3','cardio2','football1','plyo3','soccer5'],
+    ['soccer4','plyo2','strength3','soccer5','cardio3','track2','football2'],
+    ['cardio3','strength4','soccer6','track2','plyo3','soccer3','cardio4'],
+    ['soccer1','cardio4','strength5','soccer2','plyo1','football1','track1'],
+    ['balance1','strength2','soccer3','cardio2','football2','plyo2','soccer6'],
+  ];
+
+  const dayWorkouts = {
+    soccer1: {
+      title: "Soccer Skills",
+      activities: ['dynamicWarmup','jugglingBasic','coneDribbling','firstTouchDrill','sprintIntervals','coolDownStretch'],
+      sports: ['⚽ Soccer','🏃 Cardio']
+    },
+    soccer2: {
+      title: "Soccer Focus",
+      activities: ['dynamicWarmup','insideOutsideDribble','wallPassing','shootingDrill','jumpSquats','coolDownStretch'],
+      sports: ['⚽ Soccer','🤸 Plyo']
+    },
+    soccer3: {
+      title: "Ball Control Day",
+      activities: ['dynamicWarmup','jugglingBasic','firstTouchDrill','coneDribbling','broadJumps','coolDownStretch'],
+      sports: ['⚽ Soccer','🤸 Plyo']
+    },
+    soccer4: {
+      title: "Shooting Day",
+      activities: ['dynamicWarmup','shootingDrill','coneDribbling','sprintIntervals','pushups','coolDownStretch'],
+      sports: ['⚽ Soccer','💪 Strength']
+    },
+    soccer5: {
+      title: "Dribbling & Passing",
+      activities: ['dynamicWarmup','insideOutsideDribble','firstTouchDrill','wallPassing','suicideSprints','coolDownStretch'],
+      sports: ['⚽ Soccer','🏃 Cardio']
+    },
+    soccer6: {
+      title: "Full Soccer Session",
+      activities: ['dynamicWarmup','jugglingBasic','coneDribbling','shootingDrill','lateralBounds','hipMobility'],
+      sports: ['⚽ Soccer','🤸 Plyo']
+    },
+    football1: {
+      title: "Football Day",
+      activities: ['dynamicWarmup','routeRunning','handCatching','footballAgility','tricepDips','coolDownStretch'],
+      sports: ['🏈 Football','💪 Strength']
+    },
+    football2: {
+      title: "Football Agility",
+      activities: ['dynamicWarmup','footballAgility','routeRunning','handCatching','plankHold','coolDownStretch'],
+      sports: ['🏈 Football','💪 Strength']
+    },
+    track1: {
+      title: "Track & Speed",
+      activities: ['dynamicWarmup','strideDrills','trackSprints','lateralBounds','boxJumps','coolDownStretch'],
+      sports: ['🏃 Track','🤸 Plyo']
+    },
+    track2: {
+      title: "Speed & Form",
+      activities: ['dynamicWarmup','strideDrills','sprintIntervals','agilityLadder','squats','coolDownStretch'],
+      sports: ['🏃 Track','💪 Strength']
+    },
+    strength1: {
+      title: "Strength Day",
+      activities: ['dynamicWarmup','pushups','squats','mountainClimbers','plankHold','coolDownStretch'],
+      sports: ['💪 Strength']
+    },
+    strength2: {
+      title: "Strength Circuit",
+      activities: ['dynamicWarmup','lunges','tricepDips','burpees','plankHold','coolDownStretch'],
+      sports: ['💪 Strength']
+    },
+    strength3: {
+      title: "Power Strength",
+      activities: ['dynamicWarmup','squats','pushups','mountainClimbers','jumpSquats','coolDownStretch'],
+      sports: ['💪 Strength','🤸 Plyo']
+    },
+    strength4: {
+      title: "Full Body Strength",
+      activities: ['dynamicWarmup','burpees','lunges','tricepDips','mountainClimbers','coolDownStretch'],
+      sports: ['💪 Strength']
+    },
+    strength5: {
+      title: "Strength & Core",
+      activities: ['dynamicWarmup','pushups','plankHold','squats','lunges','coolDownStretch'],
+      sports: ['💪 Strength']
+    },
+    cardio1: {
+      title: "Cardio Day",
+      activities: ['dynamicWarmup','suicideSprints','agilityLadder','bikeRide','hipMobility'],
+      sports: ['🏃 Cardio']
+    },
+    cardio2: {
+      title: "Cardio Blast",
+      activities: ['dynamicWarmup','sprintIntervals','suicideSprints','agilityLadder','coolDownStretch'],
+      sports: ['🏃 Cardio']
+    },
+    cardio3: {
+      title: "Endurance Day",
+      activities: ['dynamicWarmup','bikeRide','agilityLadder','suicideSprints','coolDownStretch'],
+      sports: ['🏃 Cardio']
+    },
+    cardio4: {
+      title: "Speed Day",
+      activities: ['dynamicWarmup','agilityLadder','sprintIntervals','suicideSprints','broadJumps','hipMobility'],
+      sports: ['🏃 Cardio','🤸 Plyo']
+    },
+    plyo1: {
+      title: "Plyometrics Day",
+      activities: ['dynamicWarmup','boxJumps','broadJumps','jumpSquats','lateralBounds','coolDownStretch'],
+      sports: ['🤸 Plyo']
+    },
+    plyo2: {
+      title: "Explosive Power",
+      activities: ['dynamicWarmup','jumpSquats','lateralBounds','broadJumps','mountainClimbers','coolDownStretch'],
+      sports: ['🤸 Plyo','💪 Strength']
+    },
+    plyo3: {
+      title: "Jump Training",
+      activities: ['dynamicWarmup','boxJumps','jumpSquats','lateralBounds','broadJumps','coolDownStretch'],
+      sports: ['🤸 Plyo']
+    },
+    balance1: {
+      title: "Balance & Agility",
+      activities: ['dynamicWarmup','singleLegBalance','duckWalks','cariocaSteps','calfRaises','coolDownStretch'],
+      sports: ['⚖️ Balance']
+    }
+  };
+
+  // Fix: wall passing key
+  ACTIVITIES['wallPassing'] = ACTIVITIES['passAndMove'];
+
+  const dow = d.getDay(); // 0=Sun
+  const patternDay = (dow + 6) % 7; // Mon=0 ... Sun=6
+  const weekNum = Math.floor((d - EPOCH) / (7 * 86400000));
+  // Cycle through patterns indefinitely
+  const patternIndex = ((weekNum % weekPatterns.length) + weekPatterns.length) % weekPatterns.length;
+  const workoutKey = weekPatterns[patternIndex][patternDay];
+  const workout = dayWorkouts[workoutKey];
+
+  if (!workout) return null;
+  return {
+    title: workout.title,
+    sports: workout.sports,
+    activities: workout.activities.map(k => ({ id: k, ...ACTIVITIES[k] }))
+  };
+}
 
 // ─── STATE ─────────────────────────────────────────────────────────────────
 
-const expanded = {}; // activityId -> bool
+const today = new Date();
+today.setHours(0,0,0,0);
+
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+let displayDate = new Date(today);
+
+const expanded = {}; // dateKey+actId -> bool
+
+// ─── LOCALSTORAGE PERSISTENCE ──────────────────────────────────────────────
+
+const LS_KEY = 'trainToday_completed';
+
+function loadChecked() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return {};
+    const obj = JSON.parse(raw);
+    const result = {};
+    for (const [k, arr] of Object.entries(obj)) result[k] = new Set(arr);
+    return result;
+  } catch { return {}; }
+}
+
+function saveChecked() {
+  const obj = {};
+  for (const [k, s] of Object.entries(checked)) obj[k] = [...s];
+  localStorage.setItem(LS_KEY, JSON.stringify(obj));
+}
+
+const checked = loadChecked();
+
+function getChecked(dk) {
+  if (!checked[dk]) checked[dk] = new Set();
+  return checked[dk];
+}
 
 // ─── RENDER ────────────────────────────────────────────────────────────────
 
+function formatDisplayDate(d) {
+  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+}
+
+function formatShortDate(d) {
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function isToday(d) {
+  const t = new Date(); t.setHours(0,0,0,0);
+  return d.getTime() === t.getTime();
+}
+
 function render() {
-  const total = Object.keys(ACTIVITIES).length;
+  const dk = dateKey(displayDate);
+  const workout = getWorkoutForDate(displayDate);
+  const ch = getChecked(dk);
 
-  let html = `<div class="header-wrap"><div class="header">
-    <div class="header-title">All Exercises</div>
-    <div class="header-meta">${total} exercises across ${CATEGORIES.length} categories</div>
-  </div></div>`;
+  let html = '';
 
-  for (const cat of CATEGORIES) {
-    const entries = Object.entries(ACTIVITIES).filter(([, a]) => a.tag === cat.tag);
-    if (!entries.length) continue;
+  // Header
+  const totalMin = workout ? workout.activities.reduce((s, a) => {
+    const m = parseInt(a.duration);
+    return s + (isNaN(m) ? 0 : m);
+  }, 0) : 0;
 
-    html += `<div class="section-title">${cat.label}</div>`;
+  html += `<div class="header-wrap"><div class="header">
+    <div class="header-top">
+      <div class="header-nav">
+        <button class="nav-btn" onclick="shiftDay(-1)">‹</button>
+      </div>
+      <div style="text-align:center">
+        <div class="header-date-label">${formatDisplayDate(displayDate)}</div>
+        <div class="header-day-label"></div>
+      </div>
+      <div class="header-nav">
+        <button class="nav-btn" onclick="shiftDay(1)">›</button>
+      </div>
+    </div>
+    <div class="header-title">${workout ? workout.title : 'Rest Day'}</div>`;
+
+  if (workout) {
+    html += `<div class="header-meta">${workout.activities.length} activities · ~${totalMin} min</div>
+    <div class="sport-pills">${workout.sports.map(s => `<span class="sport-pill">${s}</span>`).join('')}</div>`;
+  }
+  html += `</div></div>`;
+
+  // Week strip
+  html += buildWeekStrip();
+
+  if (workout) {
+    // Progress
+    const doneCount = workout.activities.filter(a => ch.has(a.id)).length;
+    const pct = Math.round((doneCount / workout.activities.length) * 100);
+    html += `<div class="progress-bar-wrap">
+      <div class="progress-row"><span>Progress</span><span>${doneCount} of ${workout.activities.length} done</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>`;
+
+    // Activities
     html += `<div class="activities">`;
-    for (const [id, act] of entries) {
-      const isExp = !!expanded[id];
+    for (const act of workout.activities) {
+      const done = ch.has(act.id);
+      const expKey = dk + act.id;
+      const isExp = !!expanded[expKey];
       const tagClass = 'tag-' + act.tag;
 
       html += `<div class="activity-item">
-        <div class="activity-row" onclick="toggleActivity('${id}')">
+        <div class="activity-row" onclick="toggleActivity('${dk}','${act.id}','${expKey}')">
+          <div class="check-circle ${done ? 'done' : ''}" onclick="toggleCheck(event,'${dk}','${act.id}')">
+            <span class="check-icon">✓</span>
+          </div>
           <div class="activity-text">
-            <div class="activity-name">${act.name}</div>
+            <div class="activity-name ${done ? 'done' : ''}">${act.name}</div>
             <span class="tag ${tagClass}">${act.tag}</span>
             <div class="activity-duration">${act.duration}</div>
+            <button class="start-btn" onclick="startTimer(event,'${dk}','${act.id}',${parseDurationMin(act.duration)},'${act.name.replace(/'/g,"\\'")}')">▶ Start</button>
           </div>
           <div class="chevron ${isExp ? 'open' : ''}">›</div>
         </div>`;
 
       if (isExp && act.steps) {
         html += `<div class="activity-detail open">
+          <div class="detail-title">How to do it:</div>
           <ol class="detail-steps">${act.steps.map(s => `<li>${s}</li>`).join('')}</ol>
         </div>`;
       }
@@ -732,8 +1278,154 @@ function render() {
   document.getElementById('app').innerHTML = html;
 }
 
-function toggleActivity(id) {
-  expanded[id] = !expanded[id];
+function buildWeekStrip() {
+  // Show week containing displayDate
+  const weekStart = new Date(displayDate);
+  const dow = weekStart.getDay();
+  weekStart.setDate(weekStart.getDate() - dow); // go to Sunday
+
+  let html = `<div class="week-strip" id="weekStrip">`;
+  const days = ['S','M','T','W','T','F','S'];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart);
+    d.setDate(d.getDate() + i);
+    const dk = dateKey(d);
+    const hasWorkout = true;
+    const isActive = dateKey(d) === dateKey(displayDate);
+    const isTod = isToday(d);
+
+    html += `<div class="week-day ${isActive ? 'active' : ''} ${isTod ? 'today' : ''}" onclick="goToDate('${dk}')">
+      <span class="week-day-name">${days[i]}</span>
+      <span class="week-day-num">${d.getDate()}</span>
+      <span class="week-dot ${hasWorkout ? 'has-workout' : ''}"></span>
+    </div>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+// ─── INTERACTIONS ──────────────────────────────────────────────────────────
+
+function shiftDay(n) {
+  displayDate.setDate(displayDate.getDate() + n);
+  render();
+  window.scrollTo(0, 0);
+}
+
+function goToDate(dk) {
+  const parts = dk.split('-');
+  displayDate = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  render();
+  window.scrollTo(0, 0);
+}
+
+function toggleCheck(e, dk, actId) {
+  e.stopPropagation();
+  const ch = getChecked(dk);
+  if (ch.has(actId)) ch.delete(actId); else ch.add(actId);
+  saveChecked();
+  render();
+}
+
+// ─── TIMER ─────────────────────────────────────────────────────────────────
+
+let timerState = null; // { dk, actId, totalSecs, remaining, paused, interval }
+
+function parseDurationMin(dur) {
+  const m = parseInt(dur);
+  return isNaN(m) ? 5 : m;
+}
+
+function playCompleteSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Three sharp buzzer bursts
+    for (let i = 0; i < 3; i++) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'square';
+      osc.frequency.value = 180;
+      const t = ctx.currentTime + i * 0.45;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.6, t + 0.01);
+      gain.gain.setValueAtTime(0.6, t + 0.28);
+      gain.gain.linearRampToValueAtTime(0, t + 0.32);
+      osc.start(t);
+      osc.stop(t + 0.35);
+    }
+  } catch(e) {}
+}
+
+function timerTick() {
+  if (!timerState || timerState.paused) return;
+  timerState.remaining--;
+  updateTimerDisplay();
+  if (timerState.remaining <= 0) {
+    clearInterval(timerState.interval);
+    timerState.interval = null;
+    document.getElementById('timerPauseBtn').disabled = true;
+    playCompleteSound();
+  }
+}
+
+function updateTimerDisplay() {
+  const s = timerState.remaining;
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  document.getElementById('timerDisplay').textContent =
+    String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+
+function startTimer(e, dk, actId, durationMin, name) {
+  e.stopPropagation();
+  if (timerState) clearInterval(timerState.interval);
+  const secs = durationMin * 60;
+  timerState = { dk, actId, totalSecs: secs, remaining: secs, paused: false, interval: null };
+  document.getElementById('timerLabel').textContent = name;
+  const pauseBtn = document.getElementById('timerPauseBtn');
+  pauseBtn.textContent = 'Pause';
+  pauseBtn.disabled = false;
+  const steps = (ACTIVITIES[actId] || {}).steps || [];
+  document.getElementById('timerStepsList').innerHTML = steps.map(s => `<li>${s}</li>`).join('');
+  updateTimerDisplay();
+  timerState.interval = setInterval(timerTick, 1000);
+  document.getElementById('timerOverlay').classList.add('active');
+}
+
+function timerTogglePause() {
+  if (!timerState || timerState.remaining <= 0) return;
+  timerState.paused = !timerState.paused;
+  document.getElementById('timerPauseBtn').textContent = timerState.paused ? 'Resume' : 'Pause';
+}
+
+function timerRestart() {
+  if (!timerState) return;
+  clearInterval(timerState.interval);
+  timerState.remaining = timerState.totalSecs;
+  timerState.paused = false;
+  const pauseBtn = document.getElementById('timerPauseBtn');
+  pauseBtn.disabled = false;
+  pauseBtn.textContent = 'Pause';
+  updateTimerDisplay();
+  timerState.interval = setInterval(timerTick, 1000);
+}
+
+function timerFinish() {
+  if (!timerState) return;
+  clearInterval(timerState.interval);
+  const { dk, actId } = timerState;
+  timerState = null;
+  document.getElementById('timerOverlay').classList.remove('active');
+  const ch = getChecked(dk);
+  ch.add(actId);
+  saveChecked();
+  render();
+}
+
+function toggleActivity(dk, actId, expKey) {
+  expanded[expKey] = !expanded[expKey];
   render();
 }
 

@@ -1,35 +1,77 @@
-# Train Today
+# DRILL
 
-A lightweight, single-file training app for young multi-sport athletes. No frameworks, no build step. Just open the HTML file in a browser.
+Multi-sport training for young athletes. A native SwiftUI iPhone app that builds a
+daily training session around the sports your athlete actually plays, then talks them
+through it step by step.
 
-![Train Today app screenshot](train-today-app-screenshot.png)
+⚽ Soccer · 🏈 Football · 🏁 Track · 🏃 Cardio · 💪 Strength · 🤸 Plyometrics · ⚖️ Balance
+
+<p>
+  <img src="site/img/screen-calendar.png" width="240" alt="Calendar screen">
+  <img src="site/img/screen-today.png" width="240" alt="Today screen">
+  <img src="site/img/screen-timer.png" width="240" alt="Step timer">
+</p>
 
 ## What it does
 
-- Shows a daily workout drawn from a rotating 10-week plan that cycles forever
-- Activities cover soccer, football, track, strength, cardio, and plyometrics
-- Each activity has step-by-step instructions written for young athletes
-- Tap/click an activity to expand the how-to guide
-- Check off activities as you complete them; a progress bar tracks the day
-- Navigate forward/backward by day or tap any day in the week strip
-- "Jump to Today" button appears whenever you're browsing another date
+- **Builds the plan for you.** Pick your sports, your training days and how long a
+  session should run. Every training day gets a warmup, three or four drills weighted
+  to those sports, a strength or plyo finisher and a cooldown. Sports rotate rather
+  than cluster, and no drill repeats two days running.
+- **Talks you through it.** Each step is timed on its own and read aloud, with a cue
+  and a haptic on every change — sets and rests count themselves down, so the phone can
+  go in a pocket mid-drill.
+- **Tracks what matters.** A forgiving streak (rest days never break it), a month
+  calendar, twelve reachable badges, and personal records with their history.
+- **Reminds you.** One local notification per training day, at a time you choose.
+- **Keeps everything on the device.** No account, no analytics, no third-party code,
+  and not a single network request.
 
-## Usage
+## Repo
 
-Open `index.html` in any browser. No server needed.
+| Path | What |
+|---|---|
+| `ios/` | The Xcode project and app sources. |
+| `site/` | The marketing site for trainwithdrill.com. |
+| `site/app/` | The original vanilla-JS web app, still live until the App Store release. |
+| `tools/` | Content validation and page generation. Plain Node, no dependencies. |
+| `docs/` | The migration plan. |
 
-Works on phone or desktop. Designed to be bookmarked on a phone home screen.
+## Building
 
-## Customizing
+Requires Xcode 16 or later. No package manager, no third-party dependencies.
 
-All workouts live in two places inside the `<script>` block:
+```sh
+cd ios
+xcodebuild -project DRILL.xcodeproj -scheme DRILL \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
+```
 
-- **`ACTIVITIES`**: the exercise library (name, duration, tag, step-by-step instructions)
-- **`dayWorkouts`** inside `getWorkoutForDate`: named workout combos that pull from the library
-- **`weekPatterns`**: a 10-week rotation array; each row is Mon-Sun, each value is a `dayWorkouts` key
+Run the tests:
 
-To add a new exercise: add an entry to `ACTIVITIES`, then reference it in an existing or new `dayWorkouts` entry.
+```sh
+cd ios
+xcodebuild -project DRILL.xcodeproj -scheme DRILL \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro' test
+```
 
-## Sports covered
+## The exercise library
 
-⚽ Soccer · 🏈 Football · 🏃 Track · 💪 Strength · 🏃 Cardio · 🤸 Plyometrics
+All 33 exercises and 170 steps live in `ios/DRILL/Resources/exercises.json`, written
+for an 8–12 year old to follow without a coach standing over them. Every step carries
+a role (setup, form, cue or the work itself) and, where it has one, a timing — which
+is what lets the app walk them one at a time instead of showing a wall of text.
+
+```sh
+node tools/validate-content.js       # schema, plus proves the step text is unchanged
+node tools/build-site-exercises.js   # regenerates the public library page
+```
+
+## Safety
+
+DRILL is a training plan, not a coach and not medical advice. Check with a parent
+before starting a new plan, warm up first, drink water, and stop if something hurts.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
