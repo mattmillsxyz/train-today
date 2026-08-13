@@ -1,0 +1,4 @@
+# Lives in the publish directory so it works on Cloudflare Pages and Netlify
+# alike; netlify.toml is read by Netlify only. The retired web app stays at
+# /app/ until the iOS release, then it and this line both go.
+/app  /app/  301

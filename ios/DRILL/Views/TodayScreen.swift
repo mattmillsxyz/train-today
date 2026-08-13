@@ -169,7 +169,7 @@ struct TodayScreen: View {
         VStack(spacing: 6) {
             Text("😴").font(.system(size: 48)).padding(.bottom, 6)
             Text("Rest Day").font(.system(size: 20, weight: .bold))
-            Text("No workout scheduled. Rest is when you actually get stronger — but a walk or a bike ride never hurts.")
+            Text("No workout scheduled. Rest is when you actually get stronger, but a walk or a bike ride never hurts.")
                 .font(.system(size: 14))
                 .foregroundStyle(Theme.textSecondary)
                 .multilineTextAlignment(.center)

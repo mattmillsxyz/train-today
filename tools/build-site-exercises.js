@@ -86,7 +86,7 @@ const html = `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Every exercise, with full instructions — DRILL</title>
+<title>Every exercise, with full instructions · DRILL</title>
 <meta name="description" content="All ${exercises.length} exercises in DRILL, with every step written out: soccer, football, track, cardio, strength, plyometrics and balance drills for 8-12 year olds.">
 <meta name="theme-color" content="#0d0d0d">
 <link rel="icon" type="image/png" href="favicon.png">

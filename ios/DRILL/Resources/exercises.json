@@ -1277,7 +1277,7 @@
           "timing": null
         },
         {
-          "text": "Waddle forward one small step at a time, staying low the whole way — like a duck!",
+          "text": "Waddle forward one small step at a time, staying low the whole way, like a duck!",
           "role": "form",
           "media": null,
           "timing": null
@@ -1358,7 +1358,7 @@
           }
         },
         {
-          "text": "Rest 30 seconds between each set of 15. Go slow on the way down — that's where the real work happens.",
+          "text": "Rest 30 seconds between each set of 15. Go slow on the way down, that's where the real work happens.",
           "role": "cue",
           "media": null,
           "timing": null
@@ -1386,7 +1386,7 @@
           "timing": null
         },
         {
-          "text": "Hold as still as you can for 30 seconds. Pick a spot on the wall to stare at — it helps!",
+          "text": "Hold as still as you can for 30 seconds. Pick a spot on the wall to stare at, it helps!",
           "role": "action",
           "media": null,
           "timing": {
@@ -1738,5 +1738,5 @@
       "media": null
     }
   ],
-  "mediaNote": "media.asset is a logical name, never a filename or URL — the app decides how to resolve it (bundled, downloaded, streamed) so delivery can change without touching content."
+  "mediaNote": "media.asset is a logical name, never a filename or URL. The app decides how to resolve it (bundled, downloaded, streamed) so delivery can change without touching content."
 }

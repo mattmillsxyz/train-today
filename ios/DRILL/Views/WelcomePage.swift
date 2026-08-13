@@ -113,7 +113,7 @@ struct WelcomePage: View {
     }
 
     private var blurb: some View {
-        Text("A fresh session every training day — timed, talked through, and built around the sports you actually play.")
+        Text("A fresh session every training day: timed, talked through, and built around the sports you actually play.")
             .font(.system(size: 15))
             .foregroundStyle(.white.opacity(0.55))
             .multilineTextAlignment(.center)

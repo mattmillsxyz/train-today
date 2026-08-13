@@ -13,7 +13,7 @@ Bundle id `com.trainwithdrill.drill`. Site: `trainwithdrill.com`.
 | `ios/DRILL.xcodeproj` | Xcode project. Two targets: `DRILL`, `DRILLTests`. |
 | `ios/DRILL/` | App sources: `Models/`, `Views/`, `Services/`, `Resources/`. |
 | `ios/DRILLTests/` | Unit tests. |
-| `site/` | Marketing site, deployed at the domain root (`netlify.toml` sets `publish = "site"`). |
+| `site/` | Marketing site, deployed at the domain root. Publish directory is `site`; no build step. |
 | `site/app/` | The retired vanilla-JS web app, kept live until the App Store release. |
 | `tools/` | Content validation and page generation. Plain Node, no dependencies. |
 | `docs/ios-migration-plan.md` | The plan this was built from. |

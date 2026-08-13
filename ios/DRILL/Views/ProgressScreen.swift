@@ -97,7 +97,7 @@ struct ProgressScreen: View {
         return VStack(alignment: .leading, spacing: 10) {
             SectionHeading(text: "Personal records")
             if logged.isEmpty {
-                Text("Finish an exercise that tracks a record — juggling, broad jumps, cone dribbling — and log your number. This is where it lives.")
+                Text("Finish an exercise that tracks a record (juggling, broad jumps, cone dribbling) and log your number. This is where it lives.")
                     .font(.system(size: 14))
                     .foregroundStyle(Theme.textSecondary)
             } else {
@@ -163,7 +163,8 @@ struct RecordRow: View {
             Spacer()
             Sparkline(values: values, higherIsBetter: metric?.higherIsBetter ?? true)
                 .frame(width: 70, height: 24)
-            Text(best.map { format($0, metric) } ?? "—")
+            // Only reachable if a record row is built with no history behind it.
+            Text(best.map { format($0, metric) } ?? "-")
                 .font(.system(size: 18, weight: .bold, design: .rounded))
                 .foregroundStyle(Theme.green)
         }

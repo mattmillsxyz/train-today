@@ -76,7 +76,7 @@ struct OnboardingFlow: View {
     // MARK: - Pages
 
     private var namePage: some View {
-        page(title: "Who's training?", subtitle: "Just a first name — it's only used to say hello.") {
+        page(title: "Who's training?", subtitle: "Just a first name. It's only used to say hello.") {
             TextField("Name", text: $draft.athleteName)
                 .textFieldStyle(.plain)
                 .font(.system(size: 22, weight: .semibold))
@@ -106,7 +106,7 @@ struct OnboardingFlow: View {
     }
 
     private var schedulePage: some View {
-        page(title: "When do you train?", subtitle: "Days you don't pick are rest days — they never break your streak.") {
+        page(title: "When do you train?", subtitle: "Days you don't pick are rest days, and they never break your streak.") {
             VStack(alignment: .leading, spacing: 24) {
                 WeekdayPicker(selection: $draft.trainingDays)
 
@@ -157,7 +157,7 @@ struct OnboardingFlow: View {
                 }
 
                 if notificationDenied {
-                    Text("Notifications are turned off for DRILL. You can switch them on in the iOS Settings app whenever you like — everything else works without them.")
+                    Text("Notifications are turned off for DRILL. You can switch them on in the iOS Settings app whenever you like, and everything else works without them.")
                         .font(.system(size: 14))
                         .foregroundStyle(Theme.textSecondary)
                 }

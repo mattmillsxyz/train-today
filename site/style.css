@@ -450,4 +450,63 @@ h2 {
   section { padding: 48px 0; }
   .hero { padding-top: 52px; }
   .site-header .wrap { flex-direction: column; align-items: flex-start; padding-top: 12px; padding-bottom: 12px; }
+
+  /* Three phones wrapping into a vertical column is a lot of scrolling for one
+     idea. Fan them into a deck instead: Today in front, the other two rotated
+     out behind it.
+
+     The front phone stays in normal flow so it sets the container's height —
+     the two behind are absolutely positioned, and absolute children would
+     otherwise collapse it to nothing. */
+  .shots {
+    display: block;
+    position: relative;
+    margin-top: 40px;
+  }
+
+  /* Rotating a 1:2.17 phone by 9deg widens its bounding box by about 16% of
+     its own width, so the back two are inset to keep their corners inside the
+     column rather than clipped against the viewport. */
+  .shots img {
+    position: absolute;
+    top: 7%;
+    width: 46%;
+    margin: 0;
+  }
+
+  .shots img:nth-child(1) {
+    left: 7%;
+    transform: rotate(-9deg);
+    animation: fan-left 0.85s cubic-bezier(0.2, 0.85, 0.3, 1) 0.1s both;
+  }
+
+  .shots img:nth-child(2) {
+    position: relative;
+    top: 0;
+    width: 62%;
+    margin: 0 auto;
+    z-index: 2;
+  }
+
+  .shots img:nth-child(3) {
+    right: 7%;
+    transform: rotate(9deg);
+    animation: fan-right 0.85s cubic-bezier(0.2, 0.85, 0.3, 1) 0.1s both;
+  }
+
+  /* They start squared up behind the front phone and swing out into the fan. */
+  @keyframes fan-left {
+    from { transform: translateX(30%) rotate(0deg); opacity: 0; }
+    to   { transform: translateX(0) rotate(-9deg); opacity: 1; }
+  }
+
+  @keyframes fan-right {
+    from { transform: translateX(-30%) rotate(0deg); opacity: 0; }
+    to   { transform: translateX(0) rotate(9deg); opacity: 1; }
+  }
+}
+
+@media (max-width: 640px) and (prefers-reduced-motion: reduce) {
+  .shots img:nth-child(1),
+  .shots img:nth-child(3) { animation: none; }
 }
