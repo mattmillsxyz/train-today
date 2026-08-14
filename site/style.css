@@ -295,7 +295,11 @@ h2 {
 
 /* ── Prose pages ────────────────────────────────────────────────────────── */
 
-.prose { max-width: 720px; padding: 52px 0 72px; }
+/* padding-block, not the padding shorthand: these pages are `.wrap .prose`, and
+   a shorthand here resets the 20px side padding .wrap sets. Above 720px the
+   column is narrower than the viewport so nothing looked wrong, but on a phone
+   the text ran into both edges. */
+.prose { max-width: 720px; padding-block: 52px 72px; }
 .prose h1 { font-size: clamp(30px, 6vw, 42px); font-weight: 800; letter-spacing: -0.5px; }
 .prose .updated { color: var(--text-secondary); font-size: 14px; margin-top: 6px; }
 .prose h2 { font-size: 21px; margin: 34px 0 8px; }
