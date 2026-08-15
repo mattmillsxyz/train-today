@@ -11,6 +11,10 @@ struct OnboardingFlow: View {
     @State private var page = 0
     @State private var draft = PlanSettings.default
     @State private var notificationDenied = false
+    /// The name field is the only keyboard in the flow. It has to give the
+    /// keyboard back on the way out, or it covers the sports grid on the very
+    /// next page with no obvious way to close it.
+    @FocusState private var nameFocused: Bool
     /// Measured from the floating footer, so page content can be padded clear
     /// of it. Seeded with roughly the real height to avoid a first-layout jump.
     @State private var footerHeight: CGFloat = 84
@@ -55,6 +59,8 @@ struct OnboardingFlow: View {
             }
         }
         .background(isWelcome ? Theme.ink : Theme.bg)
+        // Covers every way off the name page: Next, Back, and a swipe.
+        .onChange(of: page) { _, _ in nameFocused = false }
         .task { draft.seed = UInt64.random(in: 1...UInt64.max) }
     }
 
@@ -84,6 +90,19 @@ struct OnboardingFlow: View {
                 .background(Theme.card, in: .rect(cornerRadius: 14))
                 .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(Theme.border))
                 .autocorrectionDisabled()
+                .textContentType(.givenName)
+                .focused($nameFocused)
+                .submitLabel(.done)
+                .onSubmit { nameFocused = false }
+                // A visible way out, rather than expecting anyone to guess
+                // that Return dismisses it.
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("Done") { nameFocused = false }
+                            .font(.system(size: 17, weight: .semibold))
+                    }
+                }
         }
     }
 
@@ -195,6 +214,7 @@ struct OnboardingFlow: View {
             .padding(.top, 24)
             .padding(.bottom, footerHeight + 12)
         }
+        .scrollDismissesKeyboard(.interactively)
     }
 
     /// Floats over the page rather than sitting on a bar of its own, so the
