@@ -69,6 +69,11 @@ struct WelcomePage: View {
 
     /// A green glow behind the wordmark, breathing slowly, fading into the
     /// app's near-black.
+    ///
+    /// Opacity rather than scale on purpose — a scaled `RadialGradient` reads
+    /// as the entire background zooming, since it has no visible edge of its
+    /// own to show the scaling is local. Only the motes should look like they
+    /// are moving.
     private var background: some View {
         ZStack {
             Theme.ink
@@ -78,7 +83,7 @@ struct WelcomePage: View {
                 startRadius: 10,
                 endRadius: 470
             )
-            .scaleEffect(glowing ? 1.07 : 0.94)
+            .opacity(glowing ? 1 : 0.72)
             .animation(
                 reduceMotion ? nil : .easeInOut(duration: 4.5).repeatForever(autoreverses: true),
                 value: glowing

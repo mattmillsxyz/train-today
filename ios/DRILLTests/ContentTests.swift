@@ -7,13 +7,13 @@ final class ContentTests: XCTestCase {
     private let library = ExerciseLibrary.shared
 
     func testLibraryDecodes() {
-        XCTAssertEqual(library.all.count, 33)
-        XCTAssertEqual(library.all.reduce(0) { $0 + $1.steps.count }, 170)
+        XCTAssertEqual(library.all.count, 39)
+        XCTAssertEqual(library.all.reduce(0) { $0 + $1.steps.count }, 203)
     }
 
     func testModeSplit() {
-        XCTAssertEqual(library.all.count { $0.mode == .stepped }, 25)
-        XCTAssertEqual(library.all.count { $0.mode == .openBlock }, 8)
+        XCTAssertEqual(library.all.count { $0.mode == .stepped }, 27)
+        XCTAssertEqual(library.all.count { $0.mode == .openBlock }, 12)
     }
 
     func testRoleCounts() {
@@ -21,19 +21,19 @@ final class ContentTests: XCTestCase {
         for step in library.all.flatMap(\.steps) {
             counts[step.role, default: 0] += 1
         }
-        XCTAssertEqual(counts[.setup], 15)
-        XCTAssertEqual(counts[.form], 39)
-        XCTAssertEqual(counts[.cue], 27)
-        XCTAssertEqual(counts[.action], 89)
+        XCTAssertEqual(counts[.setup], 21)
+        XCTAssertEqual(counts[.form], 42)
+        XCTAssertEqual(counts[.cue], 37)
+        XCTAssertEqual(counts[.action], 103)
     }
 
     /// The claim the walkthrough design rests on: only action steps gate, and
-    /// there are 64 of them across the stepped exercises.
+    /// there are 68 of them across the stepped exercises.
     func testWalkthroughGateCount() {
         let gates = library.all
             .filter { $0.mode == .stepped }
             .reduce(0) { $0 + $1.actionSteps.count }
-        XCTAssertEqual(gates, 64)
+        XCTAssertEqual(gates, 68)
     }
 
     func testEveryTimedStepIsAnAction() {
@@ -90,7 +90,7 @@ final class ContentTests: XCTestCase {
     /// The prompts the content already made in prose are now logged numbers.
     func testPersonalRecordMetrics() {
         let tracked = library.all.filter { $0.prMetric != nil }
-        XCTAssertEqual(tracked.count, 9)
+        XCTAssertEqual(tracked.count, 12)
         XCTAssertEqual(library["jugglingBasic"]?.prMetric?.label, "Best juggling streak")
         XCTAssertEqual(library["coneDribbling"]?.prMetric?.higherIsBetter, false)
     }

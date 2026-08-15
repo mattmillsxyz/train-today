@@ -198,6 +198,10 @@ enum PlanGenerator {
                       "Dribbling & Passing", "Full Soccer Session"]
         case .football:
             titles = ["Football Day", "Football Agility"]
+        case .basketball:
+            titles = ["Basketball Day", "Basketball Skills", "Hoops Day"]
+        case .baseball:
+            titles = ["Baseball Day", "Baseball Skills", "Diamond Day"]
         case .track:
             titles = ["Track & Speed", "Speed & Form"]
         case .cardio:

@@ -5,6 +5,8 @@
     "warmup",
     "soccer",
     "football",
+    "basketball",
+    "baseball",
     "cardio",
     "plyo",
     "strength",
@@ -494,6 +496,312 @@
         },
         {
           "text": "Try to keep your hips low and stay on the balls of your feet. No flat-footed running!",
+          "role": "cue",
+          "media": null,
+          "timing": null
+        }
+      ],
+      "media": null
+    },
+    {
+      "id": "ballHandling",
+      "name": "Ball Handling Drills",
+      "tag": "basketball",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "openBlock",
+      "prMetric": null,
+      "steps": [
+        {
+          "text": "Stand with your feet shoulder-width apart and your knees bent, ready position.",
+          "role": "setup",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Dribble the ball low and hard with your right hand for 30 seconds. Keep your eyes up, not on the ball.",
+          "role": "action",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Switch to your left hand and dribble low and hard for 30 seconds.",
+          "role": "action",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Practice crossovers: bounce the ball from your right hand to your left hand out in front of you, staying low. Do 15 crossovers.",
+          "role": "action",
+          "media": null,
+          "timing": {
+            "type": "reps",
+            "count": 15,
+            "each": null
+          }
+        },
+        {
+          "text": "Keep the ball below your knees and use your fingertips, not your palm.",
+          "role": "cue",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Try dribbling figure-eights between and around your legs.",
+          "role": "action",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "The best ball handlers never look down. Try to keep your head up the whole time.",
+          "role": "cue",
+          "media": null,
+          "timing": null
+        }
+      ],
+      "media": null
+    },
+    {
+      "id": "freeThrowPractice",
+      "name": "Free Throw Practice",
+      "tag": "basketball",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "openBlock",
+      "prMetric": {
+        "label": "Best free throws in a row",
+        "unit": "count",
+        "higherIsBetter": true
+      },
+      "steps": [
+        {
+          "text": "Stand at the free throw line, or 15 feet from the hoop if you don't have one marked.",
+          "role": "setup",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Line up your shooting foot with the hoop. Bend your knees, elbow under the ball, and follow through with a snap of the wrist.",
+          "role": "form",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Shoot 10 free throws. Count how many you make.",
+          "role": "action",
+          "media": null,
+          "timing": {
+            "type": "reps",
+            "count": 10,
+            "each": null
+          }
+        },
+        {
+          "text": "Same routine every time: same number of dribbles, same breath, same release.",
+          "role": "cue",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Rest a minute, then shoot 10 more. Try to beat your first set.",
+          "role": "action",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Count your best streak in a row and try to beat it tomorrow!",
+          "role": "cue",
+          "media": null,
+          "timing": null
+        }
+      ],
+      "media": null
+    },
+    {
+      "id": "basketballAgility",
+      "name": "Basketball Agility",
+      "tag": "basketball",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "stepped",
+      "prMetric": null,
+      "steps": [
+        {
+          "text": "Set up 4 cones in a rectangle, about 5 yards apart, like the corners of the key.",
+          "role": "setup",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Sprint to the first cone, defensive slide sideways to the second, backpedal to the third, defensive slide back to start.",
+          "role": "action",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Stay low with your knees bent the whole time, like you're guarding a player.",
+          "role": "cue",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Do 4 rounds, resting 30 seconds between each.",
+          "role": "action",
+          "media": null,
+          "timing": {
+            "type": "loop",
+            "repeatFrom": 2,
+            "rounds": 4,
+            "rest": 30,
+            "restEvery": 1
+          }
+        },
+        {
+          "text": "Stay on the balls of your feet. No flat-footed defense!",
+          "role": "cue",
+          "media": null,
+          "timing": null
+        }
+      ],
+      "media": null
+    },
+    {
+      "id": "throwingCatching",
+      "name": "Throwing and Catching",
+      "tag": "baseball",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "openBlock",
+      "prMetric": null,
+      "steps": [
+        {
+          "text": "Grab a partner and stand about 20 feet apart. No partner? Throw against a wall instead.",
+          "role": "setup",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Grip the ball across the seams with your index and middle finger. Step toward your target and throw overhand.",
+          "role": "form",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Play catch for 5 minutes. Focus on catching with two hands and giving with the glove.",
+          "role": "action",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Watch the ball all the way into your glove. Don't take your eyes off it.",
+          "role": "cue",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Take a few steps back every minute so you're throwing farther by the end.",
+          "role": "action",
+          "media": null,
+          "timing": null
+        }
+      ],
+      "media": null
+    },
+    {
+      "id": "battingTeePractice",
+      "name": "Batting Tee Practice",
+      "tag": "baseball",
+      "displayDuration": "10 min",
+      "estimatedMinutes": 10,
+      "mode": "openBlock",
+      "prMetric": {
+        "label": "Line drives in a row",
+        "unit": "count",
+        "higherIsBetter": true
+      },
+      "steps": [
+        {
+          "text": "Set a batting tee (or a ball balanced on a cone) at belt height.",
+          "role": "setup",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Stand with feet shoulder-width apart, bat back, eyes on the ball.",
+          "role": "form",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Swing level through the ball and follow through high. Take 10 swings.",
+          "role": "action",
+          "media": null,
+          "timing": {
+            "type": "reps",
+            "count": 10,
+            "each": null
+          }
+        },
+        {
+          "text": "Keep your eyes on the tee even after you swing. Don't peek at where it went.",
+          "role": "cue",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Move the tee to a different spot (inside, outside, low) and take 10 more swings.",
+          "role": "action",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Count how many solid line drives you hit in a row and try to beat it next time!",
+          "role": "cue",
+          "media": null,
+          "timing": null
+        }
+      ],
+      "media": null
+    },
+    {
+      "id": "baseRunningSprints",
+      "name": "Base Running Sprints",
+      "tag": "baseball",
+      "displayDuration": "10 min · 4 sets",
+      "estimatedMinutes": 10,
+      "mode": "stepped",
+      "prMetric": {
+        "label": "Fastest home to first",
+        "unit": "seconds",
+        "higherIsBetter": false
+      },
+      "steps": [
+        {
+          "text": "Set up two markers 90 feet apart (or however far you can go), like home plate and first base.",
+          "role": "setup",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Sprint from one marker to the other as fast as you can, like you just hit the ball.",
+          "role": "action",
+          "media": null,
+          "timing": null
+        },
+        {
+          "text": "Rest 30 seconds, then repeat. Try to beat your time each set.",
+          "role": "action",
+          "media": null,
+          "timing": {
+            "type": "loop",
+            "repeatFrom": 2,
+            "rounds": 4,
+            "rest": 30,
+            "restEvery": 1
+          }
+        },
+        {
+          "text": "Bonus: time yourself and try to beat your record!",
           "role": "cue",
           "media": null,
           "timing": null

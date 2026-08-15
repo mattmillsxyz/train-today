@@ -102,6 +102,7 @@ final class WalkthroughEngine {
             deadline = nil
             isPaused = true
             SpeechService.shared.stop()
+            SoundService.shared.stop()
         }
     }
 
@@ -115,6 +116,7 @@ final class WalkthroughEngine {
         ticker?.invalidate()
         ticker = nil
         SpeechService.shared.stop()
+        SoundService.shared.stop()
         UIApplication.shared.isIdleTimerDisabled = false
         AudioSessionController.deactivate()
     }

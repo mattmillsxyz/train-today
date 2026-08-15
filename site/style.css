@@ -368,6 +368,8 @@ h2 {
 .tag-warmup { color: #0284c7; }
 .tag-soccer { color: var(--green-dark); }
 .tag-football { color: #b26430; }
+.tag-basketball { color: #e8752c; }
+.tag-baseball { color: #c23b3b; }
 .tag-cardio, .tag-track { color: #185fa5; }
 .tag-plyo { color: #7c6ce0; }
 .tag-strength { color: #b87b00; }

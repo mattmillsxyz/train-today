@@ -214,41 +214,42 @@ struct Sparkline: View {
     }
 }
 
-/// Shown when a badge is earned. Small, quick, and dismissible.
-struct BadgeUnlockedSheet: View {
+/// Shown when a badge is earned: a toast that slides in from the top and
+/// dismisses itself, rather than a sheet he has to tap through — earning
+/// several badges from one exercise-checking session used to mean several
+/// blocking dialogs in a row.
+struct BadgeToast: View {
     let badges: [Badge]
-    @Environment(\.dismiss) private var dismiss
+    let onDismiss: () -> Void
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(alignment: .leading, spacing: 10) {
             Text(badges.count == 1 ? "Badge unlocked!" : "\(badges.count) badges unlocked!")
-                .font(.system(size: 26, weight: .bold))
+                .font(.system(size: 13, weight: .bold))
+                .foregroundStyle(Theme.greenDark)
             ForEach(badges) { badge in
-                HStack(spacing: 14) {
+                HStack(spacing: 12) {
                     Image(systemName: badge.symbol)
-                        .font(.system(size: 30))
+                        .font(.system(size: 22))
                         .foregroundStyle(Theme.green)
-                        .frame(width: 44)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(badge.title).font(.system(size: 17, weight: .bold))
-                        Text(badge.detail).font(.system(size: 14)).foregroundStyle(Theme.textSecondary)
+                        .frame(width: 32)
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(badge.title).font(.system(size: 15, weight: .bold))
+                        Text(badge.detail).font(.system(size: 12)).foregroundStyle(Theme.textSecondary)
                     }
-                    Spacer()
+                    Spacer(minLength: 0)
                 }
-                .padding(14)
-                .background(Theme.greenLight, in: .rect(cornerRadius: 14))
             }
-            Button("Nice") { dismiss() }
-                .font(.system(size: 18, weight: .bold))
-                .foregroundStyle(Theme.ink)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(Theme.green, in: .capsule)
-                .buttonStyle(.plain)
         }
-        .padding(24)
-        .frame(maxWidth: .infinity)
-        .background(Theme.bg)
-        .presentationDetents([.medium])
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Theme.card, in: .rect(cornerRadius: 16))
+        .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(Theme.border))
+        .shadow(color: .black.opacity(0.22), radius: 18, y: 8)
+        .padding(.horizontal, 16)
+        .contentShape(.rect)
+        .onTapGesture(perform: onDismiss)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityHint("Double tap to dismiss")
     }
 }

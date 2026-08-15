@@ -20,6 +20,8 @@ const TAG_LABELS = {
   warmup: 'Warmup',
   soccer: 'Soccer',
   football: 'Football',
+  basketball: 'Basketball',
+  baseball: 'Baseball',
   cardio: 'Cardio',
   plyo: 'Plyometrics',
   strength: 'Strength',
@@ -29,7 +31,10 @@ const TAG_LABELS = {
 };
 
 // Display order: the shape a session is built in, warmup first, stretch last.
-const TAG_ORDER = ['warmup', 'soccer', 'football', 'track', 'cardio', 'plyo', 'strength', 'balance', 'stretch'];
+const TAG_ORDER = [
+  'warmup', 'soccer', 'football', 'basketball', 'baseball', 'track', 'cardio', 'plyo', 'strength', 'balance',
+  'stretch',
+];
 
 const ROLE_LABELS = {
   setup: 'Set up',

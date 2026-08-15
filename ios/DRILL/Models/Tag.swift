@@ -1,14 +1,16 @@
 import SwiftUI
 
-/// The nine content categories used by `exercises.json`.
+/// The eleven content categories used by `exercises.json`.
 ///
-/// Seven of them are pickable sports in onboarding; `warmup` and `stretch` are
+/// Nine of them are pickable sports in onboarding; `warmup` and `stretch` are
 /// structural — the generator always bookends a session with them, so they are
 /// never offered as a choice.
 enum Tag: String, Codable, CaseIterable, Identifiable, Hashable, Comparable {
     case warmup
     case soccer
     case football
+    case basketball
+    case baseball
     case cardio
     case plyo
     case strength
@@ -19,7 +21,9 @@ enum Tag: String, Codable, CaseIterable, Identifiable, Hashable, Comparable {
     var id: String { rawValue }
 
     /// The tags a user can choose in onboarding.
-    static let selectable: [Tag] = [.soccer, .football, .track, .cardio, .strength, .plyo, .balance]
+    static let selectable: [Tag] = [
+        .soccer, .football, .basketball, .baseball, .track, .cardio, .strength, .plyo, .balance,
+    ]
 
     /// Tags whose exercises can close out a session.
     static let finishers: [Tag] = [.strength, .plyo]
@@ -29,6 +33,8 @@ enum Tag: String, Codable, CaseIterable, Identifiable, Hashable, Comparable {
         case .warmup: "Warmup"
         case .soccer: "Soccer"
         case .football: "Football"
+        case .basketball: "Basketball"
+        case .baseball: "Baseball"
         case .cardio: "Cardio"
         case .plyo: "Plyo"
         case .strength: "Strength"
@@ -46,6 +52,8 @@ enum Tag: String, Codable, CaseIterable, Identifiable, Hashable, Comparable {
         case .warmup: "🔥"
         case .soccer: "⚽"
         case .football: "🏈"
+        case .basketball: "🏀"
+        case .baseball: "⚾"
         case .cardio: "🏃"
         case .plyo: "🤸"
         case .strength: "💪"
@@ -63,6 +71,8 @@ enum Tag: String, Codable, CaseIterable, Identifiable, Hashable, Comparable {
         case .warmup: Color(hex: 0x38BDF8)
         case .soccer: Color(hex: 0x16A869)
         case .football: Color(hex: 0xC87941)
+        case .basketball: Color(hex: 0xE8752C)
+        case .baseball: Color(hex: 0xC23B3B)
         case .cardio: Color(hex: 0x185FA5)
         case .plyo: Color(hex: 0xA89BFF)
         case .strength: Color(hex: 0xF0A500)

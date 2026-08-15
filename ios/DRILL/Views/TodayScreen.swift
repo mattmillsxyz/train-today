@@ -9,7 +9,9 @@ struct TodayScreen: View {
 
     @State private var expanded: Set<String> = []
     @State private var running: Exercise?
-    @State private var newBadges: [Badge] = []
+    @State private var activeBadgeToast: [Badge]?
+    @State private var badgeToastQueue: [[Badge]] = []
+    @State private var toastDismissTask: Task<Void, Never>?
 
     private var settings: PlanSettings { settingsStore.settings }
     private var displayDate: Date { app.selectedDate }
@@ -43,9 +45,16 @@ struct TodayScreen: View {
                 running = nil
             }
         }
-        .sheet(isPresented: .init(get: { !newBadges.isEmpty }, set: { if !$0 { newBadges = [] } })) {
-            BadgeUnlockedSheet(badges: newBadges)
+        .overlay(alignment: .top) {
+            if let activeBadgeToast {
+                BadgeToast(badges: activeBadgeToast, onDismiss: dismissBadgeToast)
+                    .padding(.top, 8)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .zIndex(1)
+            }
         }
+        .animation(.spring(response: 0.45, dampingFraction: 0.82), value: activeBadgeToast)
+        .onChange(of: dayKey) { expanded = [] }
     }
 
     // MARK: - Header
@@ -206,9 +215,36 @@ struct TodayScreen: View {
         let calculator = ProgressCalculator(store: store, settings: settings)
         let awarded = store.award(calculator.eligibleBadges())
         let badges = awarded.compactMap(Badge.named)
-        if !badges.isEmpty {
-            newBadges = badges
-            Haptics.success()
+        guard !badges.isEmpty else { return }
+        Haptics.success()
+        if activeBadgeToast == nil {
+            presentBadgeToast(badges)
+        } else {
+            badgeToastQueue.append(badges)
+        }
+    }
+
+    // MARK: - Badge toast
+
+    private func presentBadgeToast(_ badges: [Badge]) {
+        activeBadgeToast = badges
+        toastDismissTask?.cancel()
+        toastDismissTask = Task {
+            try? await Task.sleep(for: .seconds(3.2))
+            guard !Task.isCancelled else { return }
+            dismissBadgeToast()
+        }
+    }
+
+    private func dismissBadgeToast() {
+        toastDismissTask?.cancel()
+        toastDismissTask = nil
+        activeBadgeToast = nil
+        guard !badgeToastQueue.isEmpty else { return }
+        let next = badgeToastQueue.removeFirst()
+        Task {
+            try? await Task.sleep(for: .seconds(0.3))
+            presentBadgeToast(next)
         }
     }
 }

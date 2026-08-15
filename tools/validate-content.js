@@ -21,7 +21,10 @@ const ROOT = path.join(__dirname, '..');
 const JSON_PATH = path.join(ROOT, 'ios/DRILL/Resources/exercises.json');
 const HTML_PATH = path.join(ROOT, 'site/app/index.html');
 
-const TAGS = ['warmup', 'soccer', 'football', 'cardio', 'plyo', 'strength', 'balance', 'track', 'stretch'];
+const TAGS = [
+  'warmup', 'soccer', 'football', 'basketball', 'baseball', 'cardio', 'plyo', 'strength', 'balance', 'track',
+  'stretch',
+];
 const MODES = ['stepped', 'openBlock'];
 const UNITS = ['count', 'seconds', 'inches', 'feet'];
 const ROLES = ['setup', 'form', 'cue', 'action'];
@@ -224,12 +227,13 @@ for (const ex of exercises) {
 
   ex.mode === 'stepped' ? steppedCount++ : openCount++;
 
-  // Fidelity: compare against the original step text.
+  // Fidelity: compare against the original step text. Exercises with no
+  // counterpart in the retired web app are content that never existed there
+  // (new sports added after the migration) — schema-validate them like
+  // everything else, but there is nothing to compare verbatim against.
   const originalId = ID_ALIASES[ex.id] || ex.id;
   const orig = original[originalId];
-  if (!orig) {
-    fail(`${where}: no matching exercise in site/app/index.html (looked for '${originalId}')`);
-  } else {
+  if (orig) {
     if (orig.name !== ex.name) {
       fail(`${where}: name changed — was ${JSON.stringify(orig.name)}, now ${JSON.stringify(ex.name)}`);
     }

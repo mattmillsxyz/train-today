@@ -118,6 +118,7 @@ struct WalkthroughScreen: View {
                 track: Theme.ink.opacity(0.15)
             )
             .padding(.horizontal, 24)
+            .padding(.top, 12)
 
             if let phase = engine.currentPhase {
                 ScrollView {
@@ -290,41 +291,44 @@ struct WalkthroughScreen: View {
     // MARK: - Finished
 
     private var finished: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                Text("💪").font(.system(size: 64))
-                Text("Nice work!")
-                    .font(.system(size: 34, weight: .bold))
-                Text(exercise.name)
-                    .font(.system(size: 18, weight: .medium))
-                    .opacity(0.7)
+        GeometryReader { geo in
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("💪").font(.system(size: 64))
+                    Text("Nice work!")
+                        .font(.system(size: 34, weight: .bold))
+                    Text(exercise.name)
+                        .font(.system(size: 18, weight: .medium))
+                        .opacity(0.7)
 
-                if let metric = exercise.prMetric, !recordLogged {
-                    recordEntry(metric)
-                } else if recordLogged {
-                    Text(recordIsPR ? "🏆 New personal record!" : "Logged. Beat it next time.")
-                        .font(.system(size: 17, weight: .bold))
-                        .padding(14)
-                        .frame(maxWidth: .infinity)
-                        .background(.black.opacity(0.12), in: .rect(cornerRadius: 14))
-                }
+                    if let metric = exercise.prMetric, !recordLogged {
+                        recordEntry(metric)
+                    } else if recordLogged {
+                        Text(recordIsPR ? "🏆 New personal record!" : "Logged. Beat it next time.")
+                            .font(.system(size: 17, weight: .bold))
+                            .padding(14)
+                            .frame(maxWidth: .infinity)
+                            .background(.black.opacity(0.12), in: .rect(cornerRadius: 14))
+                    }
 
-                Button {
-                    onClose(true)
-                } label: {
-                    Text("Done")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundStyle(Theme.timerGreen)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 18)
-                        .background(Theme.ink, in: .capsule)
+                    Button {
+                        onClose(true)
+                    } label: {
+                        Text("Done")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundStyle(Theme.timerGreen)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 18)
+                            .background(Theme.ink, in: .capsule)
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.top, 8)
                 }
-                .buttonStyle(.plain)
-                .padding(.top, 8)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 32)
+                .frame(minHeight: geo.size.height)
+                .frame(maxWidth: .infinity)
             }
-            .padding(.horizontal, 24)
-            .padding(.top, 60)
-            .padding(.bottom, 32)
         }
     }
 
