@@ -10,6 +10,11 @@ struct LibraryScreen: View {
         let matching = ExerciseLibrary.shared.all.filter { exercise in
             search.isEmpty
                 || exercise.name.localizedCaseInsensitiveContains(search)
+                // The category is the obvious thing to search for, and the
+                // sections are already labelled with it. "Plyometrics" is
+                // accepted too, since that is the word the site and the
+                // onboarding blurb use for the `plyo` tag.
+                || exercise.tag.matchesSearch(search)
                 || exercise.steps.contains { $0.text.localizedCaseInsensitiveContains(search) }
         }
         return Dictionary(grouping: matching, by: \.tag)

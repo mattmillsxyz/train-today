@@ -65,6 +65,26 @@ enum Tag: String, Codable, CaseIterable, Identifiable, Hashable, Comparable {
 
     var pillLabel: String { "\(emoji) \(displayName)" }
 
+    /// Every word a search box should accept for this tag. `displayName` is
+    /// what the section headers show, but people type the longer or the
+    /// alternative name just as often.
+    var searchAliases: [String] {
+        switch self {
+        case .plyo: ["Plyo", "Plyometrics", "Jumping"]
+        case .stretch: ["Stretch", "Cooldown", "Cool down", "Flexibility"]
+        case .warmup: ["Warmup", "Warm up"]
+        case .cardio: ["Cardio", "Conditioning", "Endurance"]
+        case .strength: ["Strength", "Bodyweight"]
+        default: [displayName]
+        }
+    }
+
+    func matchesSearch(_ query: String) -> Bool {
+        let trimmed = query.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return false }
+        return searchAliases.contains { $0.localizedCaseInsensitiveContains(trimmed) }
+    }
+
     /// The `.tag-*` colors from the web app's stylesheet.
     var color: Color {
         switch self {

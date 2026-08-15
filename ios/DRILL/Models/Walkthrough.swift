@@ -146,19 +146,27 @@ struct Walkthrough: Equatable {
         }
 
         /// Emits every phase a single action step is responsible for.
-        private mutating func append(stepAt index: Int, round: WalkPhase.Round? = nil) {
+        ///
+        /// `opensRound` is false for the second and later steps inside one round
+        /// of a loop, which is what keeps the round label from being announced
+        /// over and over within the same round.
+        private mutating func append(
+            stepAt index: Int,
+            round: WalkPhase.Round? = nil,
+            opensRound: Bool = true
+        ) {
             let step = exercise.steps[index]
             let cues = cuesByStep[index] ?? []
 
             switch step.timing {
             case .none:
-                emit(.selfPaced, step: step, cues: cues, round: round)
+                emit(.selfPaced, step: step, cues: cues, round: round, opensRound: opensRound)
 
             case .work(let seconds):
-                emit(.work(seconds: seconds), step: step, cues: cues, round: round)
+                emit(.work(seconds: seconds), step: step, cues: cues, round: round, opensRound: opensRound)
 
             case .reps(let count, let each):
-                emit(.reps(count: count, each: each), step: step, cues: cues, round: round)
+                emit(.reps(count: count, each: each), step: step, cues: cues, round: round, opensRound: opensRound)
 
             case .interval(let work, let reps, let each, let rest, let rounds):
                 // Work and rest that both live inside this one step.
@@ -194,8 +202,8 @@ struct Walkthrough: Equatable {
                         )
                     }
                     let info = WalkPhase.Round(index: round, total: rounds)
-                    for bodyIndex in body {
-                        append(stepAt: bodyIndex, round: info)
+                    for (offset, bodyIndex) in body.enumerated() {
+                        append(stepAt: bodyIndex, round: info, opensRound: offset == 0)
                     }
                 }
             }
@@ -218,7 +226,8 @@ struct Walkthrough: Equatable {
             _ kind: WalkPhase.Kind,
             step: Step,
             cues: [String],
-            round: WalkPhase.Round?
+            round: WalkPhase.Round?,
+            opensRound: Bool = true
         ) {
             phases.append(
                 WalkPhase(
@@ -226,7 +235,7 @@ struct Walkthrough: Equatable {
                     kind: kind,
                     title: step.text,
                     detail: round?.label,
-                    spoken: spokenText(for: kind, step: step, round: round),
+                    spoken: spokenText(for: kind, step: step, round: round, opensRound: opensRound),
                     cues: cues,
                     round: round
                 )
@@ -247,13 +256,35 @@ struct Walkthrough: Equatable {
             )
         }
 
-        /// The first round says the whole step; later rounds just say which set
-        /// it is, because he already knows what he is doing by then.
-        private func spokenText(for kind: WalkPhase.Kind, step: Step, round: WalkPhase.Round?) -> String {
-            if let round, round.index > 1 {
-                return "\(round.label). Go."
+        /// The first round says the whole step; later rounds are shortened,
+        /// because he already knows what he is doing by then.
+        ///
+        /// Shortened, not dropped: this used to say only "Set 2 of 3. Go." for
+        /// every step in the round, so a loop over two or three steps spoke the
+        /// identical sentence several times in a row and there was no way to
+        /// hear that the step had changed. The first sentence of the step is
+        /// short enough to stay out of the way and still name the movement.
+        private func spokenText(
+            for kind: WalkPhase.Kind,
+            step: Step,
+            round: WalkPhase.Round?,
+            opensRound: Bool
+        ) -> String {
+            guard let round, round.index > 1 else { return step.text }
+            let reminder = Self.firstSentence(of: step.text)
+            return opensRound ? "\(round.label). \(reminder)" : reminder
+        }
+
+        /// The opening sentence of a step, which the content writes as a short
+        /// imperative: "Walk back slowly." out of "Walk back slowly. This is
+        /// your rest." Falls back to the whole thing when the split would leave
+        /// a fragment too short to mean anything.
+        private static func firstSentence(of text: String) -> String {
+            guard let end = text.rangeOfCharacter(from: CharacterSet(charactersIn: ".!?")) else {
+                return text
             }
-            return step.text
+            let sentence = String(text[..<end.upperBound]).trimmingCharacters(in: .whitespaces)
+            return sentence.split(separator: " ").count >= 3 ? sentence : text
         }
 
         private func spokenDuration(_ seconds: Int) -> String {
