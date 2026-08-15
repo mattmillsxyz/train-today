@@ -1,2 +1,6 @@
 .DS_Store
 .claude/
+
+# Xcode per-user UI state, not project configuration.
+xcuserdata/
+*.xcuserstate

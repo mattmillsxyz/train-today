@@ -1,0 +1,53 @@
+No account, login, or demo credentials are needed. The app opens straight
+into a short setup and everything is immediately usable.
+
+WHAT THIS APP IS
+A training plan generator for young athletes, roughly ages 8 to 12. It
+composes a session for each scheduled training day from a bundled library
+of 39 exercises, then walks the athlete through each step with a timer and
+spoken instructions.
+
+GETTING STARTED
+1. On first launch, tap "Let's go".
+2. Enter any first name, or leave it blank and tap Next.
+3. Pick one or more sports, then tap Next.
+4. Accept the default training days (Mon to Fri) and session length, tap Next.
+5. The reminder toggle is optional. Leave it off to skip the notification
+   permission prompt, then tap Next.
+6. Tap "Start training" to reach the Today tab.
+
+WHERE TO FIND THE MAIN FEATURES
+Today tab: the current day's session. Tap "Start" on any exercise to open
+the step timer, which is the core feature. Tap the chevron on a row to read
+the full written instructions. Tap the circle to mark an exercise done.
+Saturday and Sunday are rest days by default. If you land on a rest day,
+use the left arrow in the green header to reach a training day.
+
+Calendar tab: month grid. Tap any day to open that day's session.
+Progress tab: streak, totals, badges, and personal records.
+Settings tab: change sports, days, session length, reminders, and audio.
+Settings also has "Re-run setup" and "Delete all progress".
+
+PRIVACY AND NETWORKING
+The app makes no network requests of any kind. There are no accounts, no
+analytics, no advertising, and no third-party SDKs. All data is stored
+locally with SwiftData and UserDefaults. The privacy label is set to
+"Data Not Collected" and that is enforced by the app having no networking
+code at all.
+
+NOTIFICATIONS
+The optional daily reminder uses local notifications only, scheduled on
+device with UNCalendarNotificationTrigger. There is no push server.
+
+AUDIO
+The step timer speaks each step using AVSpeechSynthesizer and plays short
+synthesized cue tones. Both can be turned off in Settings under
+"During a workout". The app ducks other audio rather than stopping it.
+
+AGE RATING
+Rated 4+. All content is original exercise instructions written for children.
+There is no user generated content, no chat, no web view, and no external
+links inside the app.
+
+CONTACT
+hello@trainwithdrill.com

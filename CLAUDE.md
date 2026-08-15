@@ -3,8 +3,8 @@
 Multi-sport training for young athletes. A native SwiftUI iPhone app plus a static
 marketing site, both in this repo.
 
-App Store name: **DRILL: Youth Sports Training**. Home-screen name: **DRILL**.
-Bundle id `com.trainwithdrill.drill`. Site: `trainwithdrill.com`.
+App Store name: **DRILL: Never Miss a Rep**, subtitle **Youth Multi-Sport Training**.
+Home-screen name: **DRILL**. Bundle id `com.trainwithdrill.drill`. Site: `trainwithdrill.com`.
 
 ## Layout
 
