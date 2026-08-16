@@ -94,15 +94,6 @@ struct OnboardingFlow: View {
                 .focused($nameFocused)
                 .submitLabel(.done)
                 .onSubmit { nameFocused = false }
-                // A visible way out, rather than expecting anyone to guess
-                // that Return dismisses it.
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        Spacer()
-                        Button("Done") { nameFocused = false }
-                            .font(.system(size: 17, weight: .semibold))
-                    }
-                }
         }
     }
 
@@ -273,6 +264,9 @@ struct OnboardingFlow: View {
     }
 
     private func next() async {
+        // Before anything awaits, so the keyboard starts leaving the moment the
+        // button is hit rather than after the page has already slid across.
+        nameFocused = false
         if page == 4, draft.reminderEnabled {
             let granted = await NotificationService.shared.requestAuthorization()
             notificationDenied = !granted
