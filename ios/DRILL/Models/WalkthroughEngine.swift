@@ -31,6 +31,7 @@ final class WalkthroughEngine {
     private var phaseDuration: TimeInterval = 0
     private var ticker: Timer?
     private var lastSpokenCountdown = 0
+    private var hasBegun = false
 
     var exercise: Exercise { walkthrough.exercise }
     var phases: [WalkPhase] { walkthrough.phases }
@@ -59,11 +60,16 @@ final class WalkthroughEngine {
         return !phase.kind.advancesAutomatically
     }
 
+    /// Builds the phases and nothing else. Emphatically no sound, speech or
+    /// haptics here: SwiftUI evaluates a `State(initialValue:)` argument every
+    /// time the view struct is created, which is on every redraw of the parent,
+    /// and keeps only the first result. Anything noisy in here therefore fires
+    /// again on every redraw, over the top of whatever is actually on screen.
+    /// `begin()` does the starting.
     init(exercise: Exercise) {
         self.walkthrough = Walkthrough(exercise: exercise)
         // Nothing to get ready for? Go straight to the work.
         self.stage = walkthrough.getReady.isEmpty ? .running : .getReady
-        if stage == .running { enterPhase(0) }
     }
 
     deinit {
@@ -72,9 +78,19 @@ final class WalkthroughEngine {
 
     // MARK: - Control
 
+    /// Called from the view's `task`, once per presentation. Idempotent, so a
+    /// redraw cannot restart the exercise.
+    func begin() {
+        guard !hasBegun, stage == .running else { return }
+        hasBegun = true
+        enterPhase(0)
+    }
+
+    /// The "Start" button on the get-ready screen.
     func start() {
         guard stage == .getReady else { return }
         stage = .running
+        hasBegun = true
         enterPhase(0)
     }
 
@@ -165,7 +181,8 @@ final class WalkthroughEngine {
         ticker = nil
         deadline = nil
         UIApplication.shared.isIdleTimerDisabled = false
-        SoundService.shared.playFinish()
+        // No fanfare sound here. The spoken line and the haptic are enough;
+        // a synthesised flourish on top read as a crash rather than applause.
         Haptics.success()
         SpeechService.shared.speak("Nice work. \(exercise.name) done.")
     }

@@ -14,12 +14,6 @@ final class SoundService {
     private let format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 1)!
     private var started = false
 
-    /// Three quick claps rather than a buzzer — the exercise is done, not an
-    /// alarm going off.
-    private lazy var finishBuffer = makeClapBuffer(
-        claps: [(start: 0, duration: 0.09), (start: 0.13, duration: 0.09), (start: 0.29, duration: 0.13)],
-        peak: 0.8
-    )
     /// A soft sine chime, not the harsh square-wave "ding" it started as —
     /// this plays on every phase change, including a mashed skip/restart, so
     /// it has to be pleasant repeated.
@@ -31,9 +25,6 @@ final class SoundService {
     )
 
     private init() {}
-
-    /// Three claps. The exercise is over.
-    func playFinish() { play(finishBuffer) }
 
     /// A new phase has started — work, rest, or the next step.
     func playPhaseChange() { play(phaseBuffer) }
@@ -131,42 +122,6 @@ final class SoundService {
                     : peak * Float(exp(-(t - attack) / decayTau))
             }
             samples[frame] = gain * Float(sin(2 * Double.pi * frequency * t))
-        }
-        return buffer
-    }
-
-    /// A clap: filtered noise rather than a tone. Each burst is white noise
-    /// through a one-zero high-pass (drop the rumble, keep the crack) inside
-    /// a sharp-attack, fast-decay envelope.
-    private func makeClapBuffer(
-        claps: [(start: Double, duration: Double)],
-        peak: Float
-    ) -> AVAudioPCMBuffer {
-        let sampleRate = format.sampleRate
-        let total = (claps.last.map { $0.start + $0.duration } ?? 0) + 0.08
-        let frameCount = AVAudioFrameCount(total * sampleRate)
-        let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frameCount)!
-        buffer.frameLength = frameCount
-        let samples = buffer.floatChannelData![0]
-
-        let attack = 0.003
-        var previousNoise: Float = 0
-        for frame in 0..<Int(frameCount) {
-            let t = Double(frame) / sampleRate
-            var gain: Float = 0
-            for clap in claps where t >= clap.start && t < clap.start + clap.duration {
-                let local = t - clap.start
-                if local < attack {
-                    gain = peak * Float(local / attack)
-                } else {
-                    let tau = (clap.duration - attack) / 3.2
-                    gain = peak * Float(exp(-(local - attack) / tau))
-                }
-            }
-            let noise = Float.random(in: -1...1)
-            let shaped = noise - previousNoise * 0.72
-            previousNoise = noise
-            samples[frame] = max(-1, min(1, gain * shaped))
         }
         return buffer
     }

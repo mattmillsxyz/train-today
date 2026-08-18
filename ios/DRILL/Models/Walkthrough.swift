@@ -233,13 +233,44 @@ struct Walkthrough: Equatable {
                 WalkPhase(
                     id: takeID(),
                     kind: kind,
-                    title: step.text,
+                    title: displayTitle(for: step, round: round),
                     detail: round?.label,
                     spoken: spokenText(for: kind, step: step, round: round, opensRound: opensRound),
                     cues: cues,
                     round: round
                 )
             )
+        }
+
+        /// Step text often ends with how many times to repeat it: "Go for 20
+        /// seconds, rest 20 seconds. Repeat 3 times. It should burn!" On a
+        /// numbered set that trailing instruction is both redundant and
+        /// confusing, because the "Set 2 of 3" label above already says where
+        /// you are, while the text keeps telling you to do three. So a phase
+        /// that carries a round shows only the opening sentence; the full text
+        /// is still on the exercise card and in the library.
+        private func displayTitle(for step: Step, round: WalkPhase.Round?) -> String {
+            guard round != nil else { return step.text }
+            return Self.withoutRepeatClause(Self.firstSentence(of: step.text))
+        }
+
+        /// Some steps put the repeat count inside their opening sentence rather
+        /// than after it: "Do 10, rest 30 seconds, repeat 3 sets." Taking the
+        /// first sentence leaves that one untouched, so the trailing clause
+        /// goes too. Falls back to the original if stripping would leave a
+        /// fragment.
+        private static func withoutRepeatClause(_ text: String) -> String {
+            let pattern = #"[,.]?\s*(?:and\s+|then\s+)?repeat\s+\d+\s*(?:more\s+)?(?:sets?|times?|rounds?)\s*[.!]?\s*$"#
+            guard let match = text.range(
+                of: pattern,
+                options: [.regularExpression, .caseInsensitive]
+            ) else { return text }
+
+            var trimmed = String(text[..<match.lowerBound])
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            guard trimmed.split(separator: " ").count >= 3 else { return text }
+            if let last = trimmed.last, !".!?".contains(last) { trimmed += "." }
+            return trimmed
         }
 
         private mutating func emitRest(seconds: Int, detail: String?, round: WalkPhase.Round?) {

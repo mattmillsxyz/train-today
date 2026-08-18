@@ -35,6 +35,9 @@ struct WalkthroughScreen: View {
             }
         }
         .foregroundStyle(Theme.ink)
+        // Starting lives here rather than in the engine's init, which SwiftUI
+        // re-runs on every redraw. `task` fires once per presentation.
+        .task { engine.begin() }
         .onDisappear { engine.stop() }
     }
 
