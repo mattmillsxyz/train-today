@@ -59,7 +59,7 @@ struct CalendarScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Today") { app.open(.now) }
+                Button("Today") { app.open(app.today) }
                     .font(.system(size: 15, weight: .semibold))
             }
         }
@@ -81,8 +81,10 @@ struct CalendarScreen: View {
         .overlay(alignment: .bottom) { Rectangle().fill(Theme.border).frame(height: 1) }
     }
 
+    /// Anchored on `app.today` rather than `.now`, so the window slides to the
+    /// new month on a rollover instead of waiting for an unrelated redraw.
     private var months: [Date] {
-        let thisMonth = TrainingCalendar.startOfMonth(.now)
+        let thisMonth = TrainingCalendar.startOfMonth(app.today)
         return (-monthsBack...monthsForward).compactMap {
             TrainingCalendar.calendar.date(byAdding: .month, value: $0, to: thisMonth)
         }
@@ -136,7 +138,7 @@ private struct MonthGrid: View {
                                 day: day,
                                 status: calculator.status(of: day),
                                 isSelected: TrainingCalendar.isSameDay(day, app.selectedDate),
-                                isToday: TrainingCalendar.isSameDay(day, .now)
+                                isToday: TrainingCalendar.isSameDay(day, app.today)
                             ) {
                                 onSelect(day)
                             }

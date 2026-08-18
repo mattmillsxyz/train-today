@@ -46,8 +46,12 @@ synthesized cue tones. Both can be turned off in Settings under
 
 AGE RATING
 Rated 4+. All content is original exercise instructions written for children.
-There is no user generated content, no chat, no web view, and no external
-links inside the app.
+There is no user generated content, no chat, and no web view.
+
+The only link out of the app is "Help and support" at the bottom of Settings,
+which opens https://trainwithdrill.com/support in Safari. That is our own
+support page, the same URL given as the app's Support URL. The app itself
+still makes no network requests.
 
 CONTACT
 hello@trainwithdrill.com

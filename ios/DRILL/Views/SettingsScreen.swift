@@ -89,6 +89,8 @@ struct SettingsScreen: View {
             } footer: {
                 Text("DRILL keeps everything on this phone. There is no account, no tracking, and nothing is ever uploaded.")
             }
+
+            aboutSection
         }
         .navigationTitle("Settings")
         .sheet(isPresented: $showLibrary) { LibraryScreen() }
@@ -175,6 +177,43 @@ struct SettingsScreen: View {
         }
         let days = settingsStore.settings.trainingDays.sorted().map { Weekdays.names[$0] }
         return days.isEmpty ? "Pick some training days first." : "Reminding you on \(days.joined(separator: ", "))."
+    }
+
+    /// Version, and the one way out of the app.
+    ///
+    /// `Link` hands the URL to Safari; the app itself still makes no network
+    /// request of its own, so "Data Not Collected" stays true.
+    private var aboutSection: some View {
+        Section {
+            Link(destination: Self.siteURL) {
+                Label("Help and support", systemImage: "questionmark.circle")
+            }
+        } header: {
+            Text("About")
+        } footer: {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Text("DRILL \(Self.versionString)")
+                    Spacer()
+                    Text("© 2026 Matthew Mills")
+                }
+                Text("trainwithdrill.com")
+            }
+            // Otherwise the last line sits right on top of the tab bar.
+            .padding(.bottom, 28)
+        }
+    }
+
+    /// The same support page the App Store listing points at.
+    private static let siteURL = URL(string: "https://trainwithdrill.com/support")!
+
+    /// Reads the bundle rather than hardcoding, so the build number in Settings
+    /// always matches whatever TestFlight is showing.
+    private static var versionString: String {
+        let info = Bundle.main.infoDictionary
+        let version = info?["CFBundleShortVersionString"] as? String ?? "1.0"
+        let build = info?["CFBundleVersion"] as? String ?? "0"
+        return "\(version) (\(build))"
     }
 
     private func toggleSport(_ tag: Tag) {
