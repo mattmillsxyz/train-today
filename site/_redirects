@@ -1,4 +1,5 @@
 # Lives in the publish directory so it works on Cloudflare Pages and Netlify
-# alike; netlify.toml is read by Netlify only. The retired web app stays at
-# /app/ until the iOS release, then it and this line both go.
+# alike; netlify.toml is read by Netlify only. The retired web app stays served
+# at /app/ for anyone still using it, but nothing on the site links to it now
+# that the iOS app has shipped.
 /app  /app/  301

@@ -185,6 +185,19 @@ a { color: var(--green-dark); }
 
 .btn-ghost:hover { border-color: rgba(255, 255, 255, 0.45); }
 
+/* Apple's own badge artwork, white variant because the hero ground is
+   near-black. Capped in vw as well as px so it never overruns a narrow phone. */
+.store-badge {
+  margin: 26px 0 0;
+}
+
+.store-badge img {
+  width: 246px;
+  max-width: 68vw;
+  height: auto;
+  vertical-align: middle;
+}
+
 .badge-soon {
   display: inline-block;
   margin-top: 16px;
