@@ -14,7 +14,7 @@ Home-screen name: **DRILL**. Bundle id `com.trainwithdrill.drill`. Site: `trainw
 | `ios/DRILL/` | App sources: `Models/`, `Views/`, `Services/`, `Resources/`. |
 | `ios/DRILLTests/` | Unit tests. |
 | `site/` | Marketing site, deployed at the domain root. Publish directory is `site`; no build step. |
-| `site/app/` | The retired vanilla-JS web app, kept live until the App Store release. |
+| `site/app/` | The retired vanilla-JS web app. Still served for anyone who bookmarked it, but nothing on the site links to it. Also the fidelity reference for `validate-content.js`. |
 | `tools/` | Content validation and page generation. Plain Node, no dependencies. |
 | `docs/ios-migration-plan.md` | The plan this was built from. |
 
@@ -37,12 +37,16 @@ so adding a Swift file to `ios/DRILL/` is all that is needed. There is no
 
 ## Content
 
-`ios/DRILL/Resources/exercises.json` is the single source for all 33 exercises and
-170 steps. Step text is preserved **verbatim** from the original web app; only
-metadata was added. Nothing else in the repo holds a copy.
+`ios/DRILL/Resources/exercises.json` is the single source for all 39 exercises and
+203 steps. Nothing else in the repo holds a copy.
+
+The 33 exercises migrated from the web app keep their step text **verbatim**; only
+metadata was added, and the validator still proves it character for character. The
+6 basketball and baseball drills were written for the app and have no counterpart
+there, so the validator schema-checks them and skips the fidelity comparison.
 
 ```sh
-node tools/validate-content.js            # schema + proves step text still matches site/app/index.html
+node tools/validate-content.js            # schema + proves migrated step text still matches site/app/index.html
 node tools/timing-report.js > review.html # human review of every timing decision
 node tools/build-site-exercises.js        # regenerates site/exercises.html from the JSON
 ```
@@ -51,8 +55,8 @@ Run the validator after any content change, and the site generator too, or the p
 library page goes stale.
 
 Each step carries a `role` (`setup`, `form`, `cue`, `action`) and a nullable `timing`.
-Only `action` steps advance the walkthrough — that is what takes the 25 stepped
-exercises from 129 screens down to 64. Timings are `work`, `reps`, `interval` (work and
+Only `action` steps advance the walkthrough — that is what takes the 27 stepped
+exercises from 138 screens down to 68. Timings are `work`, `reps`, `interval` (work and
 rest inside one step) or `loop` (this step is the rest phase plus a jump back to an
 earlier step).
 
