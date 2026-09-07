@@ -114,12 +114,23 @@ a { color: var(--green-dark); }
   overflow: hidden;
 }
 
+/* The glow behind the wordmark: a square box with the circle centred inside it,
+   so the fade always finishes before the element does. It used to be a
+   full-width box 720px tall, and on anything wider than a phone the gradient
+   was still faintly green when the box ran out, which drew a hard horizontal
+   line across the hero. A square keeps the transparent stop (62% of the
+   distance to a corner, so 0.44 of the side) comfortably inside the nearest
+   edge (0.5 of the side) at every width. */
 .hero::before {
   content: '';
+  --glow: min(1460px, 190vw);
   position: absolute;
-  inset: -40% 0 auto 0;
-  height: 720px;
-  background: radial-gradient(circle at 50% 42%, rgba(34, 214, 138, 0.34), rgba(34, 214, 138, 0.05) 45%, transparent 68%);
+  top: calc(var(--glow) / -2.4);
+  left: 50%;
+  width: var(--glow);
+  height: var(--glow);
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 50% 50%, rgba(34, 214, 138, 0.34), rgba(34, 214, 138, 0.05) 40%, transparent 62%);
   pointer-events: none;
 }
 
